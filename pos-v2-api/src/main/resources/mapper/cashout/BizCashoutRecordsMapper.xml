@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizCashoutRecordsMapper">
+    
+    <resultMap type="BizCashoutRecords" id="BizCashoutRecordsResult">
+        <result property="cashoutId"    column="cashout_id"    />
+        <result property="walletId"    column="wallet_id"    />
+        <result property="cashoutAmount"    column="cashout_amount"    />
+        <result property="dealAccount"    column="deal_account"    />
+        <result property="dealBank"    column="deal_bank"    />
+        <result property="payAccount"    column="pay_account"    />
+        <result property="payAccountBank"    column="pay_account_bank"    />
+        <result property="cashoutType"    column="cashout_type"    />
+        <result property="cashoutStatus"    column="cashout_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>

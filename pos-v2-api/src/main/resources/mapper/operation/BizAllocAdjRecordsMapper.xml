@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizAllocAdjRecordsMapper">
+
+    <resultMap type="BizAllocAdjRecords" id="BizAllocAdjRecordsResult">
+        <result property="operId"    column="oper_id"    />
+        <result property="posId"    column="pos_id"    />
+        <result property="posCode"    column="pos_code"    />
+        <result property="oldUserId"    column="old_user_id"    />
+        <result property="newUserId"    column="new_user_id"    />
+        <result property="operator"    column="operator"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="operateType"    column="operate_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>

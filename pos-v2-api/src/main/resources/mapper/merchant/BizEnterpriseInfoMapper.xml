@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizEnterpriseInfoMapper">
+    
+    <resultMap type="BizEnterpriseInfo" id="BizEnterpriseInfoResult">
+        <result property="entId"    column="ent_id"    />
+        <result property="merchId"    column="merch_id"    />
+        <result property="legalPersonPositive"    column="legal_person_positive"    />
+        <result property="legalPersonBack"    column="legal_person_back"    />
+        <result property="legalPersonName"    column="legal_person_name"    />
+        <result property="legalPersonIdcard"    column="legal_person_idcard"    />
+        <result property="legalPersonDuedate"    column="legal_person_duedate"    />
+        <result property="entAccountType"    column="ent_account_type"    />
+        <result property="legalPersonSettle"    column="legal_person_settle"    />
+        <result property="entAccountRegion"    column="ent_account_region"    />
+        <result property="entAccount"    column="ent_account"    />
+        <result property="entAccountBank"    column="ent_account_bank"    />
+        <result property="entAccountName"    column="ent_account_name"    />
+        <result property="entAccountMobile"    column="ent_account_mobile"    />
+        <result property="entAccountCardpic"    column="ent_account_cardpic"    />
+        <result property="entLicenseType"    column="ent_license_type"    />
+        <result property="entLicenseCode"    column="ent_license_code"    />
+        <result property="entLicenseDuedate"    column="ent_license_duedate"    />
+        <result property="entLicensePositive"    column="ent_license_positive"    />
+        <result property="entLicenseBack"    column="ent_license_back"    />
+        <result property="entPositionPic1"    column="ent_position_pic1"    />
+        <result property="entPositionPic2"    column="ent_position_pic2"    />
+        <result property="entPositionPic3"    column="ent_position_pic3"    />
+        <result property="entPositionPic4"    column="ent_position_pic4"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>

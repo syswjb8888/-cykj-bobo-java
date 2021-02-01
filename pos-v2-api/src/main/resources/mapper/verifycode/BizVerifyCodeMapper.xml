@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizVerifyCodeMapper">
+    
+    <resultMap type="BizVerifyCode" id="BizVerifyCodeResult">
+        <result property="verId"    column="ver_id"    />
+        <result property="verCode"    column="ver_code"    />
+        <result property="verStarttime"    column="ver_starttime"    />
+        <result property="verEndtime"    column="ver_endtime"    />
+        <result property="verStatus"    column="ver_status"    />
+        <result property="verMobile"    column="ver_mobile"    />
+        <result property="verUserId"    column="ver_user_id"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+    </resultMap>
+
+
+</mapper>

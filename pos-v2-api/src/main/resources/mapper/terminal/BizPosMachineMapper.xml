@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizPosMachineMapper">
+    
+    <resultMap type="BizPosMachine" id="BizPosMachineResult">
+        <result property="posId"    column="pos_id"    />
+        <result property="posName"    column="pos_name"    />
+        <result property="posCode"    column="pos_code"    />
+        <result property="posType"    column="pos_type"    />
+        <result property="posActivateCode"    column="pos_activate_code"    />
+        <result property="posActivateStatus"    column="pos_activate_status"    />
+        <result property="posBindTime"    column="pos_bind_time"    />
+        <result property="posActivity"    column="pos_activity"    />
+        <result property="posDeposit"    column="pos_deposit"    />
+        <result property="posCashback"    column="pos_cashback"    />
+        <result property="posModel"    column="pos_model"    />
+        <result property="merchId"    column="merch_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>

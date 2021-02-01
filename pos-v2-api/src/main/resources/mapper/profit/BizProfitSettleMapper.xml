@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizProfitSettleMapper">
+    
+    <resultMap type="BizProfitSettle" id="BizProfitSettleResult">
+        <result property="settId"    column="sett_id"    />
+        <result property="merchId"    column="merch_id"    />
+        <result property="merchCode"    column="merch_code"    />
+        <result property="merchName"    column="merch_name"    />
+        <result property="monthAmount"    column="month_amount"    />
+        <result property="transProfit"    column="trans_profit"    />
+        <result property="manageAllowance"    column="manage_allowance"    />
+        <result property="diamondReward"    column="diamond_reward"    />
+        <result property="crownReward"    column="crown_reward"    />
+        <result property="bonusReward"    column="bonus_reward"    />
+        <result property="rewardAmount"    column="reward_amount"    />
+        <result property="caculateYear"    column="caculate_year"    />
+        <result property="caculateMonth"    column="caculate_month"    />
+        <result property="caculateDay"    column="caculate_day"    />
+        <result property="caculateDate"    column="caculate_date"    />
+        <result property="settleDate"    column="settle_date"    />
+        <result property="settleStatus"    column="settle_status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>

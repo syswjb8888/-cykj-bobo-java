@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizMerchTransactionsMapper">
+
+    <resultMap type="BizMerchTransactions" id="BizMerchTransactionsResult">
+        <result property="trnId"    column="trn_id"    />
+        <result property="innerMerchCode"    column="inner_merch_code"    />
+        <result property="merchFlagCode"    column="merch_flag_code"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="transAmount"    column="trans_amount"    />
+        <result property="idTxn"    column="id_txn"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="bankAuthCode"    column="bank_auth_code"    />
+        <result property="discountRateFlag"    column="discount_rate_flag"    />
+        <result property="status"    column="status"    />
+        <result property="errorCode"    column="error_code"    />
+        <result property="errorMsg"    column="error_msg"    />
+        <result property="transDate"    column="trans_date"    />
+        <result property="serviceEntryMode"    column="service_entry_mode"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="posCode"    column="pos_code"    />
+        <result property="deviceType"    column="device_type"    />
+        <result property="userName"    column="user_name"    />
+        <result property="phoneNo"    column="phone_no"    />
+        <result property="storeCachierFlag"    column="store_cachier_flag"    />
+        <result property="receiptType"    column="receipt_type"    />
+        <result property="s0PackageFlag"    column="s0_package_flag"    />
+        <result property="secondOrgId"    column="second_org_id"    />
+        <result property="directlyOrgId"    column="directly_org_id"    />
+        <result property="specialMode"    column="special_mode"    />
+        <result property="esimFlag"    column="esim_flag"    />
+        <result property="idCardNo"    column="id_card_no"    />
+        <result property="authMerchId"    column="auth_merch_id"    />
+        <result property="authTerminalId"    column="auth_terminal_id"    />
+    </resultMap>
+
+
+</mapper>

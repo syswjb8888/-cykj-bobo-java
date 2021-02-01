@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizWalletMapper">
+    
+    <resultMap type="BizWallet" id="BizWalletResult">
+        <result property="walletId"    column="wallet_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="profitAmount"    column="profit_amount"    />
+        <result property="profitTaxAmount"    column="profit_tax_amount"    />
+        <result property="rewardAmount"    column="reward_amount"    />
+        <result property="rewordTaxAmount"    column="reword_tax_amount"    />
+        <result property="walletAmount"    column="wallet_amount"    />
+        <result property="cashoutStatus"    column="cashout_status"    />
+        <result property="payPassword"    column="pay_password"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>
