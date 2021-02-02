@@ -82,6 +82,15 @@ public class PartnerOpenInterfaceController {
         return new KuaiQianResult("00","商户消费交易记录撤消成功");
     }
 
+    @PostMapping("/merchant/transaction/return")
+    public KuaiQianResult returnMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<BizReturnTransDTO> requestDataDTO){
+        BizReturnTransDTO merchTransDTO = requestDataDTO.getData();
+        boolean verify = dataSecurityService.dataVerfiy(requestDataDTO.getSign(), JSONObject.toJSONString(merchTransDTO));
+        if(!verify)return new KuaiQianResult("01","验证失败");
+        iBizMerchantService.returnMerchantTransaction(merchTransDTO);
+        return new KuaiQianResult("00","商户消费交易记录退货成功");
+    }
+
     @PostMapping("/terminal/bind")
     public KuaiQianResult posMacineBind(@RequestBody ThirdPartRequestDataDTO<TerminalBindDTO> requestDataDTO){
         TerminalBindDTO terminalBindDTO = requestDataDTO.getData();

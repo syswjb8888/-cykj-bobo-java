@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cykj.common.annotation.DataSource;
 import com.cykj.common.core.domain.entity.SysUser;
+import com.cykj.common.core.text.Convert;
 import com.cykj.common.enums.DataSourceType;
 import com.cykj.common.utils.SecurityUtils;
+import com.cykj.pos.domain.BizMerchTransactions;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizMicroInfo;
 import com.cykj.pos.domain.BizWallet;
@@ -76,6 +78,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
 
     @Autowired
     private IBizMicroInfoService bizMicroInfoService;
+
+    @Autowired
+    private IBizMerchTransactionsService bizMerchTransactionsService;
 
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -634,12 +639,80 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
 
     @Override
     public void addMerchantTransaction(BizMerchTransDTO merchTransDTO) {
-
+        BizMerchTransactions merchTransaction = new BizMerchTransactions();
+        // ------------------------快钱支付接口提供字段-----------------------------
+        merchTransaction.setTradeType(merchTransDTO.getTradeType()); // 交易类型
+        merchTransaction.setBankAuthCode(merchTransDTO.getAuthCode()); // 银行授权码
+        merchTransaction.setServiceEntryMode(merchTransDTO.getServiceEntryMode()); //输入模式
+        merchTransaction.setReceiptType(merchTransDTO.getReceiptType()); // 产品类型
+        merchTransaction.setStatus(merchTransDTO.getStatus());  // 交易状态
+        merchTransaction.setDiscountRateFlag(merchTransDTO.getDiscountRateFlag());  // 优惠汇率
+        merchTransaction.setIdTxn(merchTransDTO.getIdTxn()); // 交易编号
+        merchTransaction.setErrorMsg(merchTransDTO.getErrorMsg()); // 错误信息
+        merchTransaction.setCardType(merchTransDTO.getCardType()); // 卡类型
+        merchTransaction.setSecondOrgId(merchTransDTO.getSecondOrgID()); // 二级机构号
+        merchTransaction.setPhoneNo(merchTransDTO.getPhoneNo()); // 手机号
+        merchTransaction.setTransAmount(Convert.toBigDecimal(merchTransDTO.getAmt())); // 交易金额
+        //merchTransaction.setTransAmount(new BigDecimal(merchTransDTO.getAmt()));
+        merchTransaction.setDeviceType(merchTransDTO.getDeviceType()); // 设备类型
+        merchTransaction.setErrorCode(merchTransDTO.getErrorCode()); // 错误码
+        merchTransaction.setPosCode(merchTransDTO.getSnCode());// 设备sn号
+        merchTransaction.setUserName(merchTransDTO.getUserName()); // 商户实名姓名
+        merchTransaction.setMerchFlagCode(merchTransDTO.getMerchantId());// 商户标识
+        merchTransaction.setDirectlyOrgId(merchTransDTO.getDirectlyOrgID()); // 直属机构号
+        merchTransaction.setOrderId(merchTransDTO.getOrderId()); // 外部订单号
+        merchTransaction.setTransDate(merchTransDTO.getTxnTime());// 交易时间
+        // -------------------------------------------------------------------------
+        // -----------------------------未来可开发字段-------------------------------
+        merchTransaction.setProductCode(merchTransDTO.getProductCode()); // 产品码
+        merchTransaction.setIsStoreCashier(merchTransDTO.getIsStoreCachier()); // 店面收银交易标识
+        merchTransaction.setS0PackageFlag(merchTransDTO.getS0PackageFlag()); //S0手续费套餐生效标识
+        merchTransaction.setSpecialMode(merchTransDTO.getSpecialMode()); // 一机双模标识
+        merchTransaction.setEsimFlag(merchTransDTO.getEsimFlg()); //e-sim卡服务费标识
+        merchTransaction.setIdCardNo(merchTransDTO.getIdCardNo()); //用户实名身份证号
+        merchTransaction.setAuthMerchantId(merchTransDTO.getAuthMerchantId()); //授权商户编号
+        merchTransaction.setAuthTerminalId(merchTransDTO.getAuthTerminalId()); //授权终端编号
+        merchTransaction.setTransactionStatus("1"); // 消费交易
+        // 保存到数据库即可
+        bizMerchTransactionsService.saveOrUpdate(merchTransaction);
     }
 
     @Override
     public void cancelMerchantTransaction(BizCancelTransDTO merchTransDTO) {
+        BizMerchTransactions merchTransaction = new BizMerchTransactions();
+        // ------------------------快钱支付接口提供字段-----------------------------
+        merchTransaction.setTransAmount(Convert.toBigDecimal(merchTransDTO.getAmt()));
+        merchTransaction.setOriginOutTraceNo(merchTransDTO.getOriginOutTraceNo()); // 原交易外部订单号
+        merchTransaction.setIdTxn(merchTransDTO.getIdTxn()); // 交易编号
+        merchTransaction.setMerchFlagCode(merchTransDTO.getMerchantId());  //商户标识
+        merchTransaction.setOrderId(merchTransDTO.getOutTraceNo()); //外部订单号
+        merchTransaction.setTransDate(merchTransDTO.getTxnTime()); //交易请求时间
+        // -------------------------------------------------------------------------
+        // -----------------------------未来可开发字段-------------------------------
+        merchTransaction.setSecondOrgId(merchTransDTO.getSecondOrgID()); //二级机构号
+        merchTransaction.setDirectlyOrgId(merchTransDTO.getDirectlyOrgID()); //直属机构号
+        merchTransaction.setTransactionStatus("2"); // 撤销交易
+        // 保存撤销记录信息
+        bizMerchTransactionsService.saveOrUpdate(merchTransaction);
+    }
 
+    @Override
+    public void returnMerchantTransaction(BizReturnTransDTO merchTransDTO) {
+        BizMerchTransactions merchTransaction = new BizMerchTransactions();
+        // ------------------------快钱支付接口提供字段-----------------------------
+        merchTransaction.setTransAmount(Convert.toBigDecimal(merchTransDTO.getAmt()));
+        merchTransaction.setOriginOutTraceNo(merchTransDTO.getOriginOutTraceNo()); // 原交易外部订单号
+        merchTransaction.setIdTxn(merchTransDTO.getIdTxn()); // 交易编号
+        merchTransaction.setMerchFlagCode(merchTransDTO.getMerchantId());  //商户标识
+        merchTransaction.setOrderId(merchTransDTO.getOutTraceNo()); //外部订单号
+        merchTransaction.setTransDate(merchTransDTO.getTxnTime()); //交易请求时间
+        // -------------------------------------------------------------------------
+        // -----------------------------未来可开发字段-------------------------------
+        merchTransaction.setSecondOrgId(merchTransDTO.getSecondOrgID()); //二级机构号
+        merchTransaction.setDirectlyOrgId(merchTransDTO.getDirectlyOrgID()); //直属机构号
+        merchTransaction.setTransactionStatus("3"); // 退货交易
+        // 保存撤销记录信息
+        bizMerchTransactionsService.saveOrUpdate(merchTransaction);
     }
 
 }

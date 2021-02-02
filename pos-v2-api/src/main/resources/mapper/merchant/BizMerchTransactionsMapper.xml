@@ -12,7 +12,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="transAmount"    column="trans_amount"    />
         <result property="idTxn"    column="id_txn"    />
         <result property="productCode"    column="product_code"    />
-        <result property="bankAuthCode"    column="bank_auth_code"    />
         <result property="discountRateFlag"    column="discount_rate_flag"    />
         <result property="status"    column="status"    />
         <result property="errorCode"    column="error_code"    />
@@ -24,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="deviceType"    column="device_type"    />
         <result property="userName"    column="user_name"    />
         <result property="phoneNo"    column="phone_no"    />
-        <result property="storeCachierFlag"    column="store_cachier_flag"    />
+        <result property="isStoreCashier"    column="is_store_cashier"    />
         <result property="receiptType"    column="receipt_type"    />
         <result property="s0PackageFlag"    column="s0_package_flag"    />
         <result property="secondOrgId"    column="second_org_id"    />
@@ -33,7 +32,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="esimFlag"    column="esim_flag"    />
         <result property="idCardNo"    column="id_card_no"    />
         <result property="authMerchId"    column="auth_merch_id"    />
+        <result property="authMerchantId"    column="auth_merchant_id"    />
         <result property="authTerminalId"    column="auth_terminal_id"    />
+        <result property="tradeType"    column="trade_type"    />
+        <result property="bankAuthCode"    column="bank_auth_code"    />
+        <result property="storeCachierFlag"    column="store_cachier_flag"    />
+        <result property="transactionStatus"    column="transaction_status"    />
+        <result property="originOutTraceNo"    column="origin_out_trace_no"    />
     </resultMap>
 
 

@@ -9,9 +9,6 @@ import java.math.BigDecimal;
 @Data
 public class BizMerchTransDTO {
 
-    /**外部订单号*/
-    private String outTraceNo;
-
     /**交易类型*/
     private String tradeType;
 

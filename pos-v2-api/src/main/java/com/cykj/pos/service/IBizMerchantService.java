@@ -170,4 +170,9 @@ public interface IBizMerchantService extends IService<BizMerchant> {
      * @param merchTransDTO
      */
     public void cancelMerchantTransaction(BizCancelTransDTO merchTransDTO);
+    /**
+     * 退货商户交易记录
+     * @param merchTransDTO
+     */
+    public void returnMerchantTransaction(BizReturnTransDTO merchTransDTO);
 }
