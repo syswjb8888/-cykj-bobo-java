@@ -5,17 +5,21 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cykj.common.annotation.DataSource;
 import com.cykj.common.config.RuoYiConfig;
+import com.cykj.common.constant.Constants;
 import com.cykj.common.core.domain.entity.SysDictData;
 import com.cykj.common.core.domain.entity.SysDictType;
 import com.cykj.common.enums.DataSourceType;
 import com.cykj.pos.domain.BizAllocAdjRecords;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizPosMachine;
+import com.cykj.pos.domain.BizPosMachineStatusRecords;
 import com.cykj.pos.mapper.BizPosMachineMapper;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.IBizAllocAdjRecordsService;
 import com.cykj.pos.service.IBizMerchantService;
 import com.cykj.pos.service.IBizPosMachineService;
+import com.cykj.pos.service.IBizPosMachineStatusRecordsService;
+import com.cykj.pos.util.DateUtils;
 import com.cykj.pos.util.ListUtils;
 import com.cykj.system.service.ISysDictTypeService;
 import org.apache.commons.lang3.StringUtils;
@@ -28,10 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 终端设备信息Service业务层处理
@@ -59,6 +60,9 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
 
     @Autowired
     private RuoYiConfig config;
+
+    @Autowired
+    private IBizPosMachineStatusRecordsService bizPosMachineStatusRecordsService;
 
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -327,12 +331,52 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
 
     @Override
     public void posMachineActivate(TerminalActivateDTO terminalActivateDTO) {
-
+        BizPosMachineStatusRecords posMachineStatusRecords = new BizPosMachineStatusRecords();
+        posMachineStatusRecords.setPhoneNo(terminalActivateDTO.getPhoneNo());
+        posMachineStatusRecords.setTerminalId(terminalActivateDTO.getTerminalId());
+        posMachineStatusRecords.setIsActivated(terminalActivateDTO.getIsActivated());
+        posMachineStatusRecords.setReceiptType(terminalActivateDTO.getReceiptType());
+        posMachineStatusRecords.setDeviceType(terminalActivateDTO.getDeviceType());
+        posMachineStatusRecords.setName(terminalActivateDTO.getName());
+        posMachineStatusRecords.setSnCode(terminalActivateDTO.getSnCode());
+        posMachineStatusRecords.setActiveTime(terminalActivateDTO.getActiveTime());
+        posMachineStatusRecords.setIdTxn(terminalActivateDTO.getIdTxn());
+        posMachineStatusRecords.setDirectlyOrgId(terminalActivateDTO.getDirectlyOrgID());
+        posMachineStatusRecords.setMerchantId(terminalActivateDTO.getMerchantId());
+        posMachineStatusRecords.setSecondOrgId(terminalActivateDTO.getSecondOrgID());
+        posMachineStatusRecords.setOrderId(terminalActivateDTO.getOrderId());
+        // -------------------自己扩展内容--------------------------
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String receiptDate = DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER);
+        posMachineStatusRecords.setReceiptDate(receiptDate); // 设置接收时间
+        posMachineStatusRecords.setRecordsType("2"); //该记录是设备激活操作记录
+        bizPosMachineStatusRecordsService.saveOrUpdate(posMachineStatusRecords);
     }
 
     @Override
     public void posMachineBind(TerminalBindDTO terminalBindDTO) {
-
+        BizPosMachineStatusRecords posMachineStatusRecords = new BizPosMachineStatusRecords();
+        // ----------快钱接口提供数据--------------
+        posMachineStatusRecords.setSnCode(terminalBindDTO.getSnCode()); // 设备SN码
+        posMachineStatusRecords.setMerchantId(terminalBindDTO.getMerchantId()); // 商户标识
+        posMachineStatusRecords.setTerminalId(terminalBindDTO.getTerminalId()); // 商户终端ID
+        posMachineStatusRecords.setDeviceType(terminalBindDTO.getDeviceType()); // 设备类型
+        posMachineStatusRecords.setReceiptType(terminalBindDTO.getReceiptType()); // 产品名称
+        posMachineStatusRecords.setDirectlyOrgId(terminalBindDTO.getDirectlyOrgID()); // 直属机构号
+        posMachineStatusRecords.setPhoneNo(terminalBindDTO.getPhoneNo()); // 手机号
+        posMachineStatusRecords.setIdCardNo(terminalBindDTO.getIdCardNo());// 身份号
+        posMachineStatusRecords.setTime(terminalBindDTO.getTime()); // 绑定时间
+        posMachineStatusRecords.setStatus(terminalBindDTO.getStatus()); // 绑定状态
+        // ---------------------------------------
+        // -----------------下面是待接收的内容----------------------
+        posMachineStatusRecords.setSecondOrgId(terminalBindDTO.getSecondOrgID());// 二级机构号
+        posMachineStatusRecords.setName(terminalBindDTO.getName()); // 姓名
+        // -------------------自己扩展内容--------------------------
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String receiptDate = DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER);
+        posMachineStatusRecords.setReceiptDate(receiptDate); // 设置接收时间
+        posMachineStatusRecords.setRecordsType("1"); //该记录是设备绑卡操作记录
+        bizPosMachineStatusRecordsService.saveOrUpdate(posMachineStatusRecords);
     }
 
     @Transactional

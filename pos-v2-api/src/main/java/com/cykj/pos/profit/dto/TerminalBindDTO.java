@@ -17,12 +17,6 @@ public class TerminalBindDTO {
     /** 设备类型 */
     private String deviceType;
 
-    /** 订单号 */
-    private String orderId;
-
-    /** 激活状态 */
-    private String isActivated;
-
     /** 产品名称 */
     private String receiptType;
 
@@ -34,9 +28,6 @@ public class TerminalBindDTO {
 
     /** 姓名 */
     private String name;
-
-    /** 交易编号 */
-    private String idTxn;
 
     /** 手机号 */
     private String phoneNo;

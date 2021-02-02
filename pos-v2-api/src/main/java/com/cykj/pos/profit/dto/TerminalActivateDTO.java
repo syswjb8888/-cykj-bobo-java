@@ -40,4 +40,8 @@ public class TerminalActivateDTO {
     /** 交易编号 */
     private String idTxn;
 
+    /** 电话号 */
+    private String phoneNo;
+
+
 }
