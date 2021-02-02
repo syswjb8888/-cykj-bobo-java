@@ -49,12 +49,12 @@ public class DESUtils {
     /**
      * DES加密字符串
      *
-     * @param key 加密密钥，长度不能够小于8位
+     * @param key  加密密钥，长度不能够小于8位
      * @param data 待加密字符串
      * @return 加密后内容
      */
     public static String encrypt(String key, String data) {
-        if (key== null || key.length() < 8) {
+        if (key == null || key.length() < 8) {
             throw new RuntimeException("加密失败，key不能小于8位");
         }
         if (data == null)
@@ -79,12 +79,12 @@ public class DESUtils {
     /**
      * DES解密字符串
      *
-     * @param key 解密密钥，长度不能够小于8位
+     * @param key  解密密钥，长度不能够小于8位
      * @param data 待解密字符串
      * @return 解密后内容
      */
     public static String decrypt(String key, String data) {
-        if (key== null || key.length() < 8) {
+        if (key == null || key.length() < 8) {
             throw new RuntimeException("加密失败，key不能小于8位");
         }
         if (data == null)
@@ -104,14 +104,14 @@ public class DESUtils {
     /**
      * DES加密文件
      *
-     * @param key 加密密钥
+     * @param key      加密密钥
      * @param srcFile  待加密的文件
      * @param destFile 加密后存放的文件路径
      * @return 加密后的文件路径
      */
     public static String encryptFile(String key, String srcFile, String destFile) {
 
-        if (key== null || key.length() < 8) {
+        if (key == null || key.length() < 8) {
             throw new RuntimeException("加密失败，key不能小于8位");
         }
         try {
@@ -139,7 +139,7 @@ public class DESUtils {
     /**
      * DES解密文件
      *
-     * @param key  解密密钥
+     * @param key      解密密钥
      * @param srcFile  已加密的文件
      * @param destFile 解密后存放的文件路径
      * @return 解密后的文件路径
@@ -175,15 +175,15 @@ public class DESUtils {
         return null;
     }
 
-    public static void main (String args[]) throws Exception{
-    System.out.println("====加密：======");
-    String encrption = DESUtils.encrypt("password", "123456");
-    System.out.println(encrption);
+    /*public static void main(String args[]) throws Exception {
+        System.out.println("====加密：======");
+        String encrption = DESUtils.encrypt("password", "123456");
+        System.out.println(encrption);
 
-    System.out.println("====解密：======");
-    System.out.println("==========");
-    System.out.println(DESUtils.decrypt("password",encrption));
-    System.out.println("==========");
+        System.out.println("====解密：======");
+        System.out.println("==========");
+        System.out.println(DESUtils.decrypt("password", encrption));
+        System.out.println("==========");
 
-    }
+    }*/
 }

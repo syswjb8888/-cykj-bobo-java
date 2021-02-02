@@ -19,7 +19,7 @@ public class KuaiqianCryptoTest {
      */
     public static final String ENV_TEST = "test";
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         // 环境配置
         String envName = ENV_PRODUCTION;
         // 加载数据
@@ -42,5 +42,5 @@ public class KuaiqianCryptoTest {
             e.printStackTrace();
             System.out.println("验签失败");
         }
-    }
+    }*/
 }

@@ -64,12 +64,12 @@ public class MD5Tools
     }
 
     // 测试主函数
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         String s = new String("admins123");
         System.out.println("原始：" + s);
         System.out.println("MD5后：" + MD5(s));
         System.out.println("加密的：" + convertMD5(s));
         System.out.println("解密的：" + convertMD5(convertMD5(s)));
 
-    }
+    }*/
 }

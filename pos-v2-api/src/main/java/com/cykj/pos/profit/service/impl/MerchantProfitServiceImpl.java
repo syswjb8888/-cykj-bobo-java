@@ -258,7 +258,7 @@ public class MerchantProfitServiceImpl implements IMerchantProfitService{
 		return counts;
 	}
 
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		LocalDateTime date = LocalDateTime.now();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd");
         String dateStr = date.format(fmt).substring(0,6);
@@ -266,5 +266,5 @@ public class MerchantProfitServiceImpl implements IMerchantProfitService{
         System.out.println(date.getYear());
 		System.out.println(date.getMonth());
 		System.out.println(date.getDayOfYear());
-    }
+    }*/
 }
