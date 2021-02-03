@@ -65,46 +65,65 @@ public class PartnerOpenInterfaceController {
     }
 
     @PostMapping("/merchant/transaction/append")
-    public KuaiQianResult addMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<BizMerchTransDTO> requestDataDTO){
-        BizMerchTransDTO merchTransDTO = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(requestDataDTO.getSign(), JSONObject.toJSONString(merchTransDTO));
+    public KuaiQianResult addMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        String sign = requestDataDTO.getSign();
+        String data = requestDataDTO.getData();
+        boolean verify = dataSecurityService.dataVerfiy(sign,data);
         if(!verify)return new KuaiQianResult("01","验证失败");
+        // 工具类型
+        BizMerchTransDTO merchTransDTO = JSONObject.parseObject(data,BizMerchTransDTO.class);
+        // 转换成数据转换对象
         iBizMerchantService.addMerchantTransaction(merchTransDTO);
         return new KuaiQianResult("00","新增商户消费交易记录成功");
     }
 
     @PostMapping("/merchant/transaction/cancel")
-    public KuaiQianResult cancelMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<BizCancelTransDTO> requestDataDTO){
-        BizCancelTransDTO merchTransDTO = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(requestDataDTO.getSign(), JSONObject.toJSONString(merchTransDTO));
+    public KuaiQianResult cancelMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        String sign = requestDataDTO.getSign();
+        String data = requestDataDTO.getData();
+        System.out.println("-----------测试商户消费交易记录撤消功能-----------");
+        System.out.println(sign);
+        System.out.println(data);
+        boolean verify = dataSecurityService.dataVerfiy(sign,data);
         if(!verify)return new KuaiQianResult("01","验证失败");
+        // 转换成数据转换对象
+        BizCancelTransDTO merchTransDTO = JSONObject.parseObject(data,BizCancelTransDTO.class);
         iBizMerchantService.cancelMerchantTransaction(merchTransDTO);
         return new KuaiQianResult("00","商户消费交易记录撤消成功");
     }
 
     @PostMapping("/merchant/transaction/return")
-    public KuaiQianResult returnMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<BizReturnTransDTO> requestDataDTO){
-        BizReturnTransDTO merchTransDTO = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(requestDataDTO.getSign(), JSONObject.toJSONString(merchTransDTO));
+    public KuaiQianResult returnMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        String sign = requestDataDTO.getSign();
+        String data = requestDataDTO.getData();
+        boolean verify = dataSecurityService.dataVerfiy(sign, data);
         if(!verify)return new KuaiQianResult("01","验证失败");
+        // 转换成数据转换对象
+        BizReturnTransDTO merchTransDTO = JSONObject.parseObject(data,BizReturnTransDTO.class);
         iBizMerchantService.returnMerchantTransaction(merchTransDTO);
         return new KuaiQianResult("00","商户消费交易记录退货成功");
     }
 
     @PostMapping("/terminal/bind")
-    public KuaiQianResult posMacineBind(@RequestBody ThirdPartRequestDataDTO<TerminalBindDTO> requestDataDTO){
-        TerminalBindDTO terminalBindDTO = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(requestDataDTO.getSign(), JSONObject.toJSONString(terminalBindDTO));
+    public KuaiQianResult posMacineBind(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        String sign = requestDataDTO.getSign();
+        String data = requestDataDTO.getData();
+        boolean verify = dataSecurityService.dataVerfiy(sign, data);
         if(!verify)return new KuaiQianResult("01","验证失败");
+        // 转换成数据转换对象
+        TerminalBindDTO terminalBindDTO = JSONObject.parseObject(data,TerminalBindDTO.class);
         iBizPosMachineService.posMachineBind(terminalBindDTO);
         return new KuaiQianResult("00","设备绑定信息更新成功");
     }
 
     @PostMapping("/terminal/activation")
-    public KuaiQianResult posMacineActivate(@RequestBody ThirdPartRequestDataDTO<TerminalActivateDTO> requestDataDTO){
-        TerminalActivateDTO terminalActivateDTO = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(requestDataDTO.getSign(), JSONObject.toJSONString(terminalActivateDTO));
+    public KuaiQianResult posMacineActivate(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        String sign = requestDataDTO.getSign();
+        String data = requestDataDTO.getData();
+        boolean verify = dataSecurityService.dataVerfiy(sign, data);
         if(!verify)return new KuaiQianResult("01","验证失败");
+        TerminalActivateDTO terminalActivateDTO = JSONObject.parseObject(data,TerminalActivateDTO.class);
+        // 转换成数据转换对象
         iBizPosMachineService.posMachineActivate(terminalActivateDTO);
         return new KuaiQianResult("00","设备激活信息更新成功");
     }

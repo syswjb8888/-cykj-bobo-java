@@ -1,5 +1,6 @@
 package com.cykj.pos.profit.dto;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cykj.pos.domain.BizMerchTransactions;
 import lombok.Data;
 
@@ -12,6 +13,6 @@ public class ThirdPartRequestDataDTO<T> {
     private String appId;
     private String type;
     private String requestId;
-    private T data;
+    private String data;
     private String version;
 }

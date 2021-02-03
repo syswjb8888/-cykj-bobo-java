@@ -9,8 +9,37 @@ import java.math.BigDecimal;
 @Data
 public class BizMerchTransDTO {
 
+    /** 银行授权码 */
+    private String authCode;
+
     /**交易类型*/
     private String tradeType;
+
+    /** 输入模式
+     021-磁条卡有密
+     022-磁条卡无密
+     032-扫码支付
+     051-芯片插卡有密
+     052-芯片插卡无密
+     071-芯片非接挥卡有密
+     072-芯片非接挥卡无密
+     */
+    private String serviceEntryMode;
+
+    /** 交易状态
+     1：成功 ；2：失败
+     */
+    private String status;
+    /** 优惠费率标识
+     是否0.38%优惠费率：0、不是 1、是
+     */
+    private String discountRateFlag;
+
+
+
+
+
+
 
     /** 商户标识
      * 一笔交易的唯一标识，以此标识对多次推送交易去重 */
@@ -29,18 +58,7 @@ public class BizMerchTransDTO {
     /** 产品码 */
     private String productCode;
 
-    /** 银行授权码 */
-    private String authCode;
 
-    /** 优惠费率标识
-        是否0.38%优惠费率：0、不是 1、是
-     */
-    private String discountRateFlag;
-
-    /** 交易状态
-        1：成功 ；2：失败
-     */
-    private String status;
 
     /** 错误码 */
     private String errorCode;
@@ -50,17 +68,6 @@ public class BizMerchTransDTO {
 
     /** 交易请求时间 */
     private String txnTime;
-
-    /** 输入模式
-     021-磁条卡有密
-     022-磁条卡无密
-     032-扫码支付
-     051-芯片插卡有密
-     052-芯片插卡无密
-     071-芯片非接挥卡有密
-     072-芯片非接挥卡无密
-     */
-    private String serviceEntryMode;
 
     /** 卡类型 */
     private String cardType;
