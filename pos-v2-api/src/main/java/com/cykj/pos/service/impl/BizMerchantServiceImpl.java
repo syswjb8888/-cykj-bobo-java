@@ -346,8 +346,7 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     @Override
     @DataSource(DataSourceType.SLAVE)
     public List<BizMerchant> getChildMerchantList(MerchantDTO merchantDTO,int pageNo,int pageSize){
-        BizMerchant parentMerchant = this.getMerchantByMerchId(merchantDTO.getUserId());
-        System.out.println(parentMerchant);
+        BizMerchant parentMerchant = this.getMerchantByUserId(merchantDTO.getUserId());
         Long parentUserId = parentMerchant.getUserId();
         LambdaQueryWrapper<BizMerchant> merchantQuery = Wrappers.lambdaQuery();
         BizMerchant merchant = this.getMerchantByUserId(parentUserId);
