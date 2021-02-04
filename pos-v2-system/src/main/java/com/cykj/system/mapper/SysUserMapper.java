@@ -109,4 +109,11 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 重置支付密码
+     * @param sysUser
+     * @return
+     */
+    int resetPaymentPass(SysUser sysUser);
 }

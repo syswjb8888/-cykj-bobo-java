@@ -72,6 +72,17 @@ public class SysUser extends BaseEntity
     /** 邀请人用户主键 */
     private Long inviteUserId;
 
+    /** 支付密码 */
+    private String paymentPassword;
+
+    public String getPaymentPassword() {
+        return paymentPassword;
+    }
+
+    public void setPaymentPassword(String paymentPassword) {
+        this.paymentPassword = paymentPassword;
+    }
+
     /** 最后登录IP */
     @Excel(name = "最后登录IP", type = Type.EXPORT)
     private String loginIp;

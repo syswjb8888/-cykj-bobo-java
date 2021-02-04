@@ -461,4 +461,9 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
+
+    @Override
+    public int resetPaymentPass(SysUser sysUser) {
+        return userMapper.resetPaymentPass(sysUser);
+    }
 }

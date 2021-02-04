@@ -165,4 +165,11 @@ public interface ISysUserService
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 重置支付密码
+     * @param sysUser
+     * @return
+     */
+    public int resetPaymentPass(SysUser sysUser);
 }
