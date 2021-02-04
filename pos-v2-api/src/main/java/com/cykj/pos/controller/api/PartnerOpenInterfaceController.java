@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.cykj.common.core.domain.AjaxResult;
 import com.cykj.common.core.domain.entity.SysUser;
+import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.*;
+import com.cykj.pos.util.LoginUserUtils;
 import com.cykj.system.service.ISysUserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,10 @@ public class PartnerOpenInterfaceController {
     private final IBizPosMachineService iBizPosMachineService;
 
     private final IDataSecurityService dataSecurityService;
+
+    private final IBizVerifyCodeService verifyCodeService;
+
+    private final ISysUserService sysUserService;
 
     @ApiOperation(value="发送短信验证码")
     @ApiImplicitParams({@ApiImplicitParam(name="mobile",value = "路径参数1：合法手机号码",dataType = "long",required = true,paramType="body"),
@@ -126,5 +132,36 @@ public class PartnerOpenInterfaceController {
         // 转换成数据转换对象
         iBizPosMachineService.posMachineActivate(terminalActivateDTO);
         return new KuaiQianResult("00","设备激活信息更新成功");
+    }
+    @ApiOperation(value="找回登录密码")
+    @ApiImplicitParams({@ApiImplicitParam(name="password",value = "登录密码密文",dataType = "string",required = true,paramType="body")})
+    @ApiResponses({@ApiResponse(code=200,response = PartnerInviteDTO.class,message = "登录密码重置成功")})
+    @PostMapping("/password/reset")
+    public AjaxResult resetLoginPassword(@RequestBody PartnerInviteDTO partnerInviteDTO){
+        AjaxResult ajaxResult = AjaxResult.success("登录密码重置成功");
+        String mobile = partnerInviteDTO.getMobile();
+        String verifyCode = partnerInviteDTO.getVerifyCode();
+        BizStatusContantEnum bizStatus = verifyCodeService.verifyCodeValidate(mobile,verifyCode);
+        if(bizStatus != BizStatusContantEnum.SMS_SUCCESS){
+            return AjaxResult.error(bizStatus.getName());
+        }
+        //密码密文处理，前端算法解密-新算法加密-保存
+        String password = SecurityUtils.encryptPassword(partnerInviteDTO.getPassword());
+        sysUserService.resetUserPwd(mobile,password);
+        return ajaxResult;
+    }
+
+    @ApiOperation(value="APP用户发送短信验证码")
+    @ApiImplicitParams({@ApiImplicitParam(name="mobile",value = "路径参数1：合法手机号码",dataType = "long",required = true,paramType="body")})
+    @ApiResponses({@ApiResponse(code=200,response = AjaxResult.class,message = "业务数据响应成功")})
+    @GetMapping("/verifyCode/sender/{mobile}")
+    public AjaxResult verifyCodeSender(@PathVariable String mobile){
+        SysUser sysUser = sysUserService.selectUserByUserName(mobile);
+        if(sysUser == null){
+            return AjaxResult.error("用户非法");
+        }
+        BizStatusContantEnum bizStatus = iBizVerifyCodeService.sendVerifyCode(mobile, sysUser.getUserId());
+        if(bizStatus == BizStatusContantEnum.BIZ_SUCCESS)return AjaxResult.success("短信验证码发送成功");
+        return AjaxResult.error(bizStatus.getName());
     }
 }
