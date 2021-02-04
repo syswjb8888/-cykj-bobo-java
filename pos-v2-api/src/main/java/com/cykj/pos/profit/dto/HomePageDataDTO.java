@@ -31,4 +31,14 @@ public class HomePageDataDTO implements Serializable {
      */
     @ApiModelProperty(value="新闻快讯（通知公告中配置）")
     private String expressNews;
+    /**
+     * 昵称
+     */
+    @ApiModelProperty(value="昵称")
+    private String nickName;
+    /**
+     * 商户编号
+     */
+    @ApiModelProperty(value="商户编号")
+    private String merchCode;
 }

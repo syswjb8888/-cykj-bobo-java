@@ -32,13 +32,15 @@ public class PosV2AppBankCardController {
         AjaxResult ajaxResult = AjaxResult.success();
         Long userId = LoginUserUtils.getLoginUserId();
         bankCardDTO.setUserId(userId);
+        // 银行卡照片url
         ajaxResult.put("data",iBizMerchantService.getBankCardInfo(bankCardDTO));
         return ajaxResult;
     }
     @ApiOperation(value="银行卡变更")
     @ApiImplicitParams({@ApiImplicitParam(name="bankName",value = "开户行名称",dataType = "string",required = true,paramType="body"),
             @ApiImplicitParam(name="bankCardNo",value = "银行卡号",dataType = "string",required = true,paramType="body"),
-            @ApiImplicitParam(name="bankCity",value = "开户行所在城市,区县编码数据字典",dataType = "string",required = true,paramType="body")})
+            @ApiImplicitParam(name="bankCity",value = "开户行所在城市,区县编码数据字典",dataType = "string",required = true,paramType="body"),
+            @ApiImplicitParam(name="bankCardImg",value = "银行卡照片",dataType = "string",required = true,paramType="body")})
     @ApiResponses({@ApiResponse(code=200,response = BankCardDTO.class,message = "业务数据响应成功")})
     @PostMapping("/alter")
     public AjaxResult alterBankCardInfo(@RequestBody BankCardDTO bankCardDTO){

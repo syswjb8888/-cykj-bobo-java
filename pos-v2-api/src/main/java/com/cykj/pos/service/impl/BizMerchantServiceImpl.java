@@ -618,6 +618,8 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         bankCardDTO.setBankName(micro.getMerchBank());
         bankCardDTO.setBankCity(micro.getMerchBankCity());
         bankCardDTO.setBankReservedMobile(micro.getMerchBankMobile());
+        // 银行卡照片url
+        bankCardDTO.setBankCardImg(micro.getMerchBankCard());
         return bankCardDTO;
     }
 
@@ -632,6 +634,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         micro.setMerchBank(bankCardDTO.getBankName());
         micro.setMerchBankCity(bankCardDTO.getBankCity());
         //micro.setMerchBankMobile(bankCardDTO.getBankReservedMobile());
+        // 银行卡照片
+        micro.setMerchBankCard(bankCardDTO.getBankCardImg());
+
         microInfoService.saveOrUpdate(micro);
 
         return bankCardDTO;

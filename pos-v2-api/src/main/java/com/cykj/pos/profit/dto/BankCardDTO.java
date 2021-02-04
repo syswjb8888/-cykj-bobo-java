@@ -27,4 +27,7 @@ public class BankCardDTO {
     @ApiModelProperty(value = "开户人身份证件号码")
     private String idCard;
 
+    @ApiModelProperty(value = "银行卡照片URL")
+    private String bankCardImg;
+
 }
