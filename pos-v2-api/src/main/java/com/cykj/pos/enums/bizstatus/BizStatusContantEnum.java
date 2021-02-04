@@ -19,7 +19,13 @@ public enum BizStatusContantEnum {
     PARTNER_REGISTER_INVITOR_ISNOTEXIST("邀请人不存在","400006"),
     PROFIT_SETTLE_CONDITIONS_IS_NULL("请选择要计算的年份和月份!","600001"),
     PROFIT_SETTLE_DURATION_ERROR("不能计算当月或之后月份的分润!","600002"),
-    PROFIT_SETTLE_HAVE_SETTLED("所选计算月份的所有商户的分润计算已经完成，请不要重复计算!","600003");
+    PROFIT_SETTLE_HAVE_SETTLED("所选计算月份的所有商户的分润计算已经完成，请不要重复计算!","600003"),
+    // 修改支付密码状态
+    PAYMENT_CARDNO_ERROR("身份证验证失败","700001"),
+    // 修改支付密码状态
+    PAYMENT_VALIDATE_SUCCESS("支付验证成功","700002"),
+    // 修改支付密码状态
+    CARD_NO_IS_NULL("身份证为空，请上传","700003");
 
     private String code;
     private String name;

@@ -8,6 +8,7 @@ import com.cykj.common.core.domain.model.LoginUser;
 import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizMicroInfo;
+import com.cykj.pos.domain.dto.PaymentPassUpdateDTO;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.IBizMerchantService;
@@ -153,6 +154,36 @@ public class PosV2AppMerchantController {
         merchanInfo.put("url","http://www.baidu.com");
         ajaxResult.put("data",merchanInfo);
         return ajaxResult;
+    }
+
+    @ApiOperation(value="验证设置支付密码")
+    @PostMapping("/payment/validate")
+    public AjaxResult paymentValidate(@RequestBody PaymentPassUpdateDTO merchantDTO){
+        // 验证码验证
+        String verifyCode = merchantDTO.getVerifyCode();
+        String mobile = merchantDTO.getMobile();
+        BizStatusContantEnum bizStatus = verifyCodeService.verifyCodeValidate(mobile,verifyCode);
+        if(bizStatus != BizStatusContantEnum.SMS_SUCCESS){
+            return AjaxResult.error(bizStatus.getName());
+        }
+        AjaxResult ajaxResult = AjaxResult.success();
+        // 获取用户
+        SysUser sysUser = SecurityUtils.getLoginUser().getUser();
+        // 获取用户id
+        Long userId = LoginUserUtils.getLoginUserId();
+        BizMerchant merchant =  merchantService.getMerchantByUserId(userId);
+        Long merId =  merchant.getMerchId();
+        BizMicroInfo microInfo =  microInfoService.getBizMicroInfoByMerchId(merId);
+        String merchIdCard =  microInfo.getMerchIdcard(); // 数据库中的身份证号
+        String cardNo = merchantDTO.getCardNo();
+        if(merchIdCard==null || merchIdCard.length()<=0){
+            return AjaxResult.error(BizStatusContantEnum.CARD_NO_IS_NULL.getName());
+        }
+        String dbCardNo = merchIdCard.substring(merchIdCard.length()-6);// 截取后6位
+        if(!cardNo.equals(dbCardNo)){
+            return AjaxResult.error(BizStatusContantEnum.PAYMENT_CARDNO_ERROR.getName());
+        }
+        return AjaxResult.success(BizStatusContantEnum.PAYMENT_VALIDATE_SUCCESS.getName());
     }
 
 }

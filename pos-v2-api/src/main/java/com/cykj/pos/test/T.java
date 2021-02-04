@@ -23,7 +23,8 @@ public class T {
         /*ThirdPartRequestDataDTO<String> aaa = new ThirdPartRequestDataDTO<>();
         Type type = ((ParameterizedType)aaa.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         System.out.println(type);*/
-
+        String str = "12345678";
+        System.out.println(str.substring(str.length()-6));
 
     }
 }
