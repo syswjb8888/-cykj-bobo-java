@@ -25,6 +25,8 @@ public class PosV2AppBankCardController {
 
     private final IBizMerchantService iBizMerchantService;
 
+    private final IBizVerifyCodeService verifyCodeService;
+
     @ApiOperation(value="获取银行卡信息")
     @ApiResponses({@ApiResponse(code=200,response = BankCardDTO.class,message = "业务数据响应成功")})
     @PostMapping("/homepage")
@@ -40,11 +42,20 @@ public class PosV2AppBankCardController {
     @ApiImplicitParams({@ApiImplicitParam(name="bankName",value = "开户行名称",dataType = "string",required = true,paramType="body"),
             @ApiImplicitParam(name="bankCardNo",value = "银行卡号",dataType = "string",required = true,paramType="body"),
             @ApiImplicitParam(name="bankCity",value = "开户行所在城市,区县编码数据字典",dataType = "string",required = true,paramType="body"),
-            @ApiImplicitParam(name="bankCardImg",value = "银行卡照片",dataType = "string",required = true,paramType="body")})
+            @ApiImplicitParam(name="bankCardImg",value = "银行卡照片",dataType = "string",required = true,paramType="body"),
+            @ApiImplicitParam(name="verifyCode",value = "手机验证码",dataType = "string",required = true,paramType="body")})
     @ApiResponses({@ApiResponse(code=200,response = BankCardDTO.class,message = "业务数据响应成功")})
     @PostMapping("/alter")
     public AjaxResult alterBankCardInfo(@RequestBody BankCardDTO bankCardDTO){
         AjaxResult ajaxResult = AjaxResult.success();
+
+        String mobile = bankCardDTO.getBankReservedMobile();
+        String verifyCode = bankCardDTO.getVerifyCode();//verifyCode
+        BizStatusContantEnum bizStatus = verifyCodeService.verifyCodeValidate(mobile,verifyCode);
+        if(bizStatus != BizStatusContantEnum.SMS_SUCCESS){
+            return AjaxResult.error(bizStatus.getName());
+        }
+
         Long userId = LoginUserUtils.getLoginUserId();
         bankCardDTO.setUserId(userId);
         ajaxResult.put("data",iBizMerchantService.alterBankCardInfo(bankCardDTO));

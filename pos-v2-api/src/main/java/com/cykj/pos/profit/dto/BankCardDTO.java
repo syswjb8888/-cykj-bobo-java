@@ -30,4 +30,7 @@ public class BankCardDTO {
     @ApiModelProperty(value = "银行卡照片URL")
     private String bankCardImg;
 
+    @ApiModelProperty(value = "验证码")
+    private String verifyCode;
+
 }
