@@ -41,4 +41,19 @@ public class HomePageDataDTO implements Serializable {
      */
     @ApiModelProperty(value="商户编号")
     private String merchCode;
+    /**
+     * 腾讯秘钥ID
+     */
+    @ApiModelProperty(value="腾讯秘钥ID")
+    private String secretId;
+    /**
+     * 腾讯秘钥key
+     */
+    @ApiModelProperty(value="腾讯秘钥key")
+    private String secretKey;
+    /**
+     * 存储桶名称
+     */
+    @ApiModelProperty(value="存储桶名称")
+    private String bucketName;
 }

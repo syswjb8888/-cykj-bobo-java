@@ -4,6 +4,7 @@ import com.cykj.common.core.domain.AjaxResult;
 import com.cykj.common.core.domain.entity.SysUser;
 import com.cykj.framework.web.service.TokenService;
 import com.cykj.pos.domain.BizMerchant;
+import com.cykj.pos.enums.bizstatus.CommEnum;
 import com.cykj.pos.profit.dto.HomePageDataDTO;
 import com.cykj.pos.profit.dto.SysUserDTO;
 import com.cykj.pos.service.IBizMerchTransactionsService;
@@ -64,6 +65,10 @@ public class PosV2AppHomepageController {
         dataVo.setExpressNews(expressNews);
         dataVo.setNickName(sysUser.getNickName());
         dataVo.setMerchCode(merchant.getMerchCode());
+        // 腾讯接口对接用的常量
+        dataVo.setSecretId(CommEnum.SECRETID.getValue());
+        dataVo.setSecretKey(CommEnum.SECRETKEY.getValue());
+        dataVo.setBucketName(CommEnum.BUCKETNAME.getValue());
         ajaxResult.put("data",dataVo);
         return ajaxResult;
     }

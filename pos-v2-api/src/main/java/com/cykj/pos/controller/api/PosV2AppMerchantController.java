@@ -139,4 +139,20 @@ public class PosV2AppMerchantController {
         sysUserService.resetUserPwd(sysUser.getUserName(),password);
         return ajaxResult;
     }
+    @ApiOperation(value="获得伙伴邀请码")
+    @PostMapping("/mypartner/invite")
+    public AjaxResult getPartnerInviteCode(@RequestBody MerchantDTO merchantDTO){
+        AjaxResult ajaxResult = AjaxResult.success();
+        // 获取用户
+        SysUser sysUser = SecurityUtils.getLoginUser().getUser();
+        // 获取用户id
+        Long userId = LoginUserUtils.getLoginUserId();
+        BizMerchant merchant =  merchantService.getMerchantByUserId(userId);
+        Map<String,Object> merchanInfo = new HashMap<>();
+        merchanInfo.put("merchCode",merchant.getMerchCode());
+        merchanInfo.put("url","http://www.baidu.com");
+        ajaxResult.put("data",merchanInfo);
+        return ajaxResult;
+    }
+
 }
