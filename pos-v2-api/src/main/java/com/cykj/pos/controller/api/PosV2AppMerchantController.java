@@ -106,7 +106,8 @@ public class PosV2AppMerchantController {
     @PostMapping("/mypartner/detail")
     public AjaxResult getPartnerDetail(@RequestBody MerchantDTO merchantDTO){
         AjaxResult ajaxResult = AjaxResult.success();
-        ajaxResult.put("data",merchantService.getPartnerDetail(LoginUserUtils.getLoginUserId()));
+        // ajaxResult.put("data",merchantService.getPartnerDetail(LoginUserUtils.getLoginUserId()));
+        ajaxResult.put("data",merchantService.getPartnerDetail(merchantDTO.getUserId()));
         return ajaxResult;
     }
 

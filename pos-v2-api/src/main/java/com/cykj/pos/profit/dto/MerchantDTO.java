@@ -34,4 +34,5 @@ public class MerchantDTO implements Serializable {
 
     @ApiModelProperty(value = "页大小")
     private Integer pageSize;
+
 }

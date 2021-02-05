@@ -102,12 +102,13 @@ public class DESEncryptHelper {
 
     public static void main(String[] args) {
         try{
+
             String money="456";
             // 加密
-            String data = getEncryptStr(money,"abcdefgAabcdefgAabcdefgAabcdefg-");
+            String data = getEncryptStr(money,"abcdefgAabcdefgAabcdefg-");
             System.out.println(data);
             // 解密
-            String money2 = decrypt(data,"abcdefgAabcdefgAabcdefgAabcdefg-");// 32位
+            String money2 = decrypt(data,"abcdefgAabcdefgAabcdefgAabcdefg+");// 32位
             System.out.println(money2);
         }catch (Exception e){
             e.printStackTrace();

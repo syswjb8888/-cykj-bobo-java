@@ -40,4 +40,7 @@ public class MerchantDict {
      */
     @ApiModelProperty(value="数据索引key")
     private int id;
+
+    @ApiModelProperty(value = "头像")
+    private String portrait;
 }

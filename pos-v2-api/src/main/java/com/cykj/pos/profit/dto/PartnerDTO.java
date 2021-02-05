@@ -44,4 +44,7 @@ public class PartnerDTO {
     @ApiModelProperty(value = "伙伴总数")
     private Integer partnerCounts;
 
+    @ApiModelProperty(value = "头像")
+    private String portrait;
+
 }

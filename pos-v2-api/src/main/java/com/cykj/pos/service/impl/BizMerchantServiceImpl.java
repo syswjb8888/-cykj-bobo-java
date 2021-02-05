@@ -338,6 +338,8 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
             dict.setDictLabel(merchants.get(i).getMerchName());
             dict.setUserId(userId);
             dict.setMobile(user.getPhonenumber());
+            // 添加头像
+            dict.setPortrait(user.getPortrait());
             dicts.add(dict);
         }
         return dicts;
@@ -418,6 +420,8 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         partnerDTO.setTeamActiveMachines(thisPosCounts);
         partnerDTO.setLastMonthteamActiveMacines(lastPosCounts);
         partnerDTO.setParnterId(userId);
+        // 加入头像
+        partnerDTO.setPortrait(user.getPortrait());
         partnerDTO.setRegisterTime(DateUtils.Date2String(user.getCreateTime(),"YYYY-mm-dd HH:mm:ss"));
         return partnerDTO;
     }
@@ -442,6 +446,8 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
             partnerDTO.setTeamTransAmount(thisMonthAmount);
             partnerDTO.setTeamActiveCounts(counts);
             partnerDTO.setParnterId(user.getUserId());
+            // 添加头像
+            partnerDTO.setPortrait(user.getPortrait());
             partners.add(partnerDTO);
         }
         return partners;
