@@ -1,6 +1,7 @@
 package com.cykj.pos.test;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.profit.dto.BizMerchTransDTO;
 import com.cykj.pos.profit.dto.ThirdPartRequestDataDTO;
 
@@ -23,8 +24,11 @@ public class T {
         /*ThirdPartRequestDataDTO<String> aaa = new ThirdPartRequestDataDTO<>();
         Type type = ((ParameterizedType)aaa.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         System.out.println(type);*/
-        String str = "12345678";
-        System.out.println(str.substring(str.length()-6));
+        /*String str = "12345678";
+        System.out.println(str.substring(str.length()-6));*/
+        /*String pass = "567890";
+        String p1 = SecurityUtils.encryptPassword(pass);
+        System.out.println(SecurityUtils.matchesPassword(pass,p1));*/
 
     }
 }

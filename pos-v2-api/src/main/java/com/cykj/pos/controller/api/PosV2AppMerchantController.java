@@ -186,6 +186,31 @@ public class PosV2AppMerchantController {
         return AjaxResult.success(BizStatusContantEnum.PAYMENT_VALIDATE_SUCCESS.getName());
     }
 
+    @ApiOperation(value="验证重置修改支付密码")
+    @PostMapping("/payment/validatePassUpdate")
+    // 验证码   原支付密码
+    public AjaxResult paymentValidatePassUpdate(@RequestBody PaymentPassUpdateDTO merchantDTO){
+        AjaxResult ajaxResult = AjaxResult.success();
+        // 获取用户
+        SysUser sysUser = SecurityUtils.getLoginUser().getUser();
+        // 获得用户id
+        Long userId = sysUser.getUserId();
+        // 获取用户信息
+        SysUser loginUser =  sysUserService.selectUserById(userId);
+        // 获取支付
+        String dbPaymentPassword = loginUser.getPaymentPassword();
+        // 获得接口传递过来的输入支付密码
+        String password = merchantDTO.getPassword();
+        // 验证
+        boolean flag = SecurityUtils.matchesPassword(password,dbPaymentPassword);
+        if(!flag){
+            // 原支付密码输入有误 PAYMENT_ORIGINAL_PASSWORD_ERROR
+            return AjaxResult.error(BizStatusContantEnum.PAYMENT_ORIGINAL_PASSWORD_ERROR.getName());
+        }
+        return ajaxResult;
+    }
+
+
     @ApiOperation(value="修改支付密码")
     @PostMapping("/payment/updatePassword")
     public AjaxResult updatePaymentPass(@RequestBody PaymentPassUpdateDTO merchantDTO){

@@ -345,6 +345,8 @@ public class SysUser extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("inviteUserId", getInviteUserId())
+            .append("paymentPassword", getPaymentPassword())
             .append("dept", getDept())
             .toString();
     }
