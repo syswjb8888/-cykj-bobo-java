@@ -69,6 +69,8 @@ public class PosV2AppHomepageController {
         dataVo.setSecretId(CommEnum.SECRETID.getValue());
         dataVo.setSecretKey(CommEnum.SECRETKEY.getValue());
         dataVo.setBucketName(CommEnum.BUCKETNAME.getValue());
+        // 设置头像
+        dataVo.setPortrait(sysUser.getPortrait());
         ajaxResult.put("data",dataVo);
         return ajaxResult;
     }

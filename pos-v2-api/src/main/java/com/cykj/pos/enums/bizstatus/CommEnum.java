@@ -15,7 +15,7 @@ public enum CommEnum {
     /**
      * 存储桶名称
      */
-    BUCKETNAME("bucketName","UouqnWDf2A1cyKn46tQm00whEYvDJI2Z");
+    BUCKETNAME("bucketName","cykj-1303987307");
     private String key;
     private String value;
     private CommEnum(String key,String value){

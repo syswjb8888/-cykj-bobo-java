@@ -75,6 +75,17 @@ public class SysUser extends BaseEntity
     /** 支付密码 */
     private String paymentPassword;
 
+    /** 头像 */
+    private String portrait;
+
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
+
     public String getPaymentPassword() {
         return paymentPassword;
     }

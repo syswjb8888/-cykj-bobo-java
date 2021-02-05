@@ -9,6 +9,7 @@ import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizMicroInfo;
 import com.cykj.pos.domain.dto.PaymentPassUpdateDTO;
+import com.cykj.pos.domain.dto.UpdatePortraitDTO;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.IBizMerchantService;
@@ -63,9 +64,13 @@ public class PosV2AppMerchantController {
         LambdaQueryWrapper<BizMicroInfo> lqw = Wrappers.lambdaQuery();
         lqw.eq(BizMicroInfo::getMerchId ,merchant.getMerchId());
         BizMicroInfo microInfo =  microInfoService.getOne(lqw);
+        // 获取头像信息
+        SysUser sysUser = sysUserService.selectUserById(userId);
+        String portrait = sysUser.getPortrait();
         Map<String,Object> merchanInfo = new HashMap<>();
         merchanInfo.put("merchantBrief",merchant);
         merchanInfo.put("merchantDetail",microInfo);
+        merchanInfo.put("portrait",portrait);
         ajaxResult.put("data",merchanInfo);
         return  ajaxResult;
     }
@@ -220,6 +225,20 @@ public class PosV2AppMerchantController {
         String paymentPassword = SecurityUtils.encryptPassword(merchantDTO.getPassword());
         sysUser.setPaymentPassword(paymentPassword);
         sysUserService.resetPaymentPass(sysUser);
+        return ajaxResult;
+    }
+
+    // 修改头像
+
+    @ApiOperation(value="修改头像")
+    @PostMapping("/updatePortrait")
+    public AjaxResult updatPortrait(@RequestBody UpdatePortraitDTO merchantDTO){
+        AjaxResult ajaxResult = AjaxResult.success();
+        // 获取用户
+        SysUser sysUser = SecurityUtils.getLoginUser().getUser();
+        String portraitUrl = merchantDTO.getPortraitUrl();
+        sysUser.setPortrait(portraitUrl);
+        sysUserService.resetPortraitUrl(sysUser);
         return ajaxResult;
     }
 

@@ -56,4 +56,9 @@ public class HomePageDataDTO implements Serializable {
      */
     @ApiModelProperty(value="存储桶名称")
     private String bucketName;
+    /**
+     * 头像URL
+     */
+    @ApiModelProperty(value="头像url")
+    private String portrait;
 }

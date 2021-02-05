@@ -116,4 +116,10 @@ public interface SysUserMapper
      * @return
      */
     int resetPaymentPass(SysUser sysUser);
+
+    /**
+     * 重置支付密码
+     * @param sysUser
+     */
+    int resetPortraitUrl(SysUser sysUser);
 }

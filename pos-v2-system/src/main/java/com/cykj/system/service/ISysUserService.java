@@ -172,4 +172,10 @@ public interface ISysUserService
      * @return
      */
     public int resetPaymentPass(SysUser sysUser);
+
+    /**
+     * 重置头像
+     * @param sysUser
+     */
+    int resetPortraitUrl(SysUser sysUser);
 }
