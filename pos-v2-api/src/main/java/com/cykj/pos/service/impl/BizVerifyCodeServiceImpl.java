@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cykj.common.config.RuoYiConfig;
 import com.cykj.common.constant.Constants;
 import com.cykj.pos.domain.BizVerifyCode;
+import com.cykj.pos.domain.dto.VerifyCodeDTO;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.mapper.BizVerifyCodeMapper;
 import com.cykj.pos.service.IBizVerifyCodeService;
@@ -16,6 +17,7 @@ import com.github.qcloudsms.SmsSingleSenderResult;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +36,9 @@ public class BizVerifyCodeServiceImpl extends ServiceImpl<BizVerifyCodeMapper, B
 
     @Autowired
     private RuoYiConfig config;
+
+    @Autowired
+    private BizVerifyCodeMapper verifyCodeMapper;
 
     @Override
     public List<BizVerifyCode> queryList(BizVerifyCode bizVerifyCode) {
@@ -69,7 +74,19 @@ public class BizVerifyCodeServiceImpl extends ServiceImpl<BizVerifyCodeMapper, B
     }
 
     @Override
+    @Transactional
     public BizStatusContantEnum sendVerifyCode(String mobile,Long userId){
+        // 先验证验证码是否有效   如果再1分钟之内，不允许重复请求
+        Integer minEffectiveDuration = config.getMinEffectiveDuration();
+        // 获得和上一次短信验证码的时间的差值
+        VerifyCodeDTO codeDTO = this.getMinEffectiveDurationMinute(mobile);
+        if(codeDTO != null ){
+            Long minute = codeDTO.getSecond();
+            if(minute<minEffectiveDuration){
+                // 已经获取验证码，请确认验证码
+                return BizStatusContantEnum.SMS_EXIST_REQUIRED;
+            }
+        }
         String code = VerifyCodeUtils.getVerifyCode();
         SmsSingleSenderResult result = smsService.sendVerifyCode(mobile,code,"partner register");
         if(result != null && result.result == 0){
@@ -116,5 +133,10 @@ public class BizVerifyCodeServiceImpl extends ServiceImpl<BizVerifyCodeMapper, B
         bizVerifyCode.setVerStatus(1);
         this.saveOrUpdate(bizVerifyCode);
         return BizStatusContantEnum.SMS_SUCCESS;
+    }
+
+    @Override
+    public VerifyCodeDTO getMinEffectiveDurationMinute(String mobile) {
+        return verifyCodeMapper.getMinEffectiveDurationMinute(mobile);
     }
 }

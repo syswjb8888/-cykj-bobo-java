@@ -8,6 +8,7 @@ import com.cykj.common.core.domain.AjaxResult;
 import com.cykj.common.core.domain.entity.SysUser;
 import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.domain.BizMerchant;
+import com.cykj.pos.domain.BizVersionRecord;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.*;
@@ -34,6 +35,20 @@ public class PartnerOpenInterfaceController {
     private final IBizVerifyCodeService verifyCodeService;
 
     private final ISysUserService sysUserService;
+
+    private final IBizVersionRecordService versionRecordService;
+
+    // 显示版本信息接口
+    @GetMapping("/getVersionInfo")
+    public AjaxResult getNewsVersionInfo(){
+        AjaxResult ajaxResult = AjaxResult.success("获取版本信息成功");
+        BizVersionRecord versionRecord =  versionRecordService.getNewsVersionInfo();
+        if(versionRecord == null){
+            return AjaxResult.error("当前系统没有上传任何版本信息");
+        }
+        ajaxResult.put("data",versionRecord);
+        return ajaxResult;
+    }
 
     @ApiOperation(value="发送短信验证码")
     @ApiImplicitParams({@ApiImplicitParam(name="mobile",value = "路径参数1：合法手机号码",dataType = "long",required = true,paramType="body"),
@@ -64,8 +79,9 @@ public class PartnerOpenInterfaceController {
             return AjaxResult.error(bizStatus.getName());
         }
         BizStatusContantEnum status = iBizMerchantService.partnerRegister(partnerInviteDTO);
+
         if(status != BizStatusContantEnum.PARTNER_REGISTER_SUCCESS){
-            return AjaxResult.error(bizStatus.getName());
+            return AjaxResult.error(status.getName());
         }
         return AjaxResult.success(BizStatusContantEnum.PARTNER_REGISTER_SUCCESS.getName());
     }

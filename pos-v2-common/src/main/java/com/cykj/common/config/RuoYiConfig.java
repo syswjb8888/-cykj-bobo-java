@@ -39,6 +39,8 @@ public class RuoYiConfig{
 
     private Integer smsEffectiveDuration;
 
+    private Integer minEffectiveDuration;
+
     private List<String> posQueryFilterConditions;
 
     private String signenv;
@@ -133,6 +135,14 @@ public class RuoYiConfig{
     public void setAddressEnabled(boolean addressEnabled)
     {
         RuoYiConfig.addressEnabled = addressEnabled;
+    }
+
+    public Integer getMinEffectiveDuration() {
+        return minEffectiveDuration;
+    }
+
+    public void setMinEffectiveDuration(Integer minEffectiveDuration) {
+        this.minEffectiveDuration = minEffectiveDuration;
     }
 
     /**

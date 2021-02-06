@@ -9,6 +9,7 @@ public enum BizStatusContantEnum {
     SMS_DURATION_EXPIRED("短信验证码已超过5分钟而失效","300002"),
     SMS_FAIL_FREQUENCY("短信验证码发送过于频繁","300003"),
     SMS_INVALIDATED("短信验证码错误或已失效","300003"),
+    SMS_EXIST_REQUIRED("已经获取验证码，请确认验证码","300005"),
     //伙伴注册相关状态
     PARTNER_REGISTER_SUCCESS("伙伴注册失败","400000"),
     PARTNER_IS_NULL("邀请码不能为空","400001"),
@@ -28,6 +29,7 @@ public enum BizStatusContantEnum {
     CARD_NO_IS_NULL("身份证为空，请上传","700003"),
     // 原支付密码输入有误
     PAYMENT_ORIGINAL_PASSWORD_ERROR("原支付密码输入有误","700004");
+
     private String code;
     private String name;
 

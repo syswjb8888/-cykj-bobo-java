@@ -2,6 +2,7 @@ package com.cykj.pos.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cykj.pos.domain.BizVerifyCode;
+import com.cykj.pos.domain.dto.VerifyCodeDTO;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 
 import java.util.List;
@@ -32,4 +33,11 @@ public interface IBizVerifyCodeService extends IService<BizVerifyCode> {
      * @return
      */
     public BizStatusContantEnum verifyCodeValidate(String mobile, String verifyCode);
+
+    /**
+     * 获取与上一次发送验证码时间间隔 秒
+     * @param mobile
+     * @return
+     */
+    VerifyCodeDTO getMinEffectiveDurationMinute(String mobile);
 }

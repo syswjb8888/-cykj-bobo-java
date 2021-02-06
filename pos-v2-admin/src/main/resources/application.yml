@@ -21,10 +21,11 @@ cykj:
   #登录用户或密码输入错误允许的最大次数
   errorLoginCounts: 5
   #终端查询筛选条件字典类型
-  posQueryFilterConditions: ['pos_type','pos_machine_type']
+  posQueryFilterConditions: ['pos_type','pos_machine_type','merchant_bill_type']
   #短信验证码有效时长【分钟】
   smsEffectiveDuration: 5
-
+  #短信在多少分钟内不允许重复验证 [秒]
+  minEffectiveDuration: 60
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080

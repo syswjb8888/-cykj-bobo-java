@@ -17,5 +17,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="var3"    column="var3"    />
     </resultMap>
 
+    <select id="getMinEffectiveDurationMinute" resultType="VerifyCodeDTO">
+        select timestampdiff(SECOND,v.ver_starttime,now()) second from biz_verify_code v
+        where v.ver_mobile=#{mobile}
+        order by v.ver_starttime desc limit 0,1
+    </select>
 
 </mapper>
