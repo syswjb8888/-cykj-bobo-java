@@ -100,29 +100,29 @@ public class DESHelperUtil {
         return UUID.randomUUID().toString().replace("-","");
     }
     public static void main(String[] args) {
-        String money = "123";
+        String money = "36688.00";
         // 加密
-        for(int i=0;i<10;i++){
+       /* for(int i=0;i<10;i++){
             // 获得秘钥
             String secreKey = getSecretKey();
             // 获得加密的信息
             String secretBalance = encrypt(secreKey,money);
             System.out.println("secreKey="+secreKey+",secretBalance="+secretBalance);
-        }
+        }*/
         /**
-         * secret_key=a2b0dcff3bf446ac842f3a530d779af4,secret_balance=hLtNQopwEtQ=
-         * secret_key=091f33ac4ab94eca91b5a233fcd6e329,secret_balance=ijyLT87xPx8=
-         * secret_key=816ccebe1a644c928e960334f96b0f71,secret_balance=SMdFNJiLVJQ=
-         * secret_key=76019210d07d4952907dc8b278cd33c1,secret_balance=8XGnyAxqkS4=
-         * secret_key=c6e8a05ba8d543ec80406bd0dc51e5ba,secret_balance=OTbx+45kBFA=
-         * secret_key=ac425bf3e8ad473d9f283fcbcfd09eb0,secret_balance=bRfphqqJzf4=
-         * secret_key=30bca9fa2c8f4e61ae78bc81f206243b,secret_balance=ttjRg8nj5zY=
-         * secret_key=c255c7e453474c32948cc78052619788,secret_balance=UMfjsc8j2So=
-         * secret_key=895f9d95fd9547a5b5109c6406d034b3,secret_balance=51SC/6WwU9w=
-         * secret_key=cd5107e2fffd4b04983f07f0962689fe,secret_balance=eMIHpIaZlok=
+         secreKey=cf7442e3910d4a80a3839f940b86fd95,secretBalance=supyB3F8L0U0mwjGAza0Cw==
+         secreKey=475ed9c809ae46d38dde2204ade0a314,secretBalance=0HxNUktThCg7o39pIrzu3A==
+         secreKey=50984681b4564acda8f66d7d8dfa1b31,secretBalance=SzN3Bm+LTDQchAbsPWB3Bw==
+         secreKey=6b472248336d40408c81f9cae20a0e46,secretBalance=mKwQL9UIJQRLurKanfrESA==
+         secreKey=fa2a1f0b717f45c686ce40eb104d12a0,secretBalance=ZTZEJeqFHw5/BLDGp9X0Kw==
+         secreKey=ba0370294aaf4656a548709327900b50,secretBalance=aQUBkIlI38hpdbb0fAZEdg==
+         secreKey=0be954cfefb24b62a401bb62ab108bcc,secretBalance=b/u90U5Hqq4aHfWqgnf5/Q==
+         secreKey=76c7a84bcb984072a9558984b53733b1,secretBalance=Pu9itLw6nMFxfV38rIXOKQ==
+         secreKey=e173686b7bc140ecbe2b83ec55c8eb72,secretBalance=y38qvUARK/Zf+/9zHUIxmw==
+         secreKey=0325f17f4f094c04a2e157a343651b63,secretBalance=2WPJW/8uaD6Fk+GQO2DpjQ==
          */
         // 解密
-        String str1 = decrypt("a2b0dcff3bf446ac842f3a530d779af4","hLtNQopwEtQ=");
+        String str1 = decrypt("cf7442e3910d4a80a3839f940b86fd95","supyB3F8L0U0mwjGAza0Cw==");
         System.out.println("str1="+str1);
         //System.out.println(UUID.randomUUID().toString().replace("-","").length());
     }

@@ -32,7 +32,6 @@ public class BizMerchant implements Serializable {
 
 private static final long serialVersionUID=1L;
 
-
     /** 商户主键 */
     @TableId(value = "merch_id")
     @ApiModelProperty(value = "商户主键")
@@ -95,6 +94,14 @@ private static final long serialVersionUID=1L;
 
     /** $column.columnComment */
     @ApiModelProperty(hidden = true)
+    private Date updateTime;
+
+    /** $column.columnComment */
+    @ApiModelProperty(hidden = true)
+    private String secretKey;
+
+    /** $column.columnComment */
+    @ApiModelProperty(hidden = true)
     private Long createBy;
 
     /** $column.columnComment */
@@ -107,7 +114,7 @@ private static final long serialVersionUID=1L;
 
     /** $column.columnComment */
     @ApiModelProperty(hidden = true)
-    private Date updateTime;
+    private String secretBalance;
 
     /** $column.columnComment */
     @ApiModelProperty(value = "省地区代码")
