@@ -3,18 +3,20 @@ package com.cykj.pos.controller.api;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.cykj.common.core.domain.AjaxResult;
+import com.cykj.common.core.domain.entity.SysDictData;
 import com.cykj.common.core.domain.entity.SysUser;
 import com.cykj.common.core.domain.model.LoginUser;
 import com.cykj.common.utils.SecurityUtils;
-import com.cykj.pos.domain.BizMicroInfo;
-import com.cykj.pos.domain.BizWallet;
+import com.cykj.pos.domain.*;
+import com.cykj.pos.domain.dto.BillQueryDTO;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.profit.dto.MicroMerchantDTO;
+import com.cykj.pos.profit.dto.PosTerminalDTO;
 import com.cykj.pos.profit.dto.WalletDTO;
-import com.cykj.pos.service.IBizMicroInfoService;
-import com.cykj.pos.service.IBizVerifyCodeService;
-import com.cykj.pos.service.IBizWalletService;
+import com.cykj.pos.profit.service.IMerchantProfitService;
+import com.cykj.pos.service.*;
 import com.cykj.pos.util.LoginUserUtils;
+import com.cykj.system.service.ISysDictDataService;
 import com.cykj.system.service.ISysUserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,12 @@ public class PosV2AppWalletController {
     private final IBizVerifyCodeService verifyCodeService;
 
     private final IBizMicroInfoService microInfoService;
+
+    private final IBizMerchantService merchantService;
+
+    private final ISysDictDataService sysDictDataService;
+
+    private final IBizMerchBillService merchBillService;
 
     @ApiOperation(value="我的钱包首页")
     @ApiImplicitParams({@ApiImplicitParam(name="userId",value = "用户主键Id",dataType = "long",required = true,paramType="body")})
@@ -91,4 +99,30 @@ public class PosV2AppWalletController {
         iBizWalletService.setPayPassword(walletDTO);
         return ajaxResult;
     }
+
+    /**
+     * 账单明细接口
+     * @param billQueryDTO
+     * @return
+     */
+    @PostMapping("/bill/list")
+    public AjaxResult queryTerminalList(@RequestBody BillQueryDTO billQueryDTO) {
+
+        AjaxResult ajaxResult = AjaxResult.success();
+        billQueryDTO.setUserId(LoginUserUtils.getLoginUserId());
+        // 获得商户信息
+        BizMerchant merchant = merchantService.getMerchantByUserId(billQueryDTO.getUserId());
+        billQueryDTO.setMerchId(merchant.getMerchId());
+        // 获得交易类型字典值
+        SysDictData sysDictData = new SysDictData();
+        sysDictData.setDictType("merchant_bill_type");
+        // 获得字典值
+        List<SysDictData> billTypeList =  sysDictDataService.selectDictDataList(sysDictData);
+        Long merchantId = merchant.getMerchId();
+        List<BillQueryDTO> terminalList =
+                merchBillService.getPageBillListByMerchId(billQueryDTO);
+        ajaxResult.put("data", terminalList);
+        return ajaxResult;
+    }
+
 }

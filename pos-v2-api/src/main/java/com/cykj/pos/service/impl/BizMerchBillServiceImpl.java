@@ -1,5 +1,7 @@
 package com.cykj.pos.service.impl;
 
+import com.cykj.pos.domain.dto.BillQueryDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -20,6 +22,8 @@ import java.util.Map;
  */
 @Service
 public class BizMerchBillServiceImpl extends ServiceImpl<BizMerchBillMapper, BizMerchBill> implements IBizMerchBillService {
+    @Autowired
+    BizMerchBillMapper merchBillMapper;
 
     @Override
     public List<BizMerchBill> queryList(BizMerchBill bizMerchBill) {
@@ -64,5 +68,13 @@ public class BizMerchBillServiceImpl extends ServiceImpl<BizMerchBillMapper, Biz
             lqw.eq(BizMerchBill::getVar5 ,bizMerchBill.getVar5());
         }
         return this.list(lqw);
+    }
+
+    @Override
+    public List<BillQueryDTO> getPageBillListByMerchId(BillQueryDTO billQueryDTO) {
+        // 设置数据从第几条开始
+        long start = (billQueryDTO.getPageNo() -1) * billQueryDTO.getPageSize();
+        billQueryDTO.setStart(start);
+        return merchBillMapper.getPageBillListByMerchId(billQueryDTO);
     }
 }

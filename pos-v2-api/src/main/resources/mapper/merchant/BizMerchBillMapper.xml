@@ -21,6 +21,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="var4"    column="var4"    />
         <result property="var5"    column="var5"    />
     </resultMap>
-
+    <select id="getPageBillListByMerchId" resultType="BillQueryDTO" parameterType="BillQueryDTO">
+        select bill_id billId,merch_id merchId,amount,date_format(bill_date,'%Y-%m-%d %H:%i:%s') bilDate,
+        d.dict_value billTypeValue,d.dict_label billTypeLabel
+        from biz_merch_bill bill,sys_dict_data d
+        where bill.bill_type=d.dict_value and d.dict_type='merchant_bill_type'
+        <if test="billDate != null and billDate != ''"><!-- 开始账单日期检索 -->
+            and bill_date like concat(#{billDate},'%')
+        </if>
+        <if test="dictValue != null and dictValue != ''"><!-- 开始账单交易类型检索 -->
+            and d.dict_value=#{dictValue}
+        </if>
+        order by bill.bill_date desc
+        <if test="pageNo != -1 and pageSize != -1"><!-- 分页 -->
+            limit #{start},#{pageSize}
+        </if>
+    </select>
 
 </mapper>
