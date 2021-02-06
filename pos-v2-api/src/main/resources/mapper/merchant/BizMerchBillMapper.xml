@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amount"    column="amount"    />
         <result property="policyId"    column="policy_id"    />
         <result property="billDate"    column="bill_date"    />
+        <result property="taxation"    column="taxation"    />
         <result property="var1"    column="var1"    />
         <result property="var2"    column="var2"    />
         <result property="var3"    column="var3"    />

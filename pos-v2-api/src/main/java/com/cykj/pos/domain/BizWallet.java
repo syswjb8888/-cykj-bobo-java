@@ -46,7 +46,7 @@ private static final long serialVersionUID=1L;
 
     /** 结算账户总额 */
     @ApiModelProperty(value = "结算账户总额")
-    private BigDecimal profitAmount;
+    private String profitAmount;
 
     /** 结算帐户应纳税金额 */
     @ApiModelProperty(value = "结算帐户应纳税金额")
@@ -54,7 +54,7 @@ private static final long serialVersionUID=1L;
 
     /** 奖励账户总额 */
     @ApiModelProperty(value = "奖励账户总额")
-    private BigDecimal rewardAmount;
+    private String rewardAmount;
 
     /** 奖励账户应纳税金额 */
     @ApiModelProperty(value = "奖励账户应纳税总额")
@@ -62,7 +62,7 @@ private static final long serialVersionUID=1L;
 
     /** 钱包总额 */
     @ApiModelProperty(value = "钱包总额")
-    private BigDecimal walletAmount;
+    private String walletAmount;
 
     /** 是否提现，00-未提现，01-奖励账户提现，10-结算账户提出，11-全部提现 */
     @ApiModelProperty(value = "是否提现")
@@ -71,6 +71,10 @@ private static final long serialVersionUID=1L;
     /** 支付密码 */
     @ApiModelProperty(value = "支付密码")
     private String payPassword;
+
+    /** 秘钥 */
+    @ApiModelProperty(value = "秘钥")
+    private String secretKey;
 
     /** $column.columnComment */
     private Long createBy;

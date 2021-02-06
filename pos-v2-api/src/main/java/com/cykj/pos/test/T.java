@@ -34,13 +34,15 @@ public class T {
         System.out.println(SecurityUtils.matchesPassword(pass,p1));*/
         /*String formatedDate = DateUtils.getCaculateYearAndMonth("last","yyyyMMdd");
         System.out.println(formatedDate);*/
-        BigDecimal bignum1 = new BigDecimal("10.5");
+        BigDecimal bignum1 = new BigDecimal("10.0000");
 
-        BigDecimal bignum2 = new BigDecimal("5.333");
+        /*BigDecimal bignum2 = new BigDecimal("5.333");
 
         BigDecimal bignum3 = bignum1.subtract(bignum2);
 
-        System.out.println(bignum3);
+        System.out.println(bignum3);*/
+        System.out.println(BigDecimal.valueOf(109.2222));
+        System.out.println(bignum1.stripTrailingZeros().toPlainString());
     }
 }
 class Per{

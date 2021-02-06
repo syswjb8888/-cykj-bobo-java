@@ -14,6 +14,7 @@ import com.cykj.common.utils.StringUtils;
 import com.cykj.pos.domain.*;
 import com.cykj.pos.enums.bizstatus.MonthEnum;
 import com.cykj.pos.service.*;
+import com.cykj.pos.util.DESHelperUtil;
 import com.cykj.pos.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -128,11 +129,21 @@ public class MerchantProfitServiceImpl implements IMerchantProfitService{
 			wallet = new BizWallet();
 			wallet.setUserId(userId);
 		}
-		wallet.setProfitAmount(profitAmount);
-		wallet.setRewardAmount(rewardAmount);
-		wallet.setWalletAmount(profitAmount.add(rewardAmount));
-		walletService.saveOrUpdate(wallet);
+        // 代码需要重新设置  加密数据
+		String password = wallet.getSecretKey();
+		if(password==null || "".equals(password)){
+			password = DESHelperUtil.getSecretKey();
+		}
+		// 需要加密
+		String profitAmountStr =  DESHelperUtil.encrypt(password,profitAmount.stripTrailingZeros().toPlainString()); // 避免输出科学计数法
+		String rewardAmountStr = DESHelperUtil.encrypt(password,rewardAmount.stripTrailingZeros().toPlainString()); // 避免输出科学计数法
+		BigDecimal walletAmount = profitAmount.add(rewardAmount);
+		String walletAmountStr = DESHelperUtil.encrypt(password,walletAmount.stripTrailingZeros().toPlainString()); // 避免输出科学计数法
+		wallet.setProfitAmount(profitAmountStr);
+		wallet.setRewardAmount(rewardAmountStr);
+		wallet.setWalletAmount(walletAmountStr);
 
+		walletService.saveOrUpdate(wallet);
 		//修改结算支付状态及更新结算支付时间
         settle.setSettleStatus(Constants.SETTLE_PAYED);
 		String settleDate = DateUtils.localeDateTime2String(LocalDateTime.now(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));

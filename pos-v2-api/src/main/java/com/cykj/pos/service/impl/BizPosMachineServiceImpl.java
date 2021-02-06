@@ -9,17 +9,12 @@ import com.cykj.common.constant.Constants;
 import com.cykj.common.core.domain.entity.SysDictData;
 import com.cykj.common.core.domain.entity.SysDictType;
 import com.cykj.common.enums.DataSourceType;
-import com.cykj.pos.domain.BizAllocAdjRecords;
-import com.cykj.pos.domain.BizMerchant;
-import com.cykj.pos.domain.BizPosMachine;
-import com.cykj.pos.domain.BizPosMachineStatusRecords;
+import com.cykj.pos.domain.*;
 import com.cykj.pos.mapper.BizPosMachineMapper;
 import com.cykj.pos.profit.dto.*;
-import com.cykj.pos.service.IBizAllocAdjRecordsService;
-import com.cykj.pos.service.IBizMerchantService;
-import com.cykj.pos.service.IBizPosMachineService;
-import com.cykj.pos.service.IBizPosMachineStatusRecordsService;
+import com.cykj.pos.service.*;
 import com.cykj.pos.util.DateUtils;
+import com.cykj.pos.util.DictUtils;
 import com.cykj.pos.util.ListUtils;
 import com.cykj.system.service.ISysDictTypeService;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +24,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -63,6 +59,8 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
 
     @Autowired
     private IBizPosMachineStatusRecordsService bizPosMachineStatusRecordsService;
+
+    IBizMerchBillService bizMerchBillService;
 
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -330,6 +328,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     }
 
     @Override
+    @Transactional
     public void posMachineActivate(TerminalActivateDTO terminalActivateDTO) {
         BizPosMachineStatusRecords posMachineStatusRecords = new BizPosMachineStatusRecords();
         posMachineStatusRecords.setPhoneNo(terminalActivateDTO.getPhoneNo());
@@ -350,10 +349,28 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         String receiptDate = DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER);
         posMachineStatusRecords.setReceiptDate(receiptDate); // 设置接收时间
         posMachineStatusRecords.setRecordsType("2"); //该记录是设备激活操作记录
+        //--------------------- 插入账单  返现 1--------------------------
+        // 通过设备号获得商户信息
+        BizPosMachine posMachine = getPosMachineBySnCode(terminalActivateDTO.getSnCode());
+        BizMerchBill merchBill = new BizMerchBill();
+        Long merId = posMachine.getMerchId();
+        BizMerchant merchant = iBizMerchantService.getMerchantByMerchId(merId);
+        merchBill.setMerchId(merchant.getParentId());// 商户的上一级合作伙伴
+        merchBill.setMerchName(terminalActivateDTO.getName()); // 名称
+        merchBill.setPosCode(posMachine.getPosType()); // 设备类型
+        merchBill.setBillType("1"); // 账单类型
+        merchBill.setAmount(BigDecimal.valueOf(109.2));// 返现金额
+        merchBill.setPolicyId("1001");//正常id  默认设置成1001
+        merchBill.setBillType(DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER)); // 账单日期
+        merchBill.setTaxation(BigDecimal.valueOf(10.8)); // 税点
+        // 保存账单
+        bizMerchBillService.saveOrUpdate(merchBill);
+        // 保存设备状态记录
         bizPosMachineStatusRecordsService.saveOrUpdate(posMachineStatusRecords);
     }
 
     @Override
+    @Transactional
     public void posMachineBind(TerminalBindDTO terminalBindDTO) {
         BizPosMachineStatusRecords posMachineStatusRecords = new BizPosMachineStatusRecords();
         // ----------快钱接口提供数据--------------

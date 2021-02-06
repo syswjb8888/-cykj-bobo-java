@@ -61,4 +61,9 @@ public class HomePageDataDTO implements Serializable {
      */
     @ApiModelProperty(value="头像url")
     private String portrait;
+    /**
+     * 客服电话
+     */
+    @ApiModelProperty(value="客服电话")
+    private String servicePhone;
 }

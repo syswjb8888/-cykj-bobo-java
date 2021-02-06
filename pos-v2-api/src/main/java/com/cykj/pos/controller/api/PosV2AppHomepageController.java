@@ -110,6 +110,8 @@ public class PosV2AppHomepageController {
         dataVo.setSecretId(CommEnum.SECRETID.getValue());
         dataVo.setSecretKey(CommEnum.SECRETKEY.getValue());
         dataVo.setBucketName(CommEnum.BUCKETNAME.getValue());
+        // 客服电话
+        dataVo.setServicePhone(CommEnum.SERVICE_PHONE.getValue());
         // 设置头像
         dataVo.setPortrait(sysUser.getPortrait());
         ajaxResult.put("data",dataVo);

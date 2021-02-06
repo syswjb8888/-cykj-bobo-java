@@ -15,7 +15,11 @@ public enum CommEnum {
     /**
      * 存储桶名称
      */
-    BUCKETNAME("bucketName","cykj-1303987307");
+    BUCKETNAME("bucketName","cykj-1303987307"),
+    /**
+     * 客服电话
+     */
+    SERVICE_PHONE("servicePhone","0431-88856510");
     private String key;
     private String value;
     private CommEnum(String key,String value){

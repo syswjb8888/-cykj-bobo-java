@@ -101,10 +101,14 @@ public class DESHelperUtil {
     }
     public static void main(String[] args) {
         String money = "36688.00";
+        String money1 = "26688.00"; // 结算款账户
+        String money2 = "10000.00"; // 奖励
+        System.out.println(encrypt("cf7442e3910d4a80a3839f940b86fd95",money1));
+        System.out.println(encrypt("cf7442e3910d4a80a3839f940b86fd95",money2));
         // 加密
        /* for(int i=0;i<10;i++){
             // 获得秘钥
-            String secreKey = getSecretKey();
+            String secretKey = getSecretKey();
             // 获得加密的信息
             String secretBalance = encrypt(secreKey,money);
             System.out.println("secreKey="+secreKey+",secretBalance="+secretBalance);
@@ -120,9 +124,12 @@ public class DESHelperUtil {
          secreKey=76c7a84bcb984072a9558984b53733b1,secretBalance=Pu9itLw6nMFxfV38rIXOKQ==
          secreKey=e173686b7bc140ecbe2b83ec55c8eb72,secretBalance=y38qvUARK/Zf+/9zHUIxmw==
          secreKey=0325f17f4f094c04a2e157a343651b63,secretBalance=2WPJW/8uaD6Fk+GQO2DpjQ==
+
+         6R5Zkcjt5eQUZXth5rSSAg==
+         u+DISe2EF5JrOqSS3s/VTw==
          */
         // 解密
-        String str1 = decrypt("cf7442e3910d4a80a3839f940b86fd95","supyB3F8L0U0mwjGAza0Cw==");
+        String str1 = decrypt("cf7442e3910d4a80a3839f940b86fd95","u+DISe2EF5JrOqSS3s/VTw==");
         System.out.println("str1="+str1);
         //System.out.println(UUID.randomUUID().toString().replace("-","").length());
     }

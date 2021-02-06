@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
@@ -60,7 +61,11 @@ private static final long serialVersionUID=1L;
 
     /** 金额 */
     @Excel(name = "金额")
-    private Long amount;
+    private BigDecimal amount;
+
+    /** 金额 */
+    @Excel(name = "税点")
+    private BigDecimal taxation;
 
     /** 政策ID */
     @Excel(name = "政策ID")

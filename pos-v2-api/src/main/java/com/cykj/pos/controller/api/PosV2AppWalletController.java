@@ -14,6 +14,7 @@ import com.cykj.pos.profit.dto.WalletDTO;
 import com.cykj.pos.service.IBizMicroInfoService;
 import com.cykj.pos.service.IBizVerifyCodeService;
 import com.cykj.pos.service.IBizWalletService;
+import com.cykj.pos.util.LoginUserUtils;
 import com.cykj.system.service.ISysUserService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,15 @@ public class PosV2AppWalletController {
     @PostMapping("/homepage")
     public AjaxResult walletHomePage(@RequestBody WalletDTO walletDTO){
         AjaxResult ajaxResult = AjaxResult.success("我的钱包首页数据获取成功");
-        ajaxResult.put("data",iBizWalletService.getMyWallet(walletDTO));
+        // 获取用户信息
+        Long userId = LoginUserUtils.getLoginUserId();
+        // 获取用户信息
+        SysUser sysUser =  sysUserService.selectUserById(userId);
+        walletDTO.setUserId(userId);
+        BizWallet wallet = iBizWalletService.getMyWallet(walletDTO);
+        // 设置支付密码
+        wallet.setPayPassword(sysUser.getPaymentPassword());
+        ajaxResult.put("data",wallet);
         return ajaxResult;
     }
 
