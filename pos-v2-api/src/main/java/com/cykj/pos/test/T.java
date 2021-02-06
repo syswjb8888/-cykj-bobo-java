@@ -4,9 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.profit.dto.BizMerchTransDTO;
 import com.cykj.pos.profit.dto.ThirdPartRequestDataDTO;
+import com.cykj.pos.util.DateUtils;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 
 public class T {
     public static void main(String[] args) {
@@ -29,7 +32,15 @@ public class T {
         /*String pass = "567890";
         String p1 = SecurityUtils.encryptPassword(pass);
         System.out.println(SecurityUtils.matchesPassword(pass,p1));*/
+        /*String formatedDate = DateUtils.getCaculateYearAndMonth("last","yyyyMMdd");
+        System.out.println(formatedDate);*/
+        BigDecimal bignum1 = new BigDecimal("10.5");
 
+        BigDecimal bignum2 = new BigDecimal("5.333");
+
+        BigDecimal bignum3 = bignum1.subtract(bignum2);
+
+        System.out.println(bignum3);
     }
 }
 class Per{

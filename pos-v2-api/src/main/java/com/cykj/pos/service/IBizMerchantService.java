@@ -175,4 +175,24 @@ public interface IBizMerchantService extends IService<BizMerchant> {
      * @param merchTransDTO
      */
     public void returnMerchantTransaction(BizReturnTransDTO merchTransDTO);
+    /**
+     *  商户下共计商户数量
+     * @param merchId
+     * @return
+     */
+    Integer getMonthlyTotalMerchantByMerId(Long merchId);
+
+    /**
+     * 当前月新增商户数
+     * @param merchId
+     * @return
+     */
+    Integer getMonthlyMyMerchantCounts(Long merchId);
+
+    /**
+     * 商户下面所有的子商户和合作伙伴
+     * @param merchId
+     * @return
+     */
+    Integer getTtotalMerchAndPartnerCounts(Long merchId);
 }

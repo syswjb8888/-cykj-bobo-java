@@ -88,15 +88,18 @@ public class DESUtil {
     }
 
     public static void main(String[] args) {
-        String uuid = UUID.randomUUID().toString().replace("-","");
+        // String uuid = UUID.randomUUID().toString().replace("-","");
         String str = "123456";
         // 加密
-        str = encrypt(uuid,str);
-        System.out.println("str="+str);
+        for(int i=0;i<10;i++){
+            String str1 = encrypt("1234567"+i,str);
+            System.out.println("i="+i+",str1="+str1);
+        }
+
 
         // 解密
-        String str1 = decrypt(uuid,str);
-        System.out.println("str1="+str1);
+       /* String str1 = decrypt("111222333",str);
+        System.out.println("str1="+str1);*/
         //System.out.println(UUID.randomUUID().toString().replace("-","").length());
     }
 

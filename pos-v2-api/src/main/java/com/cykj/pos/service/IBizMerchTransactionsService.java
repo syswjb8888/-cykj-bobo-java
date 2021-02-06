@@ -72,4 +72,12 @@ public interface IBizMerchTransactionsService extends IService<BizMerchTransacti
      * @return
      */
     public BigDecimal getMonthlyTransAmountByMerchId(Long merchId,String month);
+
+    /**
+     * 小薇商户 交易额个人业绩
+     * @param merchId
+     * @return
+     */
+    BigDecimal getMonthlyMerchantTransAmountByMerchId(Long merchId);
+
 }

@@ -273,7 +273,7 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).substring(0, 7);
         String sql = "SELECT  merch_id FROM biz_merchant WHERE FIND_IN_SET(merch_id,findMerchSubNode(?)) and create_time like ?";
         List<Long> merchIds = jdbcTemplate.queryForList(sql, new Object[]{merchId, formatedDate}, Long.class);
-        String queryLeafNode = "select coun(1) from biz_merchant where parent_id=? and create_time like ?";
+        String queryLeafNode = "select count(1) from biz_merchant where parent_id=? and create_time like ?";
         Integer leafCounts = 0;
         for (Long merchantId : merchIds) {
             Integer count = jdbcTemplate.queryForObject(queryLeafNode, new Object[]{merchantId, formatedDate}, Integer.class);
@@ -725,4 +725,59 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         bizMerchTransactionsService.saveOrUpdate(merchTransaction);
     }
 
+    /**
+     * 商户下没有孩子得商户  就是我们需要的商户
+     *
+     * @param merchId
+     * @return
+     */
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public Integer getMonthlyTotalMerchantByMerId(Long merchId) {
+        // 拿到商户下的所有商户和合作伙伴
+        String sql = "SELECT  merch_id FROM biz_merchant WHERE FIND_IN_SET(merch_id,findMerchSubNode(?))";
+        List<Long> merchIds = jdbcTemplate.queryForList(sql, new Object[]{merchId}, Long.class);
+        // 获得商户下的所有子商户
+        String queryLeafNode = "select count(1) from biz_merchant where parent_id=?";
+        Integer leafCounts = 0;
+        for (Long merchantId : merchIds) {
+            Integer count = jdbcTemplate.queryForObject(queryLeafNode, new Object[]{merchantId}, Integer.class);
+            // 如果没有子节点  那么就说明是普通商户  散户
+            if (count < 1) {
+                leafCounts++;
+            } else {
+                continue;
+            }
+        }
+        return leafCounts;
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public Integer getMonthlyMyMerchantCounts(Long merchId) {
+        // 拿到自己的孩子
+        LocalDate localDate = LocalDate.now();
+        String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).substring(0, 7);
+        String sql = "SELECT  merch_id FROM biz_merchant WHERE parent_id=? and create_time like ?";
+        List<Long> merchIds = jdbcTemplate.queryForList(sql, new Object[]{merchId, formatedDate}, Long.class);
+        // 获得孩子的孩子
+        String queryLeafNode = "select count(1) from biz_merchant where parent_id=? and create_time like ?";
+        Integer leafCounts = 0;
+        for (Long merchantId : merchIds) {
+            Integer count = jdbcTemplate.queryForObject(queryLeafNode, new Object[]{merchantId, formatedDate}, Integer.class);
+            if (count < 1) {
+                leafCounts++;
+            } else {
+                continue;
+            }
+        }
+        return leafCounts;
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public Integer getTtotalMerchAndPartnerCounts(Long merchId) {
+        String sql = "SELECT  count(*) FROM biz_merchant WHERE FIND_IN_SET(merch_id,findMerchSubNode(?))";
+        return jdbcTemplate.queryForObject(sql, new Object[]{merchId}, Integer.class)-1;
+    }
 }

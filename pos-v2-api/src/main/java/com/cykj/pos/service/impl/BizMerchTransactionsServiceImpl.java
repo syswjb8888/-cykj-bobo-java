@@ -28,7 +28,7 @@ import java.util.Map;
 @Service
 public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransactionsMapper, BizMerchTransactions> implements IBizMerchTransactionsService {
 
-    private static final String DATE_FORMATTER = "yyyyMMdd";
+    private static final String DATE_FORMATTER = "yyyy-MM-dd";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -172,7 +172,7 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
 
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public BigDecimal getMonthlyTransAmountByMerchId(Long merchId){
+    public BigDecimal getMonthlyTransAmountByMerchId(Long merchId){ // 获取当前月份
         String formatedDate = DateUtils.getCaculateYearAndMonth("last",DATE_FORMATTER);
         String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
                 "where FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.trans_date like CONCAT(?,'%')";
@@ -182,11 +182,22 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
 
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public BigDecimal getMonthlyTransAmountByMerchId(Long merchId,String month){
+    public BigDecimal getMonthlyTransAmountByMerchId(Long merchId,String month){ // 获取某个月份的销售总金额
         String formatedDate = DateUtils.getCaculateYearAndMonth(month,DATE_FORMATTER);
         String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
                 "where FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.trans_date like CONCAT(?,'%')";
         BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchId,formatedDate},BigDecimal.class);
         return transAmount == null?BigDecimal.ZERO:transAmount;
     }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public BigDecimal getMonthlyMerchantTransAmountByMerchId(Long merchId) {
+        String formatedDate = DateUtils.getCaculateYearAndMonth("last",DATE_FORMATTER);
+        String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
+                "where p.merch_id=?) and t.trans_date like CONCAT(?,'%')";
+        BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchId,formatedDate},BigDecimal.class);
+        return transAmount == null?BigDecimal.ZERO:transAmount;
+    }
+
 }
