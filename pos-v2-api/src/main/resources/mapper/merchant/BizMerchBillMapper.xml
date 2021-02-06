@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizMerchBillMapper">
+    
+    <resultMap type="BizMerchBill" id="BizMerchBillResult">
+        <result property="billId"    column="bill_id"    />
+        <result property="merchId"    column="merch_id"    />
+        <result property="merchName"    column="merch_name"    />
+        <result property="posCode"    column="pos_code"    />
+        <result property="posType"    column="pos_type"    />
+        <result property="billType"    column="bill_type"    />
+        <result property="amount"    column="amount"    />
+        <result property="policyId"    column="policy_id"    />
+        <result property="billDate"    column="bill_date"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>
