@@ -2,6 +2,7 @@ package com.cykj.pos.controller.api;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.cykj.common.config.RuoYiConfig;
 import com.cykj.common.core.domain.AjaxResult;
 import com.cykj.common.core.domain.entity.SysUser;
 import com.cykj.common.core.domain.model.LoginUser;
@@ -41,6 +42,8 @@ public class PosV2AppMerchantController {
     private final ISysUserService sysUserService;
 
     private final IBizMicroInfoService microInfoService;
+
+    private final RuoYiConfig ruoYiConfig;
 
     @ApiOperation(value="获取商户及子商户列表")
     @ApiResponses({@ApiResponse(code=200,response = BizMerchant.class,message = "业务数据响应成功")})
@@ -162,7 +165,8 @@ public class PosV2AppMerchantController {
         BizMerchant merchant =  merchantService.getMerchantByUserId(userId);
         Map<String,Object> merchanInfo = new HashMap<>();
         merchanInfo.put("merchCode",merchant.getMerchCode());
-        merchanInfo.put("url","http://www.baidu.com");
+        String invitationUrl = ruoYiConfig.getInvitationUrl();
+        merchanInfo.put("url",invitationUrl);
         ajaxResult.put("data",merchanInfo);
         return ajaxResult;
     }

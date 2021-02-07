@@ -41,9 +41,19 @@ public class RuoYiConfig{
 
     private Integer minEffectiveDuration;
 
+    private String invitationUrl;
+
     private List<String> posQueryFilterConditions;
 
     private String signenv;
+
+    public String getInvitationUrl() {
+        return invitationUrl;
+    }
+
+    public void setInvitationUrl(String invitationUrl) {
+        this.invitationUrl = invitationUrl;
+    }
 
     public String getSignenv() {
         return signenv;

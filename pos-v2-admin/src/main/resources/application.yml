@@ -26,6 +26,8 @@ cykj:
   smsEffectiveDuration: 5
   #短信在多少分钟内不允许重复验证 [秒]
   minEffectiveDuration: 60
+  #邀请码
+  invitationUrl: http://zx.poshb.cn/
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080

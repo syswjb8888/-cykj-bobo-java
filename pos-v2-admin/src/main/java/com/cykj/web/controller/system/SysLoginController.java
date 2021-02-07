@@ -3,6 +3,7 @@ package com.cykj.web.controller.system;
 import java.util.List;
 import java.util.Set;
 
+import com.cykj.pos.enums.bizstatus.CommEnum;
 import com.cykj.pos.service.IDataSecurityService;
 import com.cykj.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,10 @@ public class SysLoginController
         LoginUser loginUser = tokenService.getLoginUser(token);
         ajax.put(Constants.TOKEN, token);
         ajax.put("loginUser",loginUser);
+        // 获得腾讯秘钥信息
+        ajax.put(CommEnum.SECRETID.getKey(),CommEnum.SECRETID.getValue());
+        ajax.put(CommEnum.SECRETKEY.getKey(),CommEnum.SECRETKEY.getValue());
+        ajax.put(CommEnum.BUCKETNAME.getKey(),CommEnum.BUCKETNAME.getValue());
         ajax.put(Constants.TICKET, ticketService.createTicket(loginBody.getUsername(), config.getTicketTimeOut()));
         return ajax;
     }
