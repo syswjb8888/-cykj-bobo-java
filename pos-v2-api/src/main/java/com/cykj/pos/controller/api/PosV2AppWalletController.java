@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @RestController
@@ -99,29 +101,38 @@ public class PosV2AppWalletController {
         iBizWalletService.setPayPassword(walletDTO);
         return ajaxResult;
     }
-
+    /**
+     * 账单明细接口
+     * @return
+     */
+    @PostMapping("/bill/type")
+    public AjaxResult queryBillTypeDictList(){
+        AjaxResult ajaxResult = AjaxResult.success();
+        // 获得交易类型字典值
+        SysDictData sysDictData = new SysDictData();
+        sysDictData.setDictType("merchant_bill_type");
+        // 获得字典值
+        List<SysDictData> billTypeList =  sysDictDataService.selectDictDataList(sysDictData);
+        ajaxResult.put("data", billTypeList);
+        return ajaxResult;
+    }
     /**
      * 账单明细接口
      * @param billQueryDTO
      * @return
      */
     @PostMapping("/bill/list")
-    public AjaxResult queryTerminalList(@RequestBody BillQueryDTO billQueryDTO) {
+    public AjaxResult queryBillList(@RequestBody BillQueryDTO billQueryDTO) {
 
         AjaxResult ajaxResult = AjaxResult.success();
         billQueryDTO.setUserId(LoginUserUtils.getLoginUserId());
         // 获得商户信息
         BizMerchant merchant = merchantService.getMerchantByUserId(billQueryDTO.getUserId());
         billQueryDTO.setMerchId(merchant.getMerchId());
-        // 获得交易类型字典值
-        SysDictData sysDictData = new SysDictData();
-        sysDictData.setDictType("merchant_bill_type");
-        // 获得字典值
-        List<SysDictData> billTypeList =  sysDictDataService.selectDictDataList(sysDictData);
         Long merchantId = merchant.getMerchId();
-        List<BillQueryDTO> terminalList =
+        List<BillQueryDTO> billList =
                 merchBillService.getPageBillListByMerchId(billQueryDTO);
-        ajaxResult.put("data", terminalList);
+        ajaxResult.put("data", billList);
         return ajaxResult;
     }
 

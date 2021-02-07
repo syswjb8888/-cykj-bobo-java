@@ -59,11 +59,13 @@ spring:
     redis:
         # 地址
         host: 59.110.236.210
+        # host: 172.21.0.3
         # 端口，默认为6379
         port: 6379
         # 数据库索引
         database: 0
         # 密码
+        # password: '@cykjmima123.'
         password: 7758521
         # 连接超时时间
         timeout: 10s

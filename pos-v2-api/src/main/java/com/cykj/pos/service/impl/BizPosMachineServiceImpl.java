@@ -359,10 +359,10 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         merchBill.setMerchName(terminalActivateDTO.getName()); // 名称
         merchBill.setPosCode(posMachine.getPosType()); // 设备类型
         merchBill.setBillType("1"); // 账单类型
-        merchBill.setAmount(BigDecimal.valueOf(109.2));// 返现金额
+        merchBill.setAmount(BigDecimal.valueOf(99));// 返现金额
         merchBill.setPolicyId("1001");//正常id  默认设置成1001
         merchBill.setBillType(DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER)); // 账单日期
-        merchBill.setTaxation(BigDecimal.valueOf(10.8)); // 税点
+        merchBill.setTaxation(BigDecimal.valueOf(0)); // 税点
         // 保存账单
         bizMerchBillService.saveOrUpdate(merchBill);
         // 保存设备状态记录
