@@ -20,6 +20,7 @@ import com.cykj.pos.util.DateUtils;
 import com.cykj.pos.util.VerifyCodeUtils;
 import com.cykj.system.service.ISysDictDataService;
 import com.cykj.system.service.ISysUserService;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -81,6 +82,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
 
     @Autowired
     private IBizMerchTransactionsService bizMerchTransactionsService;
+
+    @Autowired
+    BizMerchantMapper bizMerchantMapper;
 
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -629,6 +633,7 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     }
 
     @Override
+    @Transactional
     public BankCardDTO alterBankCardInfo(BankCardDTO bankCardDTO){
         BizMerchant merchant = this.getMerchantByUserId(bankCardDTO.getUserId());
         BizMicroInfo micro = microInfoService.getBizMicroInfoByMerchId(merchant.getMerchId());
@@ -648,6 +653,7 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     }
 
     @Override
+    @Transactional
     public void addMerchantTransaction(BizMerchTransDTO merchTransDTO) {
         BizMerchTransactions merchTransaction = new BizMerchTransactions();
         // ------------------------快钱支付接口提供字段-----------------------------
@@ -688,6 +694,7 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     }
 
     @Override
+    @Transactional
     public void cancelMerchantTransaction(BizCancelTransDTO merchTransDTO) {
         BizMerchTransactions merchTransaction = new BizMerchTransactions();
         // ------------------------快钱支付接口提供字段-----------------------------
@@ -707,6 +714,7 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     }
 
     @Override
+    @Transactional
     public void returnMerchantTransaction(BizReturnTransDTO merchTransDTO) {
         BizMerchTransactions merchTransaction = new BizMerchTransactions();
         // ------------------------快钱支付接口提供字段-----------------------------
@@ -779,5 +787,18 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     public Integer getTtotalMerchAndPartnerCounts(Long merchId) {
         String sql = "SELECT  count(*) FROM biz_merchant WHERE FIND_IN_SET(merch_id,findMerchSubNode(?))";
         return jdbcTemplate.queryForObject(sql, new Object[]{merchId}, Integer.class)-1;
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public List<MerchantDict> selectPagedPartnerList(MerchantDTO merchantDTO) {
+        Integer pageNo = merchantDTO.getPageNo();
+        Integer pageSize = merchantDTO.getPageSize();
+        if(pageNo !=null && !"".equals(pageNo) && pageSize!=null && !"".equals(pageSize)){
+            Integer start = (merchantDTO.getPageNo()-1)*merchantDTO.getPageSize();
+            // 页的开始值
+            merchantDTO.setStart(start);
+        }
+        return bizMerchantMapper.selectPagedPartnerList(merchantDTO);
     }
 }

@@ -31,4 +31,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
 
+    <select id="selectPagedPartnerList" resultType="MerchantDict" parameterType="MerchantDTO">
+        select m.merch_id dictValue,m.user_id userId,m.merch_name dictLabel,h.merch_bank_mobile mobile,u.portrait portrait
+        from biz_merchant m
+        left join biz_micro_info h on  h.merch_id = m.merch_id
+        left join sys_user u on m.user_id=u.user_id
+        where m.merch_id in(
+        select parent_id from biz_merchant where parent_id!=0)
+        and m.parent_id=#{merchId}
+        <if test="nickName!=null and nickName!=''">
+            and merch_name like concat('%',#{nickName},'%')
+        </if>
+        order by m.create_time asc
+        <if test="pageNo!=-1 and pageSize!=-1"><!-- 分页 -->
+            limit #{start},#{pageSize}
+        </if>
+    </select>
 </mapper>

@@ -80,7 +80,12 @@ public class PosV2AppMerchantController {
     public AjaxResult getChildMerchantDictList(@RequestBody MerchantDTO merchantDTO){
         AjaxResult ajaxResult = AjaxResult.success();
         Long userId = LoginUserUtils.getLoginUserId();
-        List<MerchantDict> dicts = merchantService.getChildMerchartDictList(userId);
+        // List<MerchantDict> dicts = merchantService.getChildMerchartDictList(userId);
+        BizMerchant merchant = merchantService.getMerchantByUserId(userId);
+        Long merchId = merchant.getMerchId();
+        // 设置商户编号
+        merchantDTO.setMerchId(merchId);
+        List<MerchantDict> dicts = merchantService.selectPagedPartnerList(merchantDTO);
         ajaxResult.put("data",dicts);
         return ajaxResult;
     }
