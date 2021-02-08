@@ -88,6 +88,11 @@ public class PartnerOpenInterfaceController {
 
     @PostMapping("/merchant/transaction/append")
     public KuaiQianResult addMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------快钱接口调用新增商户消费交易记录接口---------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
         boolean verify = dataSecurityService.dataVerfiy(sign,data);
@@ -101,9 +106,13 @@ public class PartnerOpenInterfaceController {
 
     @PostMapping("/merchant/transaction/cancel")
     public KuaiQianResult cancelMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------快钱接口调用新增商户消费交易撤消接口------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
-        System.out.println("-----------测试商户消费交易记录撤消功能-----------");
         System.out.println(sign);
         System.out.println(data);
         boolean verify = dataSecurityService.dataVerfiy(sign,data);
@@ -116,6 +125,11 @@ public class PartnerOpenInterfaceController {
 
     @PostMapping("/merchant/transaction/return")
     public KuaiQianResult returnMerchantTransaction(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------快钱接口调用消费交易记录退货接口------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
         boolean verify = dataSecurityService.dataVerfiy(sign, data);
@@ -128,6 +142,11 @@ public class PartnerOpenInterfaceController {
 
     @PostMapping("/terminal/bind")
     public KuaiQianResult posMacineBind(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------快钱接口调用设备绑定接口------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
         boolean verify = dataSecurityService.dataVerfiy(sign, data);
@@ -140,6 +159,11 @@ public class PartnerOpenInterfaceController {
 
     @PostMapping("/terminal/activation")
     public KuaiQianResult posMacineActivate(@RequestBody ThirdPartRequestDataDTO<String> requestDataDTO){
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("--------------------快钱接口调用设备激活接口------------------");
+        System.out.println("------------------------------------------------------------");
+        System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
         boolean verify = dataSecurityService.dataVerfiy(sign, data);
