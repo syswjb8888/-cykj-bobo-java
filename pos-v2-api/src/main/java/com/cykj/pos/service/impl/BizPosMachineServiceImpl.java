@@ -10,6 +10,8 @@ import com.cykj.common.core.domain.entity.SysDictData;
 import com.cykj.common.core.domain.entity.SysDictType;
 import com.cykj.common.enums.DataSourceType;
 import com.cykj.pos.domain.*;
+import com.cykj.pos.domain.dto.MachineTransferDTO;
+import com.cykj.pos.mapper.BizMerchantMapper;
 import com.cykj.pos.mapper.BizPosMachineMapper;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.*;
@@ -62,6 +64,9 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
 
     @Autowired
     IBizMerchBillService bizMerchBillService;
+
+    @Autowired
+    BizPosMachineMapper posMachineMapper;
 
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -218,7 +223,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     }
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public List<BizPosMachine> getPagePosMachinesByMerchId(Long merchId, PosTerminalDTO terminalVo,int pageNo,int pageSize){
+    public List<MachineTransferDTO> getPagePosMachinesByMerchId(Long merchId, PosTerminalDTO terminalVo,int pageNo,int pageSize){
         List<Object> paramList = new ArrayList<>();
         long start = (pageNo - 1)* pageSize;
         Integer operType = terminalVo.getOperType();
@@ -233,12 +238,13 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
                 sqlBuilder = new StringBuilder("select * from biz_pos_machine where merch_id in (select merch_id from biz_merchant where parent_id=?)");
             }
         }else{
-            sqlBuilder = new StringBuilder("select * from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?))");
+            // sqlBuilder = new StringBuilder("select * from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?))");
+            sqlBuilder = new StringBuilder("select m.*,r.records_type recordsType from biz_pos_machine m LEFT JOIN biz_pos_machine_status_records r ON m.pos_code=r.sn_code WHERE merch_id=?");
         }
         paramList.add(merchId);
         sqlBuilder.append(this.queryCondtions(paramList,terminalVo,pageNo,pageSize));
         Object[] params = paramList.toArray();
-        return jdbcTemplate.query(sqlBuilder.toString(),params, new BeanPropertyRowMapper<BizPosMachine>(BizPosMachine.class));
+        return jdbcTemplate.query(sqlBuilder.toString(),params, new BeanPropertyRowMapper<MachineTransferDTO>(MachineTransferDTO.class));
     }
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -254,14 +260,17 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     @Override
     @DataSource(DataSourceType.SLAVE)
     public Long getPosMachineCountsByMerchId(Long merchId){
-        String sql = "select count(1) from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?))";
+        String sql = "select count(1) from biz_pos_machine where merch_id=?";
         return jdbcTemplate.queryForObject(sql,new Object[]{merchId},Long.class);
     }
     @Override
     @DataSource(DataSourceType.SLAVE)
     public Long getPosMachineActivatedCountsByMerchId(Long merchId){
-        String sql = "select count(1) from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?)) and pos_activate_status='1'";
-        return jdbcTemplate.queryForObject(sql,new Object[]{merchId},Long.class);
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT count(*) FROM biz_pos_machine_status_records r ");
+        sql.append("WHERE r.records_type='2' and r.sn_code IN ");
+        sql.append(" (SELECT pos_code FROM biz_pos_machine WHERE merch_id=?) ");
+        return jdbcTemplate.queryForObject(sql.toString(),new Object[]{merchId},Long.class);
     }
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -422,5 +431,11 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         //3.更新机具状态为激活
         machine.setPosActivateStatus("1");
         this.updateById(machine);
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public Integer getPosMachineAllCountsByMerchId(Long merchantId) {
+        return posMachineMapper.getPosMachineAllCountsByMerchId(merchantId);
     }
 }

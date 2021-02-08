@@ -3,6 +3,7 @@ package com.cykj.pos.service;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizPosMachine;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.cykj.pos.domain.dto.MachineTransferDTO;
 import com.cykj.pos.profit.dto.*;
 
 import java.util.List;
@@ -59,7 +60,7 @@ public interface IBizPosMachineService extends IService<BizPosMachine> {
      * @param pageSize
      * @return
      */
-    public List<BizPosMachine> getPagePosMachinesByMerchId(Long merchId, PosTerminalDTO terminalVo,int pageNo,int pageSize);
+    public List<MachineTransferDTO> getPagePosMachinesByMerchId(Long merchId, PosTerminalDTO terminalVo, int pageNo, int pageSize);
     /**
      * 区间查询商户下的POS终端机
      * @param terminalDTO
@@ -121,4 +122,11 @@ public interface IBizPosMachineService extends IService<BizPosMachine> {
      * @param terminalBindDTO
      */
     public void posMachineBind(TerminalBindDTO terminalBindDTO);
+
+    /**
+     * 获取商户总得POS机器数量
+      * @param merchantId
+     * @return
+     */
+    Integer getPosMachineAllCountsByMerchId(Long merchantId);
 }

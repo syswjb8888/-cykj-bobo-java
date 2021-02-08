@@ -66,7 +66,7 @@ public interface IBizMerchTransactionsService extends IService<BizMerchTransacti
      */
     public BigDecimal getMonthlyTransAmountByMerchId(Long merchId);
     /**
-     *商户本月或上月交易额
+     *商户本月或上月交易额  魏建波可以用
      * @param merchId
      * @param month 本月或上月
      * @return
@@ -80,4 +80,10 @@ public interface IBizMerchTransactionsService extends IService<BizMerchTransacti
      */
     BigDecimal getMonthlyMerchantTransAmountByMerchId(Long merchId);
 
+    /**
+     * 合作伙伴的所有交易额
+     * @param merchantId
+     * @return
+     */
+    BigDecimal getTotalTransAmountByMerchId(Long merchantId);
 }

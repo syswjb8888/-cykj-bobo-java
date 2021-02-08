@@ -200,4 +200,12 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
         return transAmount == null?BigDecimal.ZERO:transAmount;
     }
 
+    @Override
+    public BigDecimal getTotalTransAmountByMerchId(Long merchantId) {
+        String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
+                "where p.merch_id=?)";
+        BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchantId},BigDecimal.class);
+        return transAmount == null?BigDecimal.ZERO:transAmount;
+    }
+
 }

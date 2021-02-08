@@ -60,7 +60,7 @@ public class DateUtils {
         LocalDateTime endLocalTime = localDateTime.plusMinutes(5);
         String endTime = DateUtils.localeDateTime2String(endLocalTime, Constants.DATETIME_FORMATTER);
         System.out.println(endTime);*/
-        String formatedDate = DateUtils.getCaculateYearAndMonth("","yyyy-MM");
+        String formatedDate = DateUtils.getCaculateYearAndMonth("this","yyyy-MM");
         System.out.println(formatedDate);
     }
 }

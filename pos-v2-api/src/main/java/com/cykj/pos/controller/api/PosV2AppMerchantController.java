@@ -9,6 +9,7 @@ import com.cykj.common.core.domain.model.LoginUser;
 import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizMicroInfo;
+import com.cykj.pos.domain.BizPosMachine;
 import com.cykj.pos.domain.dto.PaymentPassUpdateDTO;
 import com.cykj.pos.domain.dto.UpdatePortraitDTO;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;

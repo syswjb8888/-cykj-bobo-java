@@ -90,7 +90,7 @@ public class PosV2AppHomepageController {
             return ajaxResult;
         }
         Long merchId = merchant.getMerchId();
-        BigDecimal monthlyTransAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchId);
+        BigDecimal monthlyTransAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchId); //商户月交易额
         Integer partnerCounts = merchantService.getMonthlyNewPartnerCount(merchId);// 本月新增伙伴
         Integer leafCounts = merchantService.getMonthlyNewMerchCounts(merchId);// 本月新增商户
 

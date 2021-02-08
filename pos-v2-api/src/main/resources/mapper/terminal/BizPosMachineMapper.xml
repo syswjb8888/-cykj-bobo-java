@@ -28,5 +28,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="var5"    column="var5"    />
     </resultMap>
 
+    <select id="getPosMachineAllCountsByMerchId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM biz_pos_machine WHERE merch_id=#{merchId}
+    </select>
 
 </mapper>

@@ -85,6 +85,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     private IBizMerchTransactionsService bizMerchTransactionsService;
 
     @Autowired
+    private  IBizMerchantService merchantService;
+
+    @Autowired
     BizMerchantMapper bizMerchantMapper;
 
     @Override
@@ -363,9 +366,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         if(StringUtils.isNotBlank(nickName)){
             merchantQuery.likeRight(BizMerchant::getMerchName,nickName);
         }
-        if(StringUtils.isNotBlank(verifyStatus)){
+        /*if(StringUtils.isNotBlank(verifyStatus)){
             merchantQuery.eq(BizMerchant::getVerifyStatus,verifyStatus);
-        }
+        }*/
         if(pageNo == -1 || pageSize == -1) return this.list(merchantQuery);
         merchantQuery.last("LIMIT "+(pageNo -1)*pageSize+","+pageSize);
         return this.list(merchantQuery);
@@ -373,22 +376,14 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
 
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public Integer getChildMerchantCounts(Long parentId,String verifyStatus,String thisMonth,String nickName){
+    public Integer getChildMerchantCounts(Long userId,String verifyStatus,String thisMonth,String nickName){
+        BizMerchant merchant = this.getMerchantByUserId(userId);
+        Long parentId = merchant.getMerchId();
         LambdaQueryWrapper<BizMerchant> merchantQuery = Wrappers.lambdaQuery();
         merchantQuery.eq(BizMerchant::getParentId ,parentId);
-        if(StringUtils.isNotBlank(verifyStatus)){
+       /* if(StringUtils.isNotBlank(verifyStatus)){
             merchantQuery.eq(BizMerchant::getVerifyStatus ,verifyStatus);
-        }
-        if(StringUtils.isNotBlank(thisMonth)){
-            LocalDate localDate = LocalDate.now();
-            String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")).substring(0,6);
-            if("last".equals(thisMonth)){
-                LocalDate newDate = LocalDate.now();
-                newDate.minusMonths(1);
-                formatedDate = newDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")).substring(0,6);
-            }
-            merchantQuery.likeRight(BizMerchant::getCreateTime,formatedDate);
-        }
+        }*/
         if(StringUtils.isNotBlank(nickName)){
             merchantQuery.like(BizMerchant::getMerchName,nickName);
         }
@@ -403,25 +398,28 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         Long merchantId = merchant.getMerchId();
         SysUser user = sysUserService.selectUserById(userId);
 
+        // BigDecimal thisMonthAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchantId,"this");
         //本月交易额
-        BigDecimal thisMonthAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchantId,"this");
+        BigDecimal thisMonthAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchantId);
         //上月交易额
         BigDecimal lastMonthAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchantId,"last");
-        //团队本月报件审核通过数
-        Integer thisTeamCounts = this.getChildMerchantCounts(merchantId,"1","this","");
-        //团队上月报件审核通过数
-        Integer lastTeamCounts = this.getChildMerchantCounts(merchantId,"1","this","");
-        //团队本月终端激活数
-        Integer thisPosCounts = posMachineService.getPosMachineActivatedCountsByMerchId(merchantId,"this");
-        //团队上月终端激活数
-        Integer lastPosCounts = posMachineService.getPosMachineActivatedCountsByMerchId(merchantId,"last");
+        //本月激活post机数量
+        Integer thisActivePostMachine = this.getActivePostMachineCounts(merchantId,"this");
+        //上月激活post机数量
+        Integer lastActivePostMachine = this.getActivePostMachineCounts(merchantId,"last");
 
+        //POST机器总数
+        Integer count = posMachineService.getPosMachineAllCountsByMerchId(merchantId);
+        //已激活POST机器
+        Integer lastPosCounts = this.getActivePostMachineCounts(merchantId,null);
+        //未激活POST机器
+        Integer thisPosCounts = count-lastPosCounts;
         partnerDTO.setPartnerName(user.getNickName());
         partnerDTO.setPartnerMobile(user.getPhonenumber());
         partnerDTO.setTeamTransAmount(thisMonthAmount);
         partnerDTO.setLastMonthTeamTransAmount(lastMonthAmount);
-        partnerDTO.setTeamActiveCounts(thisTeamCounts);
-        partnerDTO.setLastMonthTeamActiveCounts(lastTeamCounts);
+        partnerDTO.setTeamActiveCounts(thisActivePostMachine);
+        partnerDTO.setLastMonthTeamActiveCounts(lastActivePostMachine);
         partnerDTO.setTeamActiveMachines(thisPosCounts);
         partnerDTO.setLastMonthteamActiveMacines(lastPosCounts);
         partnerDTO.setParnterId(userId);
@@ -442,10 +440,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
             Long merchantId = merchant.getMerchId();
             Long uId = merchant.getUserId();
             SysUser user = sysUserService.selectUserById(uId);
-            //本月交易额
-            BigDecimal thisMonthAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchantId,"this");
-            //本月团队激活数
-            Integer counts = this.getChildMerchantCounts(merchantId,"1","this","");
+            BigDecimal thisMonthAmount = transRecordsService.getTotalTransAmountByMerchId(merchantId); //商户所有交易额
+            Integer counts = merchantService.getTotalNewMerchCounts(merchantId);// 团队激活数
+
             partnerDTO.setPartnerName(user.getNickName());
             partnerDTO.setPartnerMobile(user.getPhonenumber());
             partnerDTO.setTeamTransAmount(thisMonthAmount);
@@ -820,6 +817,26 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).substring(0, 7);
         HomePageDTO homePageDTO = new HomePageDTO();
         homePageDTO.setMerchId(merchId);
+        homePageDTO.setYearMonth(formatedDate);
+        return bizMerchantMapper.getMonthlyNewMerchCounts(homePageDTO);
+    }
+
+    @Override
+    public Integer getTotalNewMerchCounts(Long merchantId) {
+        HomePageDTO homePageDTO = new HomePageDTO();
+        homePageDTO.setMerchId(merchantId);
+        return bizMerchantMapper.getMonthlyNewMerchCounts(homePageDTO);
+    }
+
+    @Override
+    public Integer getActivePostMachineCounts(Long merchantId, String month) {
+        // 设置一下月
+        String formatedDate = DateUtils.getCaculateYearAndMonth(month,"yyyy-MM");
+        if(month==null || "".equals(month)){
+            formatedDate = null;
+        }
+        HomePageDTO homePageDTO = new HomePageDTO();
+        homePageDTO.setMerchId(merchantId);
         homePageDTO.setYearMonth(formatedDate);
         return bizMerchantMapper.getMonthlyNewMerchCounts(homePageDTO);
     }

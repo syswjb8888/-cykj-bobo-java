@@ -4,6 +4,7 @@ import com.cykj.common.core.domain.AjaxResult;
 import com.cykj.common.core.domain.entity.SysDictData;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizPosMachine;
+import com.cykj.pos.domain.dto.MachineTransferDTO;
 import com.cykj.pos.profit.dto.OperationRecordsDTO;
 import com.cykj.pos.profit.dto.PosTerminalDTO;
 import com.cykj.pos.service.IBizAllocAdjRecordsService;
@@ -67,7 +68,7 @@ public class PosV2AppTerminalController {
         terminalDTO.setUserId(LoginUserUtils.getLoginUserId());
         BizMerchant merchant = merchantService.getMerchantByUserId(terminalDTO.getUserId());
         Long merchantId = merchant.getMerchId();
-        List<BizPosMachine> terminalList =
+        List<MachineTransferDTO> terminalList =
                 posMachineService.getPagePosMachinesByMerchId(merchantId, terminalDTO,
                         terminalDTO.getPageNo(), terminalDTO.getPageSize());
         ajaxResult.put("data", terminalList);
