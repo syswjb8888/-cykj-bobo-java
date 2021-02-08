@@ -60,7 +60,7 @@ public interface IBizMerchTransactionsService extends IService<BizMerchTransacti
      */
     public BigDecimal getMonthlyTransAmountByMerchId(String caculatePeriod, Long merchId);
     /**
-     * 获取商户月交易金额
+     * 获取商户月交易金额  魏建波可以用
      * @param merchId
      * @return
      */

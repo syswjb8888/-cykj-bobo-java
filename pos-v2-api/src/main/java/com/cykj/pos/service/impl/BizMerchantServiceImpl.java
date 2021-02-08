@@ -12,6 +12,7 @@ import com.cykj.pos.domain.BizMerchTransactions;
 import com.cykj.pos.domain.BizMerchant;
 import com.cykj.pos.domain.BizMicroInfo;
 import com.cykj.pos.domain.BizWallet;
+import com.cykj.pos.domain.dto.HomePageDTO;
 import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.mapper.BizMerchantMapper;
 import com.cykj.pos.profit.dto.*;
@@ -800,5 +801,26 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
             merchantDTO.setStart(start);
         }
         return bizMerchantMapper.selectPagedPartnerList(merchantDTO);
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public Integer getMonthlyNewPartnerCount(Long merchId) {
+        LocalDate localDate = LocalDate.now();
+        String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).substring(0, 7);
+        HomePageDTO homePageDTO = new HomePageDTO();
+        homePageDTO.setMerchId(merchId);
+        homePageDTO.setYearMonth(formatedDate);
+        return bizMerchantMapper.getMonthlyNewPartnerCount(homePageDTO);
+    }
+
+    @Override
+    public Integer getMonthlyNewMerchCounts(Long merchId) {
+        LocalDate localDate = LocalDate.now();
+        String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).substring(0, 7);
+        HomePageDTO homePageDTO = new HomePageDTO();
+        homePageDTO.setMerchId(merchId);
+        homePageDTO.setYearMonth(formatedDate);
+        return bizMerchantMapper.getMonthlyNewMerchCounts(homePageDTO);
     }
 }

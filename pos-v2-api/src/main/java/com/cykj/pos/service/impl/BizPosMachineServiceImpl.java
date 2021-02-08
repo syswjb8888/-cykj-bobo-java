@@ -60,6 +60,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     @Autowired
     private IBizPosMachineStatusRecordsService bizPosMachineStatusRecordsService;
 
+    @Autowired
     IBizMerchBillService bizMerchBillService;
 
     @Override
@@ -349,6 +350,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         String receiptDate = DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER);
         posMachineStatusRecords.setReceiptDate(receiptDate); // 设置接收时间
         posMachineStatusRecords.setRecordsType("2"); //该记录是设备激活操作记录
+        //向商户表中插入数据
         //--------------------- 插入账单  返现 1--------------------------
         // 通过设备号获得商户信息
         BizPosMachine posMachine = getPosMachineBySnCode(terminalActivateDTO.getSnCode());
@@ -361,7 +363,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         merchBill.setBillType("1"); // 账单类型
         merchBill.setAmount(BigDecimal.valueOf(99));// 返现金额
         merchBill.setPolicyId("1001");//正常id  默认设置成1001
-        merchBill.setBillType(DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER)); // 账单日期
+        merchBill.setBillDate(DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER)); // 账单日期
         merchBill.setTaxation(BigDecimal.valueOf(0)); // 税点
         // 保存账单
         bizMerchBillService.saveOrUpdate(merchBill);

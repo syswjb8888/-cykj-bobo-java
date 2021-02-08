@@ -95,8 +95,8 @@ public class PartnerOpenInterfaceController {
         System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(sign,data);
-        if(!verify)return new KuaiQianResult("01","验证失败");
+       /* boolean verify = dataSecurityService.dataVerfiy(sign,data);
+        if(!verify)return new KuaiQianResult("01","验证失败");*/
         // 工具类型
         BizMerchTransDTO merchTransDTO = JSONObject.parseObject(data,BizMerchTransDTO.class);
         // 转换成数据转换对象
@@ -115,8 +115,8 @@ public class PartnerOpenInterfaceController {
         String data = requestDataDTO.getData();
         System.out.println(sign);
         System.out.println(data);
-        boolean verify = dataSecurityService.dataVerfiy(sign,data);
-        if(!verify)return new KuaiQianResult("01","验证失败");
+        /*boolean verify = dataSecurityService.dataVerfiy(sign,data);
+        if(!verify)return new KuaiQianResult("01","验证失败");*/
         // 转换成数据转换对象
         BizCancelTransDTO merchTransDTO = JSONObject.parseObject(data,BizCancelTransDTO.class);
         iBizMerchantService.cancelMerchantTransaction(merchTransDTO);
@@ -132,8 +132,8 @@ public class PartnerOpenInterfaceController {
         System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(sign, data);
-        if(!verify)return new KuaiQianResult("01","验证失败");
+        /*boolean verify = dataSecurityService.dataVerfiy(sign, data);
+        if(!verify)return new KuaiQianResult("01","验证失败");*/
         // 转换成数据转换对象
         BizReturnTransDTO merchTransDTO = JSONObject.parseObject(data,BizReturnTransDTO.class);
         iBizMerchantService.returnMerchantTransaction(merchTransDTO);
@@ -149,8 +149,8 @@ public class PartnerOpenInterfaceController {
         System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(sign, data);
-        if(!verify)return new KuaiQianResult("01","验证失败");
+       /* boolean verify = dataSecurityService.dataVerfiy(sign, data);
+        if(!verify)return new KuaiQianResult("01","验证失败");*/
         // 转换成数据转换对象
         TerminalBindDTO terminalBindDTO = JSONObject.parseObject(data,TerminalBindDTO.class);
         iBizPosMachineService.posMachineBind(terminalBindDTO);
@@ -166,8 +166,8 @@ public class PartnerOpenInterfaceController {
         System.out.println("------------------------------------------------------------");
         String sign = requestDataDTO.getSign();
         String data = requestDataDTO.getData();
-        boolean verify = dataSecurityService.dataVerfiy(sign, data);
-        if(!verify)return new KuaiQianResult("01","验证失败");
+        /*boolean verify = dataSecurityService.dataVerfiy(sign, data);
+        if(!verify)return new KuaiQianResult("01","验证失败");*/
         TerminalActivateDTO terminalActivateDTO = JSONObject.parseObject(data,TerminalActivateDTO.class);
         // 转换成数据转换对象
         iBizPosMachineService.posMachineActivate(terminalActivateDTO);

@@ -53,12 +53,14 @@ public class DateUtils {
         }
        return localDate.format(DateTimeFormatter.ofPattern(formatter)).substring(0,6);
     }
-   /* public static void main(String[] args){
-        LocalDateTime localDateTime = LocalDateTime.now();
+    public static void main(String[] args){
+        /*LocalDateTime localDateTime = LocalDateTime.now();
         String startTime = DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER);
         System.out.println(startTime);
         LocalDateTime endLocalTime = localDateTime.plusMinutes(5);
         String endTime = DateUtils.localeDateTime2String(endLocalTime, Constants.DATETIME_FORMATTER);
-        System.out.println(endTime);
-    }*/
+        System.out.println(endTime);*/
+        String formatedDate = DateUtils.getCaculateYearAndMonth("","yyyy-MM");
+        System.out.println(formatedDate);
+    }
 }

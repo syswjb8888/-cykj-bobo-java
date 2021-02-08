@@ -2,6 +2,7 @@ package com.cykj.pos.mapper;
 
 import com.cykj.pos.domain.BizMerchant;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cykj.pos.domain.dto.HomePageDTO;
 import com.cykj.pos.profit.dto.MerchantDTO;
 import com.cykj.pos.profit.dto.MerchantDict;
 
@@ -20,4 +21,17 @@ public interface BizMerchantMapper extends BaseMapper<BizMerchant> {
      * @return
      */
     List<MerchantDict> selectPagedPartnerList(MerchantDTO merchantDTO);
+
+    /**
+     * 本月新增伙伴 魏建波
+     * @param homePageDTO
+     * @return
+     */
+    Integer getMonthlyNewPartnerCount(HomePageDTO homePageDTO);
+    /**
+     * 本月新增商户 魏建波
+     * @param homePageDTO
+     * @return
+     */
+    Integer getMonthlyNewMerchCounts(HomePageDTO homePageDTO);
 }

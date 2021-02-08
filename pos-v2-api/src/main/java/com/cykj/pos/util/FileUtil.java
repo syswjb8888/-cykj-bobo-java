@@ -15,6 +15,7 @@ public class FileUtil {
     public static String[] list(String dir, String... exts) {
         try {
             URL url = getUrl(dir);
+            System.out.println("访问路径是："+url);
             if (url == null) {
                 return null;
             }

@@ -91,14 +91,12 @@ public class PosV2AppHomepageController {
         }
         Long merchId = merchant.getMerchId();
         BigDecimal monthlyTransAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchId);
+        Integer partnerCounts = merchantService.getMonthlyNewPartnerCount(merchId);// 本月新增伙伴
+        Integer leafCounts = merchantService.getMonthlyNewMerchCounts(merchId);// 本月新增商户
 
-        Integer counts = merchantService.getMonthlyNewMerchantCounts(merchId);
-        Integer leafCounts = merchantService.getMonthLyNewMerchantExcludeChild(merchId);
-        Integer partnerCounts = counts - leafCounts;
         String expressNews = noticeService.getExpressNews();
         // 获取用户信息
         SysUser sysUser = sysUserService.selectUserById(userId);
-
         HomePageDataDTO dataVo = new HomePageDataDTO();
         dataVo.setMonthlyNewMerchantCounts(leafCounts);
         dataVo.setMonthlyNewPartnerCounts(partnerCounts);

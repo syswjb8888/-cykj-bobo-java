@@ -28,7 +28,7 @@ import java.util.Map;
 @Service
 public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransactionsMapper, BizMerchTransactions> implements IBizMerchTransactionsService {
 
-    private static final String DATE_FORMATTER = "yyyy-MM-dd";
+    private static final String DATE_FORMATTER = "yyyy-MM";
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -173,7 +173,7 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
     @Override
     @DataSource(DataSourceType.SLAVE)
     public BigDecimal getMonthlyTransAmountByMerchId(Long merchId){ // 获取当前月份
-        String formatedDate = DateUtils.getCaculateYearAndMonth("last",DATE_FORMATTER);
+        String formatedDate = DateUtils.getCaculateYearAndMonth("",DATE_FORMATTER);
         String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
                 "where FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.trans_date like CONCAT(?,'%')";
         BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchId,formatedDate},BigDecimal.class);

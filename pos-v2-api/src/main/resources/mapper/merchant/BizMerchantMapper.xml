@@ -47,4 +47,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             limit #{start},#{pageSize}
         </if>
     </select>
+
+    <select id="getMonthlyNewPartnerCount" parameterType="HomePageDTO" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM biz_merchant
+        WHERE parent_id=#{merchId} AND create_time LIKE CONCAT(#{yearMonth},'%')
+    </select>
+    <!--新增商户  也就是激活的pos机器数量-->
+    <select id="getMonthlyNewMerchCounts" parameterType="HomePageDTO" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM biz_pos_machine WHERE merch_id=#{merchId} AND create_time LIKE CONCAT(#{yearMonth},'%')
+        AND pos_code IN (
+            SELECT sn_code FROM biz_pos_machine_status_records WHERE Records_type='2'
+        )
+    </select>
 </mapper>

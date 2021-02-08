@@ -202,4 +202,17 @@ public interface IBizMerchantService extends IService<BizMerchant> {
      * @return
      */
     List<MerchantDict> selectPagedPartnerList(MerchantDTO merchantDTO);
+
+    /**
+     * 本月新增伙伴 魏建波
+     * @param merchId
+     * @return
+     */
+    Integer getMonthlyNewPartnerCount(Long merchId);
+    /**
+     * 本月新增商户 魏建波
+     * @param merchId
+     * @return
+     */
+    Integer getMonthlyNewMerchCounts(Long merchId);
 }
