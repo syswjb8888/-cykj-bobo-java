@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizVersionRecordMapper">
+    
+    <resultMap type="BizVersionRecord" id="BizVersionRecordResult">
+        <result property="id"    column="id"    />
+        <result property="url"    column="url"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="descs"    column="descs"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+    <select id="getNewsVersionInfo" resultMap="BizVersionRecordResult">
+        SELECT  id,url,code,name,descs,create_by,create_time,update_by,update_time,var1,var2,var3,var4,var5
+        FROM biz_version_record order by create_time desc limit 0,1
+    </select>
+</mapper>
