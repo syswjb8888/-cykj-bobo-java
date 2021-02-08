@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cykj.common.utils.SecurityUtils;
 import com.cykj.pos.profit.dto.BizMerchTransDTO;
 import com.cykj.pos.profit.dto.ThirdPartRequestDataDTO;
+import com.cykj.pos.util.BigDecimalUtil;
 import com.cykj.pos.util.DateUtils;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
@@ -36,13 +37,21 @@ public class T {
         System.out.println(formatedDate);*/
         BigDecimal bignum1 = new BigDecimal("10.0000");
 
-        /*BigDecimal bignum2 = new BigDecimal("5.333");
+        BigDecimal bignum2 = new BigDecimal("5.333");
 
-        BigDecimal bignum3 = bignum1.subtract(bignum2);
+        bignum1 = bignum1.add(bignum2);
 
-        System.out.println(bignum3);*/
-        System.out.println(BigDecimal.valueOf(109.2222));
-        System.out.println(bignum1.stripTrailingZeros().toPlainString());
+        System.out.println(bignum1);
+        System.out.println(bignum2);
+        // System.out.println(bignum3);
+        /*System.out.println(BigDecimal.valueOf(109.2222));
+        System.out.println(bignum1.stripTrailingZeros().toPlainString());*/
+
+        /*System.out.println(BigDecimalUtil.getString(100.567));
+        System.out.println(BigDecimalUtil.getString(1000.5));
+        System.out.println(BigDecimalUtil.getString(0));*/
+
+
     }
 }
 class Per{

@@ -5,10 +5,12 @@ import io.lettuce.core.ScriptOutputType;
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.text.DecimalFormat;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -103,8 +105,17 @@ public class DESHelperUtil {
         String money = "36688.00";
         String money1 = "26688.00"; // 结算款账户
         String money2 = "10000.00"; // 奖励
-        System.out.println(encrypt("cf7442e3910d4a80a3839f940b86fd95",money1));
-        System.out.println(encrypt("cf7442e3910d4a80a3839f940b86fd95",money2));
+        /*System.out.println(encrypt("cf7442e3910d4a80a3839f940b86fd95",money1));
+        System.out.println(encrypt("cf7442e3910d4a80a3839f940b86fd95",money2));*/
+        //7278ec2e85484ce49aa23fdb1637f3ef
+        //99.00  nxyzfvZX0eA=
+        //0.00   iLpHF4qYK6Q=
+        //DecimalFormat df1 = new DecimalFormat("#.00");
+
+        BigDecimal decimal = new BigDecimal(0.00);
+        BigDecimal d = decimal.setScale(2,BigDecimal.ROUND_DOWN); //ROUND_HALF_UP 四射无人
+        String secretBalance = encrypt("7278ec2e85484ce49aa23fdb1637f3ef",d+"");
+        System.out.println(secretBalance);  //nxyzfvZX0eA=
         // 加密
        /* for(int i=0;i<10;i++){
             // 获得秘钥
@@ -129,7 +140,7 @@ public class DESHelperUtil {
          u+DISe2EF5JrOqSS3s/VTw==
          */
         // 解密
-        String str1 = decrypt("cf7442e3910d4a80a3839f940b86fd95","u+DISe2EF5JrOqSS3s/VTw==");
+        String str1 = decrypt("7278ec2e85484ce49aa23fdb1637f3ef","iLpHF4qYK6Q=");
         System.out.println("str1="+str1);
         //System.out.println(UUID.randomUUID().toString().replace("-","").length());
     }

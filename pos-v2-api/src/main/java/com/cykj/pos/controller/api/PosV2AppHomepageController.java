@@ -10,6 +10,7 @@ import com.cykj.pos.profit.dto.SysUserDTO;
 import com.cykj.pos.profit.dto.TransAmountDataDTO;
 import com.cykj.pos.service.IBizMerchTransactionsService;
 import com.cykj.pos.service.IBizMerchantService;
+import com.cykj.pos.util.DateUtils;
 import com.cykj.pos.util.LoginUserUtils;
 import com.cykj.system.service.ISysNoticeService;
 import com.cykj.system.service.ISysUserService;
@@ -52,20 +53,17 @@ public class PosV2AppHomepageController {
         BigDecimal merchantTransAmount =  transRecordsService.getMonthlyMerchantTransAmountByMerchId(merchId);
         // 伙伴交易额
         BigDecimal partnerTransAmount = monthlyTransAmount.subtract(merchantTransAmount);
-        // 商户下面的所有子商户和合作伙伴   当前月
-        Integer counts = merchantService.getMonthlyNewMerchantCounts(merchId);
-        // 商户下面的所有子商户  当前月
-        Integer leafCounts = merchantService.getMonthLyNewMerchantExcludeChild(merchId);
-        // 当前月新增合作伙伴
-        Integer monthlyNewPartnerCounts = counts - leafCounts;
-        // 累计商户   所有子商户
-        Integer totalMerchantCounts = merchantService.getMonthlyTotalMerchantByMerId(merchId);
-        // 商户下面所有的子商户和合作伙伴
-        Integer totalMerchAndPartnerCounts = merchantService.getTtotalMerchAndPartnerCounts(merchId);
-        // 累计合作伙伴
-        Integer totalPartnerCounts = totalMerchAndPartnerCounts - totalMerchantCounts;
-        // 当前月新增商户数
-        Integer monthlyNewMerchantCounts = merchantService.getMonthlyMyMerchantCounts(merchId);
+        // 本月新增商户
+        Integer monthlyNewMerchantCounts = merchantService.getMonthlyNewMerchCounts(merchId);
+        // 累计商户
+        Integer totalMerchantCounts = merchantService.getTotalMerchantByMerId(merchId);
+        String formatedDate = DateUtils.getCaculateYearAndMonth("this","yyyy-MM");
+        BizMerchant bizMerchant =  merchantService.getMerchantByMerchId(merchId);
+        // 本月新增伙伴   累计伙伴
+        Integer monthlyNewPartnerCounts = merchantService.getChildMerchantCounts(bizMerchant.getUserId(),null,formatedDate,null);
+        // 累计伙伴
+        Integer totalPartnerCounts = merchantService.getChildMerchantCounts(bizMerchant.getUserId(),null,null,null);
+
         TransAmountDataDTO dataVo = new TransAmountDataDTO();
         dataVo.setMerchantTransAmount(merchantTransAmount); // 商户交易额
         dataVo.setMonthlyNewMerchantCounts(monthlyNewMerchantCounts); // 月新增商户数

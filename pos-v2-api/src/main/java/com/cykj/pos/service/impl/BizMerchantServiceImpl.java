@@ -17,6 +17,8 @@ import com.cykj.pos.enums.bizstatus.BizStatusContantEnum;
 import com.cykj.pos.mapper.BizMerchantMapper;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.*;
+import com.cykj.pos.util.BigDecimalUtil;
+import com.cykj.pos.util.DESHelperUtil;
 import com.cykj.pos.util.DateUtils;
 import com.cykj.pos.util.VerifyCodeUtils;
 import com.cykj.system.service.ISysDictDataService;
@@ -384,6 +386,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
        /* if(StringUtils.isNotBlank(verifyStatus)){
             merchantQuery.eq(BizMerchant::getVerifyStatus ,verifyStatus);
         }*/
+        if(StringUtils.isNotBlank(thisMonth)){
+            merchantQuery.likeRight(BizMerchant::getCreateTime ,thisMonth);
+        }
         if(StringUtils.isNotBlank(nickName)){
             merchantQuery.like(BizMerchant::getMerchName,nickName);
         }
@@ -606,9 +611,16 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
             //伙伴注册成功后接口会自动将伙伴用户主键返回，利用该主键即可同时给新伙伴创建我的钱包账户
             BizWallet wallet = new BizWallet();
             wallet.setUserId(partnerUser.getUserId());
-            walletService.save(wallet);
             //发送用户密码
             //smsService.sendVerifyCode(loginAccount,password,"partner register");
+            String amount_money = BigDecimalUtil.getString(0.0); // 结算账户总额
+            String secretKey = DESHelperUtil.getSecretKey();
+            String secretMoney = DESHelperUtil.encrypt(secretKey,amount_money);
+            wallet.setProfitAmount(secretMoney);
+            wallet.setRewardAmount(secretMoney);
+            wallet.setWalletAmount(secretMoney);
+            wallet.setSecretKey(secretKey);
+            walletService.save(wallet);
             return BizStatusContantEnum.PARTNER_REGISTER_SUCCESS;
         }
         return BizStatusContantEnum.PARTNER_REGISTER_FAIL;
@@ -839,5 +851,14 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         homePageDTO.setMerchId(merchantId);
         homePageDTO.setYearMonth(formatedDate);
         return bizMerchantMapper.getMonthlyNewMerchCounts(homePageDTO);
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public Integer getTotalMerchantByMerId(Long merchId) {
+        String sql = "SELECT COUNT(*) FROM biz_pos_machine_status_records r "
+                +"WHERE r.records_type='2' AND r.sn_code IN "+
+                "(SELECT pos_code FROM biz_pos_machine WHERE merch_id=?)";
+        return jdbcTemplate.queryForObject(sql, new Object[]{merchId}, Integer.class);
     }
 }

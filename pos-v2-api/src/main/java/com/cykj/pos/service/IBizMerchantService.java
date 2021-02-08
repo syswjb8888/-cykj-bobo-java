@@ -230,4 +230,11 @@ public interface IBizMerchantService extends IService<BizMerchant> {
      * @return
      */
     Integer getActivePostMachineCounts(Long merchantId, String month);
+
+    /**
+     * 获得用户下的所有商户  魏建波
+     * @param merchId
+     * @return
+     */
+    Integer getTotalMerchantByMerId(Long merchId);
 }

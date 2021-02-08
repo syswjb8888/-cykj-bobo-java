@@ -15,9 +15,7 @@ import com.cykj.pos.mapper.BizMerchantMapper;
 import com.cykj.pos.mapper.BizPosMachineMapper;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.*;
-import com.cykj.pos.util.DateUtils;
-import com.cykj.pos.util.DictUtils;
-import com.cykj.pos.util.ListUtils;
+import com.cykj.pos.util.*;
 import com.cykj.system.service.ISysDictTypeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +62,9 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
 
     @Autowired
     IBizMerchBillService bizMerchBillService;
+
+    @Autowired
+    IBizWalletService walletService;
 
     @Autowired
     BizPosMachineMapper posMachineMapper;
@@ -231,7 +232,8 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         if(operType != null){
             if(1 == operType){
                 //仅能划拔本级终端
-                sqlBuilder = new StringBuilder("select * from biz_pos_machine where merch_id=?");
+                sqlBuilder = new StringBuilder("SELECT * FROM biz_pos_machine WHERE merch_id=? AND " +
+                        "pos_code NOT IN (SELECT sn_code FROM biz_pos_machine_status_records WHERE records_type='2')");
             }
             if(2 == operType){
                 //仅能回调下拉下级终端
@@ -370,12 +372,46 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         merchBill.setMerchName(terminalActivateDTO.getName()); // 名称
         merchBill.setPosCode(posMachine.getPosType()); // 设备类型
         merchBill.setBillType("1"); // 账单类型
-        merchBill.setAmount(BigDecimal.valueOf(99));// 返现金额
+        BigDecimal amount = new BigDecimal(120*0.91);
+        merchBill.setAmount(amount.setScale(2,BigDecimal.ROUND_HALF_UP));// 返现金额  四射侮辱
         merchBill.setPolicyId("1001");//正常id  默认设置成1001
         merchBill.setBillDate(DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER)); // 账单日期
-        merchBill.setTaxation(BigDecimal.valueOf(0)); // 税点
+        BigDecimal taxation = new BigDecimal(120*0.09);
+        merchBill.setTaxation(taxation.setScale(2,BigDecimal.ROUND_HALF_UP)); // 税点
         // 保存账单
         bizMerchBillService.saveOrUpdate(merchBill);
+        // 更新钱包
+        // 1-通过user_id获取钱包
+        Long merchId = posMachine.getMerchId();
+        // 获得商户
+        BizMerchant bizMerchant = iBizMerchantService.getMerchantByMerchId(merId);
+        // 获得用户id
+        Long userId = bizMerchant.getUserId();
+        LambdaQueryWrapper<BizWallet> wallQuery = Wrappers.lambdaQuery();
+        wallQuery.eq(BizWallet::getUserId ,userId);
+        BizWallet wallet =  walletService.getOne(wallQuery);
+        // 更新数据
+        String secProfitAmount = wallet.getProfitAmount();//获得结算账户余额
+        String secRewardAmount = wallet.getRewardAmount();// 获得奖励数据
+        String key = wallet.getSecretKey();// 获得key
+        // 解密数据
+        String profitAmountStr = DESHelperUtil.decrypt(key,secProfitAmount);
+        String rewardAmountStr = DESHelperUtil.decrypt(key,secRewardAmount);
+        // 转换成BigDecimal类型
+        BigDecimal profitAmount = new BigDecimal(profitAmountStr);
+        BigDecimal rewardAmount = new BigDecimal(rewardAmountStr);
+        profitAmount = profitAmount.add(BigDecimal.valueOf(120*0.91));
+        BigDecimal walletAmount = profitAmount.add(rewardAmount);
+        // 加密
+        String profitAmountMoneyStr = DESHelperUtil.encrypt(key, BigDecimalUtil.getString(profitAmount));
+        String rewardAmountMoneyStr = DESHelperUtil.encrypt(key, BigDecimalUtil.getString(rewardAmount));
+        String walletAmountMoneyStr = DESHelperUtil.encrypt(key, BigDecimalUtil.getString(walletAmount));
+        wallet.setProfitAmount(profitAmountMoneyStr);
+        wallet.setRewardAmount(rewardAmountMoneyStr);
+        wallet.setWalletAmount(walletAmountMoneyStr);
+        wallet.setSecretKey(key);
+        // 保存钱包信息
+        walletService.saveOrUpdate(wallet);
         // 保存设备状态记录
         bizPosMachineStatusRecordsService.saveOrUpdate(posMachineStatusRecords);
     }
