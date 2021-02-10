@@ -368,7 +368,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         BizMerchBill merchBill = new BizMerchBill();
         Long merId = posMachine.getMerchId();
         BizMerchant merchant = iBizMerchantService.getMerchantByMerchId(merId);
-        merchBill.setMerchId(merchant.getParentId());// 商户的上一级合作伙伴
+        merchBill.setMerchId(posMachine.getMerchId());//POS机器的主人
         merchBill.setMerchName(terminalActivateDTO.getName()); // 名称
         merchBill.setPosCode(posMachine.getPosType()); // 设备类型
         merchBill.setBillType("1"); // 账单类型

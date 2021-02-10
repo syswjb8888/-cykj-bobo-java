@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select bill_id billId,merch_id merchId,amount,date_format(bill_date,'%Y-%m-%d %H:%i:%s') billDate,
         d.dict_value billTypeValue,d.dict_label billTypeLabel
         from biz_merch_bill bill,sys_dict_data d
-        where bill.bill_type=d.dict_value and d.dict_type='merchant_bill_type'
+        where bill.bill_type=d.dict_value and d.dict_type='merchant_bill_type' and merch_id=#{merchId}
         <if test="yearMonth != null and yearMonth != ''"><!-- 开始账单日期检索 -->
             and bill_date like concat(#{yearMonth},'%')
         </if>
