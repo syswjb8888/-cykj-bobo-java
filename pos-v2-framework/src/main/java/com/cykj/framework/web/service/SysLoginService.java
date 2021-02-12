@@ -1,5 +1,6 @@
 package com.cykj.framework.web.service;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
@@ -88,6 +89,25 @@ public class SysLoginService{
         }
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        /*
+            单点登录
+            魏建波添加的功能
+         */
+        /*-----------------------------------------------------------------------------*/
+        // 删除key开头是 login_tokens:  让之前登录的用户token失效
+        Collection<String> loginKeyCollection = redisCache.keys("login_tokens:*");
+        for(String key:loginKeyCollection){
+            // 遍历找到登录账户一致的登录信息
+            Object obj = redisCache.getCacheObject(key);
+            if(obj instanceof LoginUser){
+                LoginUser u = (LoginUser) obj;
+                if(u.getUsername().equals(username)){
+                    // 需要删除
+                    redisCache.deleteObject(key);
+                }
+            }
+        }
+        /*-----------------------------------------------------------------------------*/
         // 生成token
         return tokenService.createToken(loginUser);
     }
