@@ -11,7 +11,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @author cykj
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
-public class PosMachineApplication extends SpringBootServletInitializer
+// public class PosMachineApplication extends SpringBootServletInitializer
+public class PosMachineApplication
 {
     public static void main(String[] args)
     {
