@@ -175,15 +175,15 @@ public class DESUtils {
         return null;
     }
 
-    /*public static void main(String args[]) throws Exception {
-        System.out.println("====加密：======");
-        String encrption = DESUtils.encrypt("password", "123456");
-        System.out.println(encrption);
-
+    public static void main(String args[]) throws Exception {
+        /*System.out.println("====加密：======");
+        String encrption = DESUtils.encrypt("7278ec2e85484ce49aa23fdb1637f3ef", "0");
+        System.out.println(encrption);*/
+        //0         1QAxtA5O7cw=
         System.out.println("====解密：======");
         System.out.println("==========");
-        System.out.println(DESUtils.decrypt("password", encrption));
+        System.out.println(DESUtils.decrypt("7278ec2e85484ce49aa23fdb1637f3ef", "1QAxtA5O7cw="));
         System.out.println("==========");
 
-    }*/
+    }
 }

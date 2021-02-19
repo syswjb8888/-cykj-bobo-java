@@ -16,6 +16,7 @@ import com.cykj.pos.mapper.BizPosMachineMapper;
 import com.cykj.pos.profit.dto.*;
 import com.cykj.pos.service.*;
 import com.cykj.pos.util.*;
+import com.cykj.pos.websocket.server.WebSocketServer;
 import com.cykj.system.service.ISysDictTypeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,16 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     IBizWalletService walletService;
 
     @Autowired
+    IBizMerchIntegralService merchIntegralService;
+
+    @Autowired
+    IBizPosPolicyService posPolicyService;
+
+    @Autowired
     BizPosMachineMapper posMachineMapper;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     @Override
     @DataSource(DataSourceType.SLAVE)
@@ -367,7 +377,18 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         posMachineStatusRecords.setRecordsType("2"); //该记录是设备激活操作记录
         // 保存设备状态记录
         bizPosMachineStatusRecordsService.saveOrUpdate(posMachineStatusRecords);
-        //向商户表中插入数据
+        // 获得政策信息  重要就是这块
+        BizPosPolicy posPolicy = posPolicyService.getPosPolicyByPolicyId(terminalActivateDTO.getPolicyId());
+        Double returnMoney = 120.00; // 默认返现金额
+        Double returnTaxation = 0.09;// 默认税点
+        Long returnIntegral = 120L; // 通用积分
+        // 获得政策中的返现金额
+        if(posPolicy!=null){
+            returnMoney = posPolicy.getReturnMoney().doubleValue();
+            returnTaxation = posPolicy.getTaxation().doubleValue();
+            returnIntegral = posPolicy.getReturnIntegral();
+        }
+        //向商户账单表中插入数据
         //--------------------- 插入账单  返现 1--------------------------
         // 通过设备号获得商户信息
         BizPosMachine posMachine = getPosMachineBySnCode(terminalActivateDTO.getSnCode());
@@ -379,46 +400,62 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         merchBill.setPosType(posMachine.getPosType()); // 设备类型
         merchBill.setPosCode(posMachine.getPosCode()); // 设备编号
         merchBill.setBillType("1"); // 账单类型  返现
-        BigDecimal amount = new BigDecimal(120*0.91);
+        BigDecimal amount = new BigDecimal(returnMoney*(1-returnTaxation));
         merchBill.setAmount(amount.setScale(2,BigDecimal.ROUND_HALF_UP));// 返现金额  四射侮辱
         merchBill.setPolicyId(terminalActivateDTO.getPolicyId());//正常id  默认设置成1001
         merchBill.setBillDate(DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER)); // 账单日期
-        BigDecimal taxation = new BigDecimal(120*0.09);
+        BigDecimal taxation = new BigDecimal(returnMoney*returnTaxation);
         merchBill.setTaxation(taxation.setScale(2,BigDecimal.ROUND_HALF_UP)); // 税点
         // 保存账单
         bizMerchBillService.saveOrUpdate(merchBill);
-        // 更新钱包
-        // 1-通过user_id获取钱包
         Long merchId = posMachine.getMerchId();
         // 获得商户
         BizMerchant bizMerchant = iBizMerchantService.getMerchantByMerchId(merId);
+        //向商户积分表中插入数据
+        //--------------------- 插入积分明细   激活机具--------------------------
+        BizMerchIntegral merchIntegral = new BizMerchIntegral();
+        merchIntegral.setMerchId(merchId);
+        merchIntegral.setPosCode(posMachine.getPosCode());
+        merchIntegral.setIntegralType("激活机具");
+        merchIntegral.setValue(returnIntegral);
+        merchIntegral.setTransType("1");//收入
+        merchIntegralService.saveOrUpdate(merchIntegral);
+        //---------------------  更新钱包   ----------------------------
+        // 1-通过user_id获取钱包
         // 获得用户id
         Long userId = bizMerchant.getUserId();
-        LambdaQueryWrapper<BizWallet> wallQuery = Wrappers.lambdaQuery();
-        wallQuery.eq(BizWallet::getUserId ,userId);
-        BizWallet wallet =  walletService.getOne(wallQuery);
+        BizWallet wallet = walletService.getMyWalletByUserId(userId);
         // 更新数据
         String secProfitAmount = wallet.getProfitAmount();//获得结算账户余额
         String secRewardAmount = wallet.getRewardAmount();// 获得奖励数据
+        String secIntegral = wallet.getIntegral(); // 通用积分
         String key = wallet.getSecretKey();// 获得key
         // 解密数据
         String profitAmountStr = DESHelperUtil.decrypt(key,secProfitAmount);
         String rewardAmountStr = DESHelperUtil.decrypt(key,secRewardAmount);
+        String integralStr = DESHelperUtil.decrypt(key,secIntegral);
         // 转换成BigDecimal类型
         BigDecimal profitAmount = new BigDecimal(profitAmountStr);
         BigDecimal rewardAmount = new BigDecimal(rewardAmountStr);
-        profitAmount = profitAmount.add(BigDecimal.valueOf(120*0.91));
+        profitAmount = profitAmount.add(BigDecimal.valueOf(returnMoney*(1-returnTaxation)));
         BigDecimal walletAmount = profitAmount.add(rewardAmount);
+        Long integral = Long.parseLong(integralStr);
+        integral = integral+returnIntegral;// 通用积分
         // 加密
         String profitAmountMoneyStr = DESHelperUtil.encrypt(key, BigDecimalUtil.getString(profitAmount));
         String rewardAmountMoneyStr = DESHelperUtil.encrypt(key, BigDecimalUtil.getString(rewardAmount));
         String walletAmountMoneyStr = DESHelperUtil.encrypt(key, BigDecimalUtil.getString(walletAmount));
+        String integralMoneyStr = DESHelperUtil.encrypt(key,String.valueOf(integral));
         wallet.setProfitAmount(profitAmountMoneyStr);
         wallet.setRewardAmount(rewardAmountMoneyStr);
         wallet.setWalletAmount(walletAmountMoneyStr);
+        wallet.setIntegral(integralMoneyStr);
         wallet.setSecretKey(key);
         // 保存钱包信息
         walletService.saveOrUpdate(wallet);
+        // 发消息
+        webSocketServer.sendInfo(userId,"返现："+returnMoney*(1-returnTaxation)+"元");
+        webSocketServer.sendInfo(userId,"返积分："+returnIntegral+"元");
     }
 
     @Override

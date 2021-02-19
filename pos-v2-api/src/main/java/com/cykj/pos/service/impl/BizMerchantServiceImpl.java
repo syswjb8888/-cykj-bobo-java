@@ -621,6 +621,12 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
             wallet.setRewardAmount(secretMoney);
             wallet.setWalletAmount(secretMoney);
             wallet.setSecretKey(secretKey);
+            // 通用积分  活动积分
+            Long integral = 0L;
+            String secretIntegral = DESHelperUtil.encrypt(secretKey,String.valueOf(integral));
+            // 设置积分
+            wallet.setIntegral(secretIntegral); // 通用积分
+            wallet.setActivityIntegral(secretIntegral);// 活动积分
             walletService.save(wallet);
             return BizStatusContantEnum.PARTNER_REGISTER_SUCCESS;
         }

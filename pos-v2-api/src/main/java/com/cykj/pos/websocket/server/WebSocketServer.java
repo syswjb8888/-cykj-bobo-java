@@ -3,6 +3,7 @@ package com.cykj.pos.websocket.server;
 import com.cykj.common.core.domain.entity.SysUser;
 import com.cykj.pos.domain.BizMessageRecords;
 import com.cykj.pos.service.IBizMessageRecordsService;
+import com.cykj.pos.util.SpringUtil;
 import com.cykj.system.service.ISysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 @ServerEndpoint(value = "/socket/{userId}")
 public class WebSocketServer {
-
     @Autowired
     private ISysUserService sysUserService;
-
     @Autowired
     private IBizMessageRecordsService messageRecordsService;
 
@@ -38,55 +37,60 @@ public class WebSocketServer {
     private final ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10,
             200, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<Runnable>(5));
 
-    public WebSocketServer(){}
+    public WebSocketServer() {
+    }
+
     public void sendMessage(Session session, String message) throws IOException {
-        if(session != null){
+        if (session != null) {
             session.getBasicRemote().sendText(message);
         }
     }
 
     @OnOpen
-    public void onOpen(Session session, @PathParam(value = "userId") Long userId){
+    public void onOpen(Session session, @PathParam(value = "userId") Long userId) {
+        // 获得后台接口
+        messageRecordsService = SpringUtil.getBean(IBizMessageRecordsService.class);
         Set<Long> connectedUser = sessionPools.keySet();
 
-            //TODO:用户连接后则查询离线消息中是否存在未发送的消息，存在则发送
-            if(!connectedUser.contains(userId)){
+        //TODO:用户连接后则查询离线消息中是否存在未发送的消息，存在则发送
+        if (!connectedUser.contains(userId)) {
 
-                BizMessageRecords offline = new BizMessageRecords();
-                offline.setMsgUserId(userId);
-                offline.setMsgStatus(0);
-                List<BizMessageRecords> offlineList = messageRecordsService.queryList(offline);
-                for(BizMessageRecords msg: offlineList){
-                    executor.execute(() -> {
-                        try {
-                            sendMessage(session, msg.getMsgContent());
-                            msg.setMsgStatus(1);
-                            //发送完成即删除
-                            // messageRecordsService.removeById(msg.getMsgId());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                }
+            BizMessageRecords offline = new BizMessageRecords();
+            offline.setMsgUserId(userId);
+            offline.setMsgStatus(0);
+            List<BizMessageRecords> offlineList = messageRecordsService.queryList(offline);
+            for (BizMessageRecords msg : offlineList) {
+                executor.execute(() -> {
+                    try {
+                        sendMessage(session, msg.getMsgContent());
+                        msg.setMsgStatus(1);
+                        //发送完成即删除
+                        // messageRecordsService.removeById(msg.getMsgId());
+                        messageRecordsService.saveOrUpdate(msg); // 设置为已发送
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
+        }
 
         sessionPools.put(userId, session);
         addOnlineCount();
     }
 
     @OnClose
-    public void onClose(@PathParam(value = "userId") String userId){
+    public void onClose(@PathParam(value = "userId") String userId) {
         sessionPools.remove(userId);
         subOnlineCount();
         System.out.println(userId + "断开webSocket连接！当前人数为" + online);
     }
 
     @OnMessage
-    public void onMessage(String message){
-        for (Session session: sessionPools.values()) {
+    public void onMessage(String message) {
+        for (Session session : sessionPools.values()) {
             try {
                 sendMessage(session, message);
-            } catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 continue;
             }
@@ -94,31 +98,35 @@ public class WebSocketServer {
     }
 
     @OnError
-    public void onError(Session session, Throwable throwable){
+    public void onError(Session session, Throwable throwable) {
         System.out.println("发生错误");
         throwable.printStackTrace();
     }
 
-    public void sendInfo(Long userId, String message){
+    public void sendInfo(Long userId, String message) {
+        // 获得后端接口
+        sysUserService = SpringUtil.getBean(ISysUserService.class);
         Session session = sessionPools.get(userId);
         SysUser user = sysUserService.selectUserById(userId);
-        if(session != null) {
+        BizMessageRecords msg = new BizMessageRecords();
+        if (session != null) {
             try {
                 sendMessage(session, message);
-            }catch (Exception e){
+                msg.setMsgStatus(1); // 已发送
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else if(user != null){
-           //用户存在，但用户不在线，则将消息保存
-            BizMessageRecords msg = new BizMessageRecords();
-            msg.setMsgUserId(userId);
-            msg.setMsgContent(message);
-            msg.setMsgStatus(0);
-            messageRecordsService.save(msg);
+        } else if (user != null) {
+            //用户存在，但用户不在线，则将消息保存
+            msg.setMsgStatus(0); // 为发送
         }
+        // 保存起来
+        msg.setMsgUserId(userId);
+        msg.setMsgContent(message);
+        messageRecordsService.save(msg);
     }
 
-    public static void addOnlineCount(){
+    public static void addOnlineCount() {
         online.incrementAndGet();
     }
 

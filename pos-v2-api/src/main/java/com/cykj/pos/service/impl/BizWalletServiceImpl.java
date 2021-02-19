@@ -84,4 +84,13 @@ public class BizWalletServiceImpl extends ServiceImpl<BizWalletMapper, BizWallet
        //TODO：这里还需要加一层密码密文解密功能，即前端传输过来的是密码密文（加密算法协商解决），解密后保存到本地数据库
        wallet.setPayPassword(SecurityUtils.encryptPassword(walletDTO.getPayPassword()));
     }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public BizWallet getMyWalletByUserId(Long userId) {
+        LambdaQueryWrapper<BizWallet> wallQuery = Wrappers.lambdaQuery();
+        wallQuery.eq(BizWallet::getUserId ,userId);
+        BizWallet wallet =  this.getOne(wallQuery);
+        return wallet;
+    }
 }

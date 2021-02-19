@@ -1,5 +1,7 @@
 package com.cykj.pos.service.impl;
 
+import com.cykj.common.annotation.DataSource;
+import com.cykj.common.enums.DataSourceType;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -61,5 +63,13 @@ public class BizPosPolicyServiceImpl extends ServiceImpl<BizPosPolicyMapper, Biz
             lqw.eq(BizPosPolicy::getVar5 ,bizPosPolicy.getVar5());
         }
         return this.list(lqw);
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public BizPosPolicy getPosPolicyByPolicyId(String policyId) {
+        LambdaQueryWrapper<BizPosPolicy> posQuery = Wrappers.lambdaQuery();
+        posQuery.eq(BizPosPolicy::getPolicyId ,policyId);
+        return this.getOne(posQuery);
     }
 }

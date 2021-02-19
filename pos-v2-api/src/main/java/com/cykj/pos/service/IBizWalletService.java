@@ -27,4 +27,11 @@ public interface IBizWalletService extends IService<BizWallet> {
     public BizWallet getMyWallet(WalletDTO walletDTO);
 
     public void setPayPassword(WalletDTO walletDTO);
+
+    /**
+     * 根据用户id获取钱包
+     * @param userId
+     * @return
+     */
+    BizWallet getMyWalletByUserId(Long userId);
 }

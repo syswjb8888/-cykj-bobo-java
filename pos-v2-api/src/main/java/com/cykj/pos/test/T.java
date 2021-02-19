@@ -37,12 +37,14 @@ public class T {
         System.out.println(formatedDate);*/
         BigDecimal bignum1 = new BigDecimal("10.0000");
 
-        BigDecimal bignum2 = new BigDecimal("5.333");
+        /*BigDecimal bignum2 = new BigDecimal("5.333");
 
         bignum1 = bignum1.add(bignum2);
 
         System.out.println(bignum1);
-        System.out.println(bignum2);
+        System.out.println(bignum2);*/
+        System.out.println(bignum1.doubleValue());
+        System.out.println(Double.parseDouble(bignum1.toString()));
         // System.out.println(bignum3);
         /*System.out.println(BigDecimal.valueOf(109.2222));
         System.out.println(bignum1.stripTrailingZeros().toPlainString());*/
@@ -55,8 +57,8 @@ public class T {
         BigDecimal bignum222 = bignum22.negate();
         System.out.println(bignum222);*/
 
-        String pass = SecurityUtils.encryptPassword("123123");
-        System.out.println(pass);
+        /*String pass = SecurityUtils.encryptPassword("123123");
+        System.out.println(pass);*/
     }
 }
 class Per{
