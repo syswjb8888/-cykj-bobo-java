@@ -76,6 +76,10 @@ private static final long serialVersionUID=1L;
     @ApiModelProperty(value = "秘钥")
     private String secretKey;
 
+    /** 加密后的积分 */
+    @ApiModelProperty(value = "积分")
+    private String integral;
+
     /** $column.columnComment */
     private Long createBy;
 

@@ -95,7 +95,7 @@ public class SysLoginService{
          */
         /*-----------------------------------------------------------------------------*/
         // 删除key开头是 login_tokens:  让之前登录的用户token失效
-        Collection<String> loginKeyCollection = redisCache.keys("login_tokens:*");
+        /*Collection<String> loginKeyCollection = redisCache.keys("login_tokens:*");
         for(String key:loginKeyCollection){
             // 遍历找到登录账户一致的登录信息
             Object obj = redisCache.getCacheObject(key);
@@ -106,7 +106,7 @@ public class SysLoginService{
                     redisCache.deleteObject(key);
                 }
             }
-        }
+        }*/
         /*-----------------------------------------------------------------------------*/
         // 生成token
         return tokenService.createToken(loginUser);

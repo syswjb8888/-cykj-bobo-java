@@ -430,7 +430,7 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         partnerDTO.setParnterId(userId);
         // 加入头像
         partnerDTO.setPortrait(user.getPortrait());
-        partnerDTO.setRegisterTime(DateUtils.Date2String(user.getCreateTime(),"YYYY-mm-dd HH:mm:ss"));
+        partnerDTO.setRegisterTime(DateUtils.Date2String(user.getCreateTime(),"YYYY-MM-dd HH:mm:ss"));
         return partnerDTO;
     }
     @Override
@@ -445,7 +445,8 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
             Long merchantId = merchant.getMerchId();
             Long uId = merchant.getUserId();
             SysUser user = sysUserService.selectUserById(uId);
-            BigDecimal thisMonthAmount = transRecordsService.getTotalTransAmountByMerchId(merchantId); //商户所有交易额
+            // BigDecimal thisMonthAmount = transRecordsService.getTotalTransAmountByMerchId(merchantId); //商户所有交易额
+            BigDecimal thisMonthAmount = transRecordsService.getMonthlyTransAmountByMerchId(merchantId);
             Integer counts = merchantService.getTotalNewMerchCounts(merchantId);// 团队激活数
 
             partnerDTO.setPartnerName(user.getNickName());
@@ -708,7 +709,8 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     public void cancelMerchantTransaction(BizCancelTransDTO merchTransDTO) {
         BizMerchTransactions merchTransaction = new BizMerchTransactions();
         // ------------------------快钱支付接口提供字段-----------------------------
-        merchTransaction.setTransAmount(Convert.toBigDecimal(merchTransDTO.getAmt()));
+        BigDecimal transAmount = Convert.toBigDecimal(merchTransDTO.getAmt());
+        merchTransaction.setTransAmount(transAmount.negate());//值变为负值  -600.00
         merchTransaction.setOriginOutTraceNo(merchTransDTO.getOriginOutTraceNo()); // 原交易外部订单号
         merchTransaction.setIdTxn(merchTransDTO.getIdTxn()); // 交易编号
         merchTransaction.setMerchFlagCode(merchTransDTO.getMerchantId());  //商户标识
@@ -728,7 +730,8 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     public void returnMerchantTransaction(BizReturnTransDTO merchTransDTO) {
         BizMerchTransactions merchTransaction = new BizMerchTransactions();
         // ------------------------快钱支付接口提供字段-----------------------------
-        merchTransaction.setTransAmount(Convert.toBigDecimal(merchTransDTO.getAmt()));
+        BigDecimal transAmount = Convert.toBigDecimal(merchTransDTO.getAmt());
+        merchTransaction.setTransAmount(transAmount.negate());//值变为负值  -600.00
         merchTransaction.setOriginOutTraceNo(merchTransDTO.getOriginOutTraceNo()); // 原交易外部订单号
         merchTransaction.setIdTxn(merchTransDTO.getIdTxn()); // 交易编号
         merchTransaction.setMerchFlagCode(merchTransDTO.getMerchantId());  //商户标识

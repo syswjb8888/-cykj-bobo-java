@@ -62,7 +62,7 @@ public class WebSocketServer {
                             sendMessage(session, msg.getMsgContent());
                             msg.setMsgStatus(1);
                             //发送完成即删除
-                            messageRecordsService.removeById(msg.getMsgId());
+                            // messageRecordsService.removeById(msg.getMsgId());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

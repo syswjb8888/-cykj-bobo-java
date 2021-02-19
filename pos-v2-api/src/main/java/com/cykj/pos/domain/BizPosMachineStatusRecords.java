@@ -110,6 +110,9 @@ private static final long serialVersionUID=1L;
     @Excel(name = "记录类型")
     private String recordsType;
 
+    @Excel(name = "政策编号")
+    private String policyId;
+
     @TableField(exist = false)
     private Map<String, Object> params = new HashMap<>();
 }

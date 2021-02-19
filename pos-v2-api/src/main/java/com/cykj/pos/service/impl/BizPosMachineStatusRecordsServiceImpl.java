@@ -1,5 +1,7 @@
 package com.cykj.pos.service.impl;
 
+import com.cykj.common.annotation.DataSource;
+import com.cykj.common.enums.DataSourceType;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class BizPosMachineStatusRecordsServiceImpl extends ServiceImpl<BizPosMachineStatusRecordsMapper, BizPosMachineStatusRecords> implements IBizPosMachineStatusRecordsService {
 
     @Override
+    @DataSource(DataSourceType.SLAVE)
     public List<BizPosMachineStatusRecords> queryList(BizPosMachineStatusRecords bizPosMachineStatusRecords) {
         LambdaQueryWrapper<BizPosMachineStatusRecords> lqw = Wrappers.lambdaQuery();
         if (bizPosMachineStatusRecords.getId() != null){
@@ -76,5 +79,14 @@ public class BizPosMachineStatusRecordsServiceImpl extends ServiceImpl<BizPosMac
             lqw.eq(BizPosMachineStatusRecords::getStatus ,bizPosMachineStatusRecords.getStatus());
         }
         return this.list(lqw);
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public BizPosMachineStatusRecords getPosMachineStatusRecordsByMerchantId(String merchantId) {
+        LambdaQueryWrapper<BizPosMachineStatusRecords> merchantQuery = Wrappers.lambdaQuery();
+        merchantQuery.eq(BizPosMachineStatusRecords::getMerchantId, merchantId);
+        BizPosMachineStatusRecords posMachineStatusRecords = this.getOne(merchantQuery);
+        return posMachineStatusRecords;
     }
 }

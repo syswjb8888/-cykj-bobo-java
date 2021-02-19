@@ -51,7 +51,12 @@ public class T {
         System.out.println(BigDecimalUtil.getString(1000.5));
         System.out.println(BigDecimalUtil.getString(0));*/
 
+        /*BigDecimal bignum22 = new BigDecimal("600.12345678");
+        BigDecimal bignum222 = bignum22.negate();
+        System.out.println(bignum222);*/
 
+        String pass = SecurityUtils.encryptPassword("123123");
+        System.out.println(pass);
     }
 }
 class Per{

@@ -342,25 +342,31 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     @Override
     @Transactional
     public void posMachineActivate(TerminalActivateDTO terminalActivateDTO) {
-        BizPosMachineStatusRecords posMachineStatusRecords = new BizPosMachineStatusRecords();
-        posMachineStatusRecords.setPhoneNo(terminalActivateDTO.getPhoneNo());
-        posMachineStatusRecords.setTerminalId(terminalActivateDTO.getTerminalId());
+        // 根据merchant_id获得绑定的记录信息
+        String merchantId = terminalActivateDTO.getMerchantId();
+        BizPosMachineStatusRecords posMachineStatusRecords = bizPosMachineStatusRecordsService.getPosMachineStatusRecordsByMerchantId(merchantId);
+        // BizPosMachineStatusRecords posMachineStatusRecords = new BizPosMachineStatusRecords();
+        // posMachineStatusRecords.setPhoneNo(terminalActivateDTO.getPhoneNo());
+        // posMachineStatusRecords.setTerminalId(terminalActivateDTO.getTerminalId());
+        // posMachineStatusRecords.setDeviceType(terminalActivateDTO.getDeviceType());
+        // posMachineStatusRecords.setSnCode(terminalActivateDTO.getSnCode());
+        // posMachineStatusRecords.setDirectlyOrgId(terminalActivateDTO.getDirectlyOrgID());
+        //posMachineStatusRecords.setMerchantId(terminalActivateDTO.getMerchantId());
         posMachineStatusRecords.setIsActivated(terminalActivateDTO.getIsActivated());
         posMachineStatusRecords.setReceiptType(terminalActivateDTO.getReceiptType());
-        posMachineStatusRecords.setDeviceType(terminalActivateDTO.getDeviceType());
         posMachineStatusRecords.setName(terminalActivateDTO.getName());
-        posMachineStatusRecords.setSnCode(terminalActivateDTO.getSnCode());
         posMachineStatusRecords.setActiveTime(terminalActivateDTO.getActiveTime());
         posMachineStatusRecords.setIdTxn(terminalActivateDTO.getIdTxn());
-        posMachineStatusRecords.setDirectlyOrgId(terminalActivateDTO.getDirectlyOrgID());
-        posMachineStatusRecords.setMerchantId(terminalActivateDTO.getMerchantId());
         posMachineStatusRecords.setSecondOrgId(terminalActivateDTO.getSecondOrgID());
         posMachineStatusRecords.setOrderId(terminalActivateDTO.getOrderId());
+        posMachineStatusRecords.setPolicyId(terminalActivateDTO.getPolicyId()); // 政策编号
         // -------------------自己扩展内容--------------------------
         LocalDateTime localDateTime = LocalDateTime.now();
         String receiptDate = DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER);
         posMachineStatusRecords.setReceiptDate(receiptDate); // 设置接收时间
         posMachineStatusRecords.setRecordsType("2"); //该记录是设备激活操作记录
+        // 保存设备状态记录
+        bizPosMachineStatusRecordsService.saveOrUpdate(posMachineStatusRecords);
         //向商户表中插入数据
         //--------------------- 插入账单  返现 1--------------------------
         // 通过设备号获得商户信息
@@ -370,11 +376,12 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         BizMerchant merchant = iBizMerchantService.getMerchantByMerchId(merId);
         merchBill.setMerchId(posMachine.getMerchId());//POS机器的主人
         merchBill.setMerchName(terminalActivateDTO.getName()); // 名称
-        merchBill.setPosCode(posMachine.getPosType()); // 设备类型
-        merchBill.setBillType("1"); // 账单类型
+        merchBill.setPosType(posMachine.getPosType()); // 设备类型
+        merchBill.setPosCode(posMachine.getPosCode()); // 设备编号
+        merchBill.setBillType("1"); // 账单类型  返现
         BigDecimal amount = new BigDecimal(120*0.91);
         merchBill.setAmount(amount.setScale(2,BigDecimal.ROUND_HALF_UP));// 返现金额  四射侮辱
-        merchBill.setPolicyId("1001");//正常id  默认设置成1001
+        merchBill.setPolicyId(terminalActivateDTO.getPolicyId());//正常id  默认设置成1001
         merchBill.setBillDate(DateUtils.localeDateTime2String(localDateTime, Constants.DATETIME_FORMATTER)); // 账单日期
         BigDecimal taxation = new BigDecimal(120*0.09);
         merchBill.setTaxation(taxation.setScale(2,BigDecimal.ROUND_HALF_UP)); // 税点
@@ -412,8 +419,6 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         wallet.setSecretKey(key);
         // 保存钱包信息
         walletService.saveOrUpdate(wallet);
-        // 保存设备状态记录
-        bizPosMachineStatusRecordsService.saveOrUpdate(posMachineStatusRecords);
     }
 
     @Override

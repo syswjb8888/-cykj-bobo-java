@@ -16,7 +16,8 @@ public class SMSServiceImpl implements ISMSService {
     private static final Integer SECRET_ID = 1400447243;
     private static final Integer VERIFYCODE_TEMPLATE_ID =770977;
     private static final Integer PASSWORD_TEMPLATE_ID =770977;
-    private static final String SIGN_NAME ="长春众盛科技有限公司";
+    // private static final String SIGN_NAME ="众盛科技有限公司";
+    private static final String SIGN_NAME ="众鑫助手";
 
     @Override
     public SmsSingleSenderResult sendVerifyCode(String mobile, String verifyCode, String purpose) {

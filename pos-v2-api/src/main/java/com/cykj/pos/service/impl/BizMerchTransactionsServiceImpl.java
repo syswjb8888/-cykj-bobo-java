@@ -202,6 +202,13 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
 
     @Override
     public BigDecimal getTotalTransAmountByMerchId(Long merchantId) {
+        /*
+        String formatedDate = DateUtils.getCaculateYearAndMonth("",DATE_FORMATTER);
+        String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
+                "where FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.trans_date like CONCAT(?,'%')";
+        BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchId,formatedDate},BigDecimal.class);
+        return transAmount == null?BigDecimal.ZERO:transAmount;
+         */
         String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
                 "where p.merch_id=?)";
         BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchantId},BigDecimal.class);

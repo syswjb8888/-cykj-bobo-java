@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="receiptDate"    column="receipt_date"    />
         <result property="status"    column="status"    />
         <result property="recordsType"    column="records_type"    />
+        <result property="policyId"    column="policy_id"    />
     </resultMap>
 
 

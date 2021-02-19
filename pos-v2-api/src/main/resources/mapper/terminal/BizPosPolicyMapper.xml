@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.pos.mapper.BizPosPolicyMapper">
+    
+    <resultMap type="BizPosPolicy" id="BizPosPolicyResult">
+        <result property="id"    column="id"    />
+        <result property="policyId"    column="policy_id"    />
+        <result property="returnMoney"    column="return_money"    />
+        <result property="taxation"    column="taxation"    />
+        <result property="returnIntegral"    column="return_integral"    />
+        <result property="months"    column="months"    />
+        <result property="amounts"    column="amounts"    />
+        <result property="frozenAmount"    column="frozen_amount"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="var4"    column="var4"    />
+        <result property="var5"    column="var5"    />
+    </resultMap>
+
+
+</mapper>

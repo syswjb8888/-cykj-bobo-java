@@ -16,4 +16,11 @@ public interface IBizPosMachineStatusRecordsService extends IService<BizPosMachi
      * 查询列表
      */
     List<BizPosMachineStatusRecords> queryList(BizPosMachineStatusRecords bizPosMachineStatusRecords);
+
+    /**
+     * 根据商户编号查询设备记录信息 魏建波
+     * @param merchantId
+     * @return
+     */
+    BizPosMachineStatusRecords getPosMachineStatusRecordsByMerchantId(String merchantId);
 }

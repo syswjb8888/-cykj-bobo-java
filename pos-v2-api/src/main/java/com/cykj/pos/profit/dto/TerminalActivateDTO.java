@@ -43,5 +43,8 @@ public class TerminalActivateDTO {
     /** 电话号 */
     private String phoneNo;
 
+    /** 政策编号 */
+    private String policyId;
+
 
 }
