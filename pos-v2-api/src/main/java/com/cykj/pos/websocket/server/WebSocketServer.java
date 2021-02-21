@@ -3,6 +3,7 @@ package com.cykj.pos.websocket.server;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cykj.common.core.domain.entity.SysUser;
+import com.cykj.common.utils.DateUtils;
 import com.cykj.pos.domain.BizMessageRecords;
 import com.cykj.pos.service.IBizMessageRecordsService;
 import com.cykj.pos.util.SpringUtil;
@@ -15,10 +16,9 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -120,6 +120,8 @@ public class WebSocketServer {
         BizMessageRecords msg = new BizMessageRecords();
         msg.setMsgUserId(userId);
         msg.setMsgContent(message);
+        msg.setReadStatus(0);
+        msg.setCreateTime(DateUtils.getNowDate());
         if (session != null) {
             try {
                 // 把对象转换成json进行传递
@@ -148,6 +150,10 @@ public class WebSocketServer {
         Session session = sessionPools.get(userId);
         SysUser user = sysUserService.selectUserById(userId);
         msg.setMsgUserId(userId);
+        // 服务器当前时间
+        /*LocalDate localDate = LocalDate.now();
+        String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));*/
+        msg.setCreateTime(DateUtils.getNowDate());
         if (session != null) {
             try {
                 // 把对象转换成json进行传递
