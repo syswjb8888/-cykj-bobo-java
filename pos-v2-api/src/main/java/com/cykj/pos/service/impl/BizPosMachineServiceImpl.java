@@ -454,8 +454,17 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         // 保存钱包信息
         walletService.saveOrUpdate(wallet);
         // 发消息
-        webSocketServer.sendInfo(userId,"返现："+returnMoney*(1-returnTaxation)+"元");
-        webSocketServer.sendInfo(userId,"返积分："+returnIntegral+"元");
+        String fanXianMess = "返现："+returnMoney*(1-returnTaxation)+"元";
+        BizMessageRecords fanXianMessageRecords = new BizMessageRecords();
+        fanXianMessageRecords.setMsgContent(fanXianMess);// 消息内容
+        fanXianMessageRecords.setMsgType(2); // 消息类型  返现
+        webSocketServer.sendInfo(userId,fanXianMessageRecords);// 发送消息
+
+        String jiFenMess = "返积分："+returnIntegral;
+        BizMessageRecords jiFenMessageRecords = new BizMessageRecords();
+        jiFenMessageRecords.setMsgContent(jiFenMess);// 消息内容
+        jiFenMessageRecords.setMsgType(8); // 消息类型  返积分
+        webSocketServer.sendInfo(userId,jiFenMessageRecords);// 发送消息
     }
 
     @Override
