@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 /**
- * 离用户消息Service接口
+ * 用户消息Service接口
  *
- * @author ningbingwu
- * @date 2021-01-18
+ * @author weijianbo
+ * @date 2021-02-21
  */
 public interface IBizMessageRecordsService extends IService<BizMessageRecords> {
 

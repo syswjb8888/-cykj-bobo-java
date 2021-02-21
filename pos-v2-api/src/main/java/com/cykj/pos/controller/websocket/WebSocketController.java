@@ -8,6 +8,12 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * WebSocket控制器
+ *
+ * @author weijianbo
+ * @date 2021-02-19
+ */
 @RestController
 @RequestMapping("/websocket")
 public class WebSocketController {

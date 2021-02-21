@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * 离用户消息Service业务层处理
  *
- * @author ningbingwu
- * @date 2021-01-18
+ * @author weijianbo
+ * @date 2021-02-21
  */
 @Service
 public class BizMessageRecordsServiceImpl extends ServiceImpl<BizMessageRecordsMapper, BizMessageRecords> implements IBizMessageRecordsService {

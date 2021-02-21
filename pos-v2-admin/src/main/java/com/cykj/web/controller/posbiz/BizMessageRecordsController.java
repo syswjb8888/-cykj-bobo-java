@@ -17,10 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 离线用户消息Controller
+ * 用户消息Controller
  *
- * @author ningbingwu
- * @date 2021-01-18
+ * @author weijianbo
+ * @date 2021-02-21
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @RestController
@@ -30,7 +30,7 @@ public class BizMessageRecordsController extends BaseController {
     private final IBizMessageRecordsService iBizMessageRecordsService;
 
     /**
-     * 查询离线用户消息列表
+     * 查询用户消息列表
      */
     @PreAuthorize("@ss.hasPermi('message:offline:list')")
     @GetMapping("/list")
@@ -41,7 +41,7 @@ public class BizMessageRecordsController extends BaseController {
     }
 
     /**
-     * 导出离线用户消息列表
+     * 导出用户消息列表
      */
     @PreAuthorize("@ss.hasPermi('message:offline:export')" )
     @Log(title = "离线用户消息" , businessType = BusinessType.EXPORT)
@@ -53,7 +53,7 @@ public class BizMessageRecordsController extends BaseController {
     }
 
     /**
-     * 获取离线用户消息详细信息
+     * 获取用户消息详细信息
      */
     @PreAuthorize("@ss.hasPermi('message:offline:query')" )
     @GetMapping(value = "/{msgId}" )
@@ -62,7 +62,7 @@ public class BizMessageRecordsController extends BaseController {
     }
 
     /**
-     * 新增离线用户消息
+     * 新增用户消息
      */
     @PreAuthorize("@ss.hasPermi('message:offline:add')" )
     @Log(title = "离线用户消息" , businessType = BusinessType.INSERT)
@@ -72,7 +72,7 @@ public class BizMessageRecordsController extends BaseController {
     }
 
     /**
-     * 修改离线用户消息
+     * 修改用户消息
      */
     @PreAuthorize("@ss.hasPermi('message:offline:edit')" )
     @Log(title = "离线用户消息" , businessType = BusinessType.UPDATE)
@@ -82,10 +82,10 @@ public class BizMessageRecordsController extends BaseController {
     }
 
     /**
-     * 删除离线用户消息
+     * 删除用户消息
      */
     @PreAuthorize("@ss.hasPermi('message:offline:remove')" )
-    @Log(title = "离线用户消息" , businessType = BusinessType.DELETE)
+    @Log(title = "用户消息" , businessType = BusinessType.DELETE)
     @DeleteMapping("/{msgIds}" )
     public AjaxResult remove(@PathVariable Long[] msgIds) {
         return toAjax(iBizMessageRecordsService.removeByIds(Arrays.asList(msgIds)) ? 1 : 0);

@@ -24,7 +24,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
+/**
+ * WebSocket服务类
+ *
+ * @author weijianbo
+ * @date 2021-02-19
+ */
 @Component
 @ServerEndpoint(value = "/socket/{userId}")
 public class WebSocketServer {
