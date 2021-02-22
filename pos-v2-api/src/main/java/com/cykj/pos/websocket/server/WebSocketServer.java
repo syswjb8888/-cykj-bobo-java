@@ -11,6 +11,7 @@ import com.cykj.system.service.ISysUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -126,7 +127,11 @@ public class WebSocketServer {
         msg.setMsgUserId(userId);
         msg.setMsgContent(message);
         msg.setReadStatus(0);
+        msg.setMsgType(2);
         msg.setCreateTime(DateUtils.getNowDate());
+        // 保存起来
+        messageRecordsService.save(msg);
+        System.out.println(msg);
         if (session != null) {
             try {
                 // 把对象转换成json进行传递
@@ -140,8 +145,7 @@ public class WebSocketServer {
             //用户存在，但用户不在线，则将消息保存
             msg.setMsgStatus(0); // 为发送
         }
-        // 保存起来
-        messageRecordsService.save(msg);
+        messageRecordsService.saveOrUpdate(msg);
     }
     /**
      * 向某个用户发送消息对象   这个是专门给第三方发送消息提供的功能接口
@@ -159,6 +163,8 @@ public class WebSocketServer {
         /*LocalDate localDate = LocalDate.now();
         String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));*/
         msg.setCreateTime(DateUtils.getNowDate());
+        // 保存起来
+        messageRecordsService.save(msg);
         if (session != null) {
             try {
                 // 把对象转换成json进行传递
@@ -172,8 +178,7 @@ public class WebSocketServer {
             //用户存在，但用户不在线，则将消息保存
             msg.setMsgStatus(0); // 未发送
         }
-        // 保存起来
-        messageRecordsService.save(msg);
+        messageRecordsService.saveOrUpdate(msg);
     }
 
     public static void addOnlineCount() {

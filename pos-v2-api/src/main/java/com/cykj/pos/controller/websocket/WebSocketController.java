@@ -1,5 +1,6 @@
 package com.cykj.pos.controller.websocket;
 
+import com.cykj.pos.domain.BizMessageRecords;
 import com.cykj.pos.profit.dto.MessageDTO;
 import com.cykj.pos.websocket.server.WebSocketServer;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,11 @@ import java.util.List;
 public class WebSocketController {
     @Resource
     private WebSocketServer webSocketServer;
+    @PostMapping("/send/test")
+    public void sendInfoToOneTest(@RequestBody BizMessageRecords message){
+        webSocketServer.sendInfo(message.getMsgUserId(),message);
+    }
+
     @PostMapping("/send/to/one")
     public void sendInfoToOne(@RequestBody MessageDTO message){
         webSocketServer.sendInfo(message.getUserId(),message.getMessage());

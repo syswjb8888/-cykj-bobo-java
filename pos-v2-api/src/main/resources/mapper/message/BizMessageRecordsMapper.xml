@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="msgType"    column="msg_type"    />
         <result property="readStatus"    column="read_status"    />
+        <result property="adviceType"    column="advice_type"    />
     </resultMap>
 
 

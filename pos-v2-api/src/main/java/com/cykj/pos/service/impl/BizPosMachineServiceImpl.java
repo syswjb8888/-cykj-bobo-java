@@ -458,7 +458,8 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         BizMessageRecords fanXianMessageRecords = new BizMessageRecords();
         fanXianMessageRecords.setMsgContent(fanXianMess);// 消息内容
         fanXianMessageRecords.setMsgType(2); // 消息类型  返现
-        fanXianMessageRecords.setReadStatus(0);// 消息未读
+        fanXianMessageRecords.setReadStatus(0); // 消息未读
+        fanXianMessageRecords.setAdviceType(1); // 业务消息
         webSocketServer.sendInfo(userId,fanXianMessageRecords);// 发送消息
 
         String jiFenMess = "返积分："+returnIntegral;
@@ -466,6 +467,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         jiFenMessageRecords.setMsgContent(jiFenMess);// 消息内容
         jiFenMessageRecords.setMsgType(8); // 消息类型  返积分
         jiFenMessageRecords.setReadStatus(0);// 消息未读
+        jiFenMessageRecords.setAdviceType(1); // 业务消息
         webSocketServer.sendInfo(userId,jiFenMessageRecords);// 发送消息
     }
 

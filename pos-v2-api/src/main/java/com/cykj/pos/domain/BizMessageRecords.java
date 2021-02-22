@@ -52,7 +52,7 @@ private static final long serialVersionUID=1L;
     private Integer msgStatus;
 
     /** 消息类型 */
-    @Excel(name = "消息类型",readConverterExp = "0-未定义,1-入库,2-机具激活,3-预约提现成功,4-提现,6-兑换申请,7-兑换")
+    @Excel(name = "消息类型",readConverterExp = "0-未定义,1-入库,2-机具激活,3-预约提现成功,4-提现,6-兑换申请,7-兑换,8-返积分")
     private Integer msgType;
 
     /** 读取状态 */
@@ -62,6 +62,10 @@ private static final long serialVersionUID=1L;
     /** $column.columnComment */
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+    /** 消息类型 */
+    @Excel(name = "通知类型",readConverterExp = "1-业务消息,2-系统消息")
+    private Integer adviceType;
 
     @TableField(exist = false)
     private Map<String, Object> params = new HashMap<>();

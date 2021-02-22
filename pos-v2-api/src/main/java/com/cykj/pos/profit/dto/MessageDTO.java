@@ -9,4 +9,5 @@ public class MessageDTO {
     private Long userId;
     private List<Long> userIds;
     private String message;
+    private Integer msgType;
 }
