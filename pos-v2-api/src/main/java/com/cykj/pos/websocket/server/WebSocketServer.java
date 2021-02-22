@@ -164,21 +164,8 @@ public class WebSocketServer {
         String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));*/
         msg.setCreateTime(DateUtils.getNowDate());
         // 保存起来
-        messageRecordsService.save(msg);
-        if (session != null) {
-            try {
-                // 把对象转换成json进行传递
-                String m = JSON.toJSONString(msg);
-                sendMessage(session, m);
-                msg.setMsgStatus(1); // 已发送
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (user != null) {
-            //用户存在，但用户不在线，则将消息保存
-            msg.setMsgStatus(0); // 未发送
-        }
-        messageRecordsService.saveOrUpdate(msg);
+        IBizMessageRecordsService messageRecordsService = SpringUtil.getBean(IBizMessageRecordsService.class);
+        messageRecordsService.sendInfo(session,msg,user);// 发送消息
     }
 
     public static void addOnlineCount() {

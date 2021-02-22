@@ -36,9 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from biz_merchant m
         left join biz_micro_info h on  h.merch_id = m.merch_id
         left join sys_user u on m.user_id=u.user_id
-        where m.merch_id in(
-        select parent_id from biz_merchant where parent_id!=0)
-        and m.parent_id=#{merchId}
+        where m.parent_id=#{merchId}
         <if test="nickName!=null and nickName!=''">
             and merch_name like concat('%',#{nickName},'%')
         </if>

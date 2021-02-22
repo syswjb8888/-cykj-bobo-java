@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface BizMerchantMapper extends BaseMapper<BizMerchant> {
     /**
-     * 查询商户的所有伙伴信息 魏建波
+     * 查询商户的直接伙伴信息 魏建波
      * @param merchantDTO
      * @return
      */
