@@ -67,6 +67,15 @@ public class BizMessageRecordsServiceImpl extends ServiceImpl<BizMessageRecordsM
 
     @Override
     public List<MessageDTO> getMessageListByUserIdAndType(MessageDTO messageDTO) {
+        //处理一下分页
+        Integer pageNo = messageDTO.getPageNo();
+        Integer pageSize = messageDTO.getPageSize();
+        if(pageNo!=null && pageNo!=-1 && pageSize!=null && pageSize!=-1){
+            Integer start = (pageNo-1)*pageSize;
+            messageDTO.setStart(start);
+        }else{
+            messageDTO.setStart(-1);
+        }
         return messageRecordsMapper.selectMessageListByUserIdAndType(messageDTO);
     }
 

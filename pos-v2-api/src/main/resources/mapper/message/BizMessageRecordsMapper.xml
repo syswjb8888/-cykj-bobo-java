@@ -29,6 +29,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="msgType != null  and msgType != ''"> and msg_type = #{msgType}</if>
         </where>
         order by create_time desc
+        <if test="start!=-1">
+            limit #{start},#{pageSize}
+        </if>
     </select>
 
     <select id="selectMessageByMgsId" parameterType="com.cykj.pos.profit.dto.MessageDTO"

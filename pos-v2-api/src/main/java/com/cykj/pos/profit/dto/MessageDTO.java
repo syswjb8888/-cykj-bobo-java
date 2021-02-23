@@ -23,4 +23,10 @@ public class MessageDTO {
     private String createTime;
     /** 消息类型 */
     private Integer adviceType;
+    /**页号*/
+    private Integer pageNo;
+    /**页大小*/
+    private Integer pageSize;
+    /**数据开始数*/
+    private Integer start;
 }
