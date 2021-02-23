@@ -53,8 +53,10 @@ public class BizMessageRecordsServiceImpl extends ServiceImpl<BizMessageRecordsM
             try {
                 // 把对象转换成json进行传递
                 String m = JSON.toJSONString(msg);
-                session.getBasicRemote().sendText(m);
-                msg.setMsgStatus(1); // 已发送
+                if (session != null && session.getBasicRemote()!=null) {
+                    session.getBasicRemote().sendText(m);
+                    msg.setMsgStatus(1); // 已发送
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

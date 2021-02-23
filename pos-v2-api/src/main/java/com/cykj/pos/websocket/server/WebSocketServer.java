@@ -61,35 +61,35 @@ public class WebSocketServer {
         Set<Long> connectedUser = sessionPools.keySet();
 
         //TODO:用户连接后则查询离线消息中是否存在未发送的消息，存在则发送
-            if (!connectedUser.contains(userId)) {
+        if (!connectedUser.contains(userId)) {
 
-                BizMessageRecords offline = new BizMessageRecords();
-                offline.setMsgUserId(userId);
-                offline.setMsgStatus(0);
-                List<BizMessageRecords> offlineList = messageRecordsService.queryList(offline);
-                for (BizMessageRecords msg : offlineList) {
-                    executor.execute(() -> {
-                        try {
-                            // 把对象转换成json进行传递
-                            String message = JSON.toJSONString(msg);
-                            sendMessage(session, message);
-                            msg.setMsgStatus(1);
-                            //发送完成即删除
-                            // messageRecordsService.removeById(msg.getMsgId());
-                            messageRecordsService.saveOrUpdate(msg); // 设置为已发送
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                }
+            BizMessageRecords offline = new BizMessageRecords();
+            offline.setMsgUserId(userId);
+            offline.setMsgStatus(0);
+            List<BizMessageRecords> offlineList = messageRecordsService.queryList(offline);
+            for (BizMessageRecords msg : offlineList) {
+                executor.execute(() -> {
+                    try {
+                        // 把对象转换成json进行传递
+                        String message = JSON.toJSONString(msg);
+                        sendMessage(session, message);
+                        msg.setMsgStatus(1);
+                        //发送完成即删除
+                        // messageRecordsService.removeById(msg.getMsgId());
+                        messageRecordsService.saveOrUpdate(msg); // 设置为已发送
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
+        }
 
         sessionPools.put(userId, session);
         addOnlineCount();
     }
 
     @OnClose
-    public void onClose(@PathParam(value = "userId") String userId) {
+    public void onClose(@PathParam(value = "userId") Long userId) {
         sessionPools.remove(userId);
         subOnlineCount();
         System.out.println(userId + "断开webSocket连接！当前人数为" + online);
