@@ -6,11 +6,16 @@ import com.cykj.pos.profit.dto.BizMerchTransDTO;
 import com.cykj.pos.profit.dto.ThirdPartRequestDataDTO;
 import com.cykj.pos.util.BigDecimalUtil;
 import com.cykj.pos.util.DateUtils;
+import com.cykj.pos.util.OrderUtil;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
+import java.util.UUID;
 
 public class T {
     public static void main(String[] args) {
@@ -59,6 +64,23 @@ public class T {
 
         /*String pass = SecurityUtils.encryptPassword("123123");
         System.out.println(pass);*/
+
+        /*System.out.println(UUID.randomUUID().toString().replace("-","").length());*/
+        /*int first = new Random(10).nextInt(8) + 1;
+        int hashCodeV = UUID.randomUUID().toString().hashCode();
+        if (hashCodeV < 0) {//有可能是负数
+            hashCodeV = -hashCodeV;
+        }
+        // 0 代表前面补充0
+        // 4 代表长度为4
+        // d 代表参数为正数型
+        String str = String.format("%010d", hashCodeV);
+        System.out.println(str);*/
+        /*LocalDate localDate = LocalDate.now();
+        String formatedDate = localDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));*/
+        for(int i=0;i<10000;i++){
+            System.out.println(OrderUtil.randomOrderNo());
+        }
     }
 }
 class Per{

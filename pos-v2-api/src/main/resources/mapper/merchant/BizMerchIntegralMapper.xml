@@ -31,6 +31,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         group by DATE_FORMAT(i.create_time,"%Y-%m")
         order by i.create_time desc
+        <if test="start!=-1">
+            limit #{start},#{pageSize}
+        </if>
     </select>
 
     <select id="selectIntegralList" parameterType="com.cykj.pos.domain.dto.IntegralDTO"

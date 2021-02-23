@@ -71,7 +71,15 @@ public class BizMerchIntegralServiceImpl extends ServiceImpl<BizMerchIntegralMap
     @Override
     public List getIntegralList(IntegralDTO integralDTO) {
         List integralDetailMapList = new ArrayList<>();
-        // 先按照月份  进行分组
+        Integer pageNo = integralDTO.getPageNo();
+        Integer pageSize = integralDTO.getPageSize();
+        if(pageNo!=null && pageNo!=-1 && pageSize!=null && pageSize!=-1){
+            Integer start = (pageNo-1)*pageSize;
+            integralDTO.setStart(start);
+        }else{
+            integralDTO.setStart(-1);
+        }
+        // 先按照月份  进行分组  分页
         List<String> monthList = merchIntegralMapper.selectMonthListByUserIdAndTranType(integralDTO);
         for(String month:monthList){
             Map<String,Object> integralDetailMap = new HashMap<>();

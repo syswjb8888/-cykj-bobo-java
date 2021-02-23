@@ -51,6 +51,7 @@ public class PosV2AppIntegralController {
         IntegralDTO integral = new IntegralDTO();
         integral.setIntegral(wallet.getIntegral()); // 设置通用积分
         integral.setActivityIntegral(wallet.getActivityIntegral());// 设置活动积分
+        integral.setSecretKey(wallet.getSecretKey()); // 秘钥
         ajaxResult.put("data",integral);
         return ajaxResult;
     }
@@ -67,6 +68,7 @@ public class PosV2AppIntegralController {
         ajaxResult.put("data",integralList);
         return ajaxResult;
     }
+
 
 
 }

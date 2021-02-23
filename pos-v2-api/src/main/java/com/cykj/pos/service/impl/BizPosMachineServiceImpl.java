@@ -419,6 +419,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         merchIntegral.setIntegralType("激活机具");
         merchIntegral.setValue(returnIntegral);
         merchIntegral.setTransType("1");//收入  支出2
+        // merchIntegral.setOrderId(UUID.randomUUID().toString().replaceAll("-","")); //订单编号
         merchIntegralService.saveOrUpdate(merchIntegral);
         //---------------------  更新钱包   ----------------------------
         // 1-通过user_id获取钱包

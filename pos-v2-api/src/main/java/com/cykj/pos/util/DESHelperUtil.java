@@ -112,9 +112,9 @@ public class DESHelperUtil {
         //0.00   iLpHF4qYK6Q=
         //DecimalFormat df1 = new DecimalFormat("#.00");
 
-        BigDecimal decimal = new BigDecimal(0.00);
-        BigDecimal d = decimal.setScale(2,BigDecimal.ROUND_DOWN); //ROUND_HALF_UP 四射无人
-        String secretBalance = encrypt("7278ec2e85484ce49aa23fdb1637f3ef",d+"");
+       /* BigDecimal decimal = new BigDecimal(0.00);
+        BigDecimal d = decimal.setScale(2,BigDecimal.ROUND_DOWN); //ROUND_HALF_UP 四射无人*/
+        String secretBalance = encrypt("7278ec2e85484ce49aa23fdb1637f3ef",0+"");
         System.out.println(secretBalance);  //nxyzfvZX0eA=
         // 加密
        /* for(int i=0;i<10;i++){
@@ -140,7 +140,7 @@ public class DESHelperUtil {
          u+DISe2EF5JrOqSS3s/VTw==
          */
         // 解密
-        String str1 = decrypt("7278ec2e85484ce49aa23fdb1637f3ef","iLpHF4qYK6Q=");
+        String str1 = decrypt("7278ec2e85484ce49aa23fdb1637f3ef","1QAxtA5O7cw=");
         System.out.println("str1="+str1);
         //System.out.println(UUID.randomUUID().toString().replace("-","").length());
     }
