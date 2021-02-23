@@ -20,5 +20,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="var5"    column="var5"    />
     </resultMap>
 
+    <select id="selectMonthListByUserIdAndTranType" parameterType="com.cykj.pos.domain.dto.IntegralDTO"
+    resultType="java.lang.String">
+        select DATE_FORMAT(i.create_time,"%Y-%m") create_time
+        from biz_merch_integral i left join biz_merchant m on  m.merch_id=i.merch_id
+        /*where m.user_id=118 and i.trans_type=1*/
+        <where>
+            <if test="userId != null  and userId != ''"> and m.user_id = #{userId}</if>
+            <if test="transType != null  and transType != ''"> and i.trans_type = #{transType}</if>
+        </where>
+        group by DATE_FORMAT(i.create_time,"%Y-%m")
+        order by i.create_time desc
+    </select>
+
+    <select id="selectIntegralList" parameterType="com.cykj.pos.domain.dto.IntegralDTO"
+    resultType="com.cykj.pos.domain.dto.IntegralDetailDTO">
+        select i.id,i.merch_id,i.pos_code,i.integral_type,i.value,DATE_FORMAT(i.create_time,'%Y-%m-%d %H:%i:%s') create_time,i.trans_type
+        from biz_merch_integral i left join biz_merchant m on  m.merch_id=i.merch_id
+        /*where m.user_id=118 and i.trans_type=1*/
+        <where>
+            <if test="userId != null  and userId != ''"> and m.user_id = #{userId}</if>
+            <if test="transType != null  and transType != ''"> and i.trans_type = #{transType}</if>
+            <if test="monthly != null  and monthly != ''"> and i.create_time like concat(#{monthly},'%')</if>
+        </where>
+        order by i.create_time desc
+    </select>
 
 </mapper>

@@ -15,5 +15,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="adviceType"    column="advice_type"    />
     </resultMap>
 
+    <sql id="selectBizMessageRecords">
+        select msg_id,msg_user_id,msg_content,msg_status,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') create_time
+        ,msg_type,read_status,advice_type
+        from biz_message_records
+    </sql>
+
+    <select id="selectMessageListByUserIdAndType" parameterType="com.cykj.pos.profit.dto.MessageDTO"
+            resultType="com.cykj.pos.profit.dto.MessageDTO">
+        <include refid="selectBizMessageRecords"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and msg_user_id = #{userId}</if>
+            <if test="msgType != null  and msgType != ''"> and msg_type = #{msgType}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectMessageByMgsId" parameterType="com.cykj.pos.profit.dto.MessageDTO"
+            resultType="com.cykj.pos.profit.dto.MessageDTO">
+        <include refid="selectBizMessageRecords"/>
+        <where>
+            <if test="msgId != null  and msgId != ''"> and msg_id = #{msgId}</if>
+        </where>
+        order by create_time desc
+    </select>
+
 
 </mapper>

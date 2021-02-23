@@ -3,6 +3,8 @@ package com.cykj.pos.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.cykj.common.core.domain.entity.SysUser;
 import com.cykj.common.utils.DateUtils;
+import com.cykj.pos.profit.dto.MessageDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -24,18 +26,20 @@ import java.util.List;
  */
 @Service
 public class BizMessageRecordsServiceImpl extends ServiceImpl<BizMessageRecordsMapper, BizMessageRecords> implements IBizMessageRecordsService {
+    @Autowired
+    private BizMessageRecordsMapper messageRecordsMapper;
 
     @Override
     public List<BizMessageRecords> queryList(BizMessageRecords bizMessageRecords) {
         LambdaQueryWrapper<BizMessageRecords> lqw = Wrappers.lambdaQuery();
-        if (bizMessageRecords.getMsgUserId() != null){
-            lqw.eq(BizMessageRecords::getMsgUserId ,bizMessageRecords.getMsgUserId());
+        if (bizMessageRecords.getMsgUserId() != null) {
+            lqw.eq(BizMessageRecords::getMsgUserId, bizMessageRecords.getMsgUserId());
         }
-        if (StringUtils.isNotBlank(bizMessageRecords.getMsgContent())){
-            lqw.eq(BizMessageRecords::getMsgContent ,bizMessageRecords.getMsgContent());
+        if (StringUtils.isNotBlank(bizMessageRecords.getMsgContent())) {
+            lqw.eq(BizMessageRecords::getMsgContent, bizMessageRecords.getMsgContent());
         }
-        if (bizMessageRecords.getMsgStatus() != null){
-            lqw.eq(BizMessageRecords::getMsgStatus ,bizMessageRecords.getMsgStatus());
+        if (bizMessageRecords.getMsgStatus() != null) {
+            lqw.eq(BizMessageRecords::getMsgStatus, bizMessageRecords.getMsgStatus());
         }
         return this.list(lqw);
     }
@@ -59,6 +63,16 @@ public class BizMessageRecordsServiceImpl extends ServiceImpl<BizMessageRecordsM
             msg.setMsgStatus(0); // 未发送
         }
         saveOrUpdate(msg);
+    }
+
+    @Override
+    public List<MessageDTO> getMessageListByUserIdAndType(MessageDTO messageDTO) {
+        return messageRecordsMapper.selectMessageListByUserIdAndType(messageDTO);
+    }
+
+    @Override
+    public MessageDTO getMessageByMgsId(MessageDTO messageDTO) {
+        return messageRecordsMapper.selectMessageByMgsId(messageDTO);
     }
 
 }

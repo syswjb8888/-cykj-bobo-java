@@ -1,5 +1,11 @@
 package com.cykj.pos.service.impl;
 
+import com.cykj.pos.domain.BizMerchant;
+import com.cykj.pos.domain.dto.IntegralDTO;
+import com.cykj.pos.domain.dto.IntegralDetailDTO;
+import com.cykj.pos.mapper.BizMerchantMapper;
+import com.cykj.pos.service.IBizMerchantService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -9,6 +15,8 @@ import com.cykj.pos.mapper.BizMerchIntegralMapper;
 import com.cykj.pos.domain.BizMerchIntegral;
 import com.cykj.pos.service.IBizMerchIntegralService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +28,10 @@ import java.util.Map;
  */
 @Service
 public class BizMerchIntegralServiceImpl extends ServiceImpl<BizMerchIntegralMapper, BizMerchIntegral> implements IBizMerchIntegralService {
-
+    @Autowired
+    IBizMerchantService merchantService;
+    @Autowired
+    BizMerchIntegralMapper merchIntegralMapper;
     @Override
     public List<BizMerchIntegral> queryList(BizMerchIntegral bizMerchIntegral) {
         LambdaQueryWrapper<BizMerchIntegral> lqw = Wrappers.lambdaQuery();
@@ -55,5 +66,23 @@ public class BizMerchIntegralServiceImpl extends ServiceImpl<BizMerchIntegralMap
             lqw.eq(BizMerchIntegral::getVar5 ,bizMerchIntegral.getVar5());
         }
         return this.list(lqw);
+    }
+
+    @Override
+    public List getIntegralList(IntegralDTO integralDTO) {
+        List integralDetailMapList = new ArrayList<>();
+        // 先按照月份  进行分组
+        List<String> monthList = merchIntegralMapper.selectMonthListByUserIdAndTranType(integralDTO);
+        for(String month:monthList){
+            Map<String,Object> integralDetailMap = new HashMap<>();
+            integralDTO.setMonthly(month);
+            List<IntegralDetailDTO> integralDetailDTOList = merchIntegralMapper.selectIntegralList(integralDTO);
+            // 设置第几个月
+            integralDetailMap.put("monthly",month);
+            // 设置内容值
+            integralDetailMap.put("detail",integralDetailDTOList);
+            integralDetailMapList.add(integralDetailMap);
+        }
+        return integralDetailMapList;
     }
 }

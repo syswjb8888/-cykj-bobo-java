@@ -27,17 +27,17 @@ public class WebSocketController {
 
     @PostMapping("/send/to/one")
     public void sendInfoToOne(@RequestBody MessageDTO message){
-        webSocketServer.sendInfo(message.getUserId(),message.getMessage());
+        webSocketServer.sendInfo(message.getUserId(),message.getMsgContent());
     }
     @PostMapping("/send/to/users")
     public void sendInfoToUsers(@RequestBody MessageDTO message){
         List<Long> userIds = message.getUserIds();
         for(Long userId: userIds){
-            webSocketServer.sendInfo(userId,"[BIZ]"+message.getMessage());
+            webSocketServer.sendInfo(userId,"[BIZ]"+message.getMsgContent());
         }
     }
     @PostMapping("/send/to/all")
     public void sendInfoToAll(@RequestBody MessageDTO message){
-        webSocketServer.onMessage("[SYS]"+message.getMessage());
+        webSocketServer.onMessage("[SYS]"+message.getMsgContent());
     }
 }

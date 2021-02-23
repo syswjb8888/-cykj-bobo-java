@@ -8,6 +8,19 @@ import java.util.List;
 public class MessageDTO {
     private Long userId;
     private List<Long> userIds;
-    private String message;
+    /** 消息类型 */
     private Integer msgType;
+    /** 主键id */
+    private Long msgId;
+    /** 消息接收用户 */
+    private Long msgUserId;
+    /** 消息内容 */
+    private String msgContent;
+    /** 是否已推送 */
+    private Integer msgStatus;
+    /** 读取状态 */
+    private Integer readStatus;
+    private String createTime;
+    /** 消息类型 */
+    private Integer adviceType;
 }
