@@ -237,4 +237,11 @@ public interface IBizMerchantService extends IService<BizMerchant> {
      * @return
      */
     Integer getTotalMerchantByMerId(Long merchId);
+
+    /**
+     * 获得直接父合作伙伴和服务中心  魏建波
+     * @param userId
+     * @return
+     */
+    List<BizMerchant> getParentMerchByUserId(Long userId);
 }

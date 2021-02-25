@@ -71,7 +71,10 @@ public class PosV2AppTerminalController {
         List<MachineTransferDTO> terminalList =
                 posMachineService.getPagePosMachinesByMerchId(merchantId, terminalDTO,
                         terminalDTO.getPageNo(), terminalDTO.getPageSize());
+        // 获得总数量
+        Long totalNum = posMachineService.getPosMachineNotActivatedAndBindCountsByMerchId(merchantId);
         ajaxResult.put("data", terminalList);
+        ajaxResult.put("totalNum", totalNum);
         return ajaxResult;
     }
 

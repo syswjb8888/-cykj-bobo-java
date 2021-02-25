@@ -59,7 +59,7 @@ public class BizMessageRecordsServiceImpl extends ServiceImpl<BizMessageRecordsM
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+        }
         } else if (user != null) {
             //用户存在，但用户不在线，则将消息保存
             msg.setMsgStatus(0); // 未发送

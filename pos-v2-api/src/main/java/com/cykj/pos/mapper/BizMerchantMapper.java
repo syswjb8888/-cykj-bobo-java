@@ -34,4 +34,11 @@ public interface BizMerchantMapper extends BaseMapper<BizMerchant> {
      * @return
      */
     Integer getMonthlyNewMerchCounts(HomePageDTO homePageDTO);
+
+    /**
+     * 获得直接父合作伙伴和总部服务中心 魏建波
+     * @param parentMerchId
+     * @return
+     */
+    List<BizMerchant> selectParentMerchByUserId(Long parentMerchId);
 }

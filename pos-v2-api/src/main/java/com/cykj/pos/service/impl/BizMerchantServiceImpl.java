@@ -92,6 +92,9 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     @Autowired
     BizMerchantMapper bizMerchantMapper;
 
+    @Autowired
+    IBizAreaDictService areaDictService;
+
     @Override
     @DataSource(DataSourceType.SLAVE)
     public List<BizMerchant> queryList(BizMerchant bizMerchart) {
@@ -503,15 +506,15 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         merchant.setVar3(StringUtils.isNotBlank(countyCode)?countyCode:"");
         String provinceName = "";
         if(StringUtils.isNotBlank(proviceCode)){
-            provinceName = sysDictDataService.selectDictLabel("region_code_province",proviceCode);
+            provinceName = areaDictService.getById(Integer.parseInt(proviceCode)).getCname();
         }
         String cityName = "";
         if(StringUtils.isNotBlank(cityCode)){
-            cityName = sysDictDataService.selectDictLabel("region_code_city",cityCode);
+            cityName = areaDictService.getById(Integer.parseInt(cityCode)).getCname();
         }
         String countyName = "";
         if(StringUtils.isNotBlank(countyCode)){
-            countyName = sysDictDataService.selectDictLabel("region_code_county",countyCode);
+            countyName = areaDictService.getById(Integer.parseInt(countyCode)).getCname();
         }
         if(StringUtils.isNotBlank(provinceName) || StringUtils.isNotBlank(cityName) || StringUtils.isNotBlank(countyName)){
             merchant.setMerchRegion(provinceName+cityName+countyName);
@@ -539,20 +542,11 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
         String bankProvinceCode = microMerchantDTO.getMerchProvince();
         String bankCityCode = microMerchantDTO.getMerchBankCity();
 
-        String bankProvinceName = "";
-        if(StringUtils.isNotBlank(bankProvinceCode)){
-            bankProvinceName = sysDictDataService.selectDictLabel("region_code_province",bankProvinceCode);
-        }
-        String bankCityName = "";
-
-        if(StringUtils.isNotBlank(bankCityCode)){
-            bankCityName = sysDictDataService.selectDictLabel("region_code_city",bankCityCode);
-        }
         //扩展字段存编码
         microInfo.setVar1(bankProvinceCode);
         microInfo.setVar2(bankCityCode);
         //存省市汉字
-        microInfo.setMerchBankCity(bankProvinceName+bankCityName);
+        microInfo.setMerchBankCity(provinceName+cityName);
 
         microInfo.setMerchBankMobile(microMerchantDTO.getMerchBankMobile());
         microInfo.setMerchIdcard(microMerchantDTO.getMerchIdcard());
@@ -869,5 +863,11 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
                 +"WHERE r.records_type='2' AND r.sn_code IN "+
                 "(SELECT pos_code FROM biz_pos_machine WHERE merch_id=?)";
         return jdbcTemplate.queryForObject(sql, new Object[]{merchId}, Integer.class);
+    }
+
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public List<BizMerchant> getParentMerchByUserId(Long userId) {
+        return bizMerchantMapper.selectParentMerchByUserId(userId);
     }
 }

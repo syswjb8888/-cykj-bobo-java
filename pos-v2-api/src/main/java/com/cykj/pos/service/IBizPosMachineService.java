@@ -129,4 +129,11 @@ public interface IBizPosMachineService extends IService<BizPosMachine> {
      * @return
      */
     Integer getPosMachineAllCountsByMerchId(Long merchantId);
+
+    /**
+     * 获得商户没有绑定和激活的POS机器数量
+     * @param merchId
+     * @return
+     */
+    public Long getPosMachineNotActivatedAndBindCountsByMerchId(Long merchId);
 }

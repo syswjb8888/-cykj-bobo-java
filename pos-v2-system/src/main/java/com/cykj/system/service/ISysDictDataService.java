@@ -61,7 +61,7 @@ public interface ISysDictDataService
     public int updateDictData(SysDictData dictData);
 
     /**
-     *
+     * 查看区域信息   魏建波
      * @param dictType
      * @param dictValueLevel
      * @return

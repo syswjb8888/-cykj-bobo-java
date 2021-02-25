@@ -60,4 +60,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             SELECT sn_code FROM biz_pos_machine_status_records WHERE Records_type='2'
         )
     </select>
+    <!--通过用户id获得直接父伙伴和服务中心-->
+    <select id="selectParentMerchByUserId" resultMap="BizMerchantResult">
+        select * from biz_merchant
+        where  merch_id = (select parent_id from biz_merchant where user_id=#{userId})
+        or parent_id=0
+    </select>
 </mapper>

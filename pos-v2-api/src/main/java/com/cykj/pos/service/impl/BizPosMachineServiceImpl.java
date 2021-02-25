@@ -243,7 +243,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
             if(1 == operType){
                 //仅能划拔本级终端
                 sqlBuilder = new StringBuilder("SELECT * FROM biz_pos_machine WHERE merch_id=? AND " +
-                        "pos_code NOT IN (SELECT sn_code FROM biz_pos_machine_status_records WHERE records_type='2')");
+                        "pos_code NOT IN (SELECT sn_code FROM biz_pos_machine_status_records)");
             }
             if(2 == operType){
                 //仅能回调下拉下级终端
@@ -282,6 +282,14 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         sql.append("SELECT count(*) FROM biz_pos_machine_status_records r ");
         sql.append("WHERE r.records_type='2' and r.sn_code IN ");
         sql.append(" (SELECT pos_code FROM biz_pos_machine WHERE merch_id=?) ");
+        return jdbcTemplate.queryForObject(sql.toString(),new Object[]{merchId},Long.class);
+    }
+    @Override
+    @DataSource(DataSourceType.SLAVE)
+    public Long getPosMachineNotActivatedAndBindCountsByMerchId(Long merchId){
+        StringBuffer sql = new StringBuffer();
+        sql.append("select count(1) from biz_pos_machine where merch_id=? and pos_code not in  ");
+        sql.append("( select sn_code from biz_pos_machine_status_records )");
         return jdbcTemplate.queryForObject(sql.toString(),new Object[]{merchId},Long.class);
     }
     @Override
