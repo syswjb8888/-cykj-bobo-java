@@ -108,7 +108,7 @@ public class PosV2AppTerminalController {
         if(2 == operateType){
             merchId = merchantService.getMerchantByUserId(userId).getMerchId();
         }
-        Integer counts = posMachineService.doTheOperations(posIdList,merchId ,userId,operateType);
+        Integer counts = posMachineService.doTheOperations(posIdList,merchId ,userId,operateType,terminalDTO.getOrderId()); // 划拨
         Map<String, Integer> responseData = new HashMap<>();
         responseData.put("counts", counts);
         ajaxResult.put("data", responseData);

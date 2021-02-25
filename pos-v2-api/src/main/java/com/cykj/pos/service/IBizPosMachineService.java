@@ -96,7 +96,7 @@ public interface IBizPosMachineService extends IService<BizPosMachine> {
      * @param operType
      * @return 操作成功终端数量
      */
-    public Integer doTheOperations(List<Long> posIdList, Long merchantId, Long loginUser,Integer operType);
+    public Integer doTheOperations(List<Long> posIdList, Long merchantId, Long loginUser,Integer operType,Long orderId);
 
     /**
      * 筛选条件获取

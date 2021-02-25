@@ -12,6 +12,8 @@ public class PosTerminalDTO {
 
     @ApiModelProperty(value = "商户主键Id")
     private Long merchId;
+    @ApiModelProperty(value = "订单主键Id")
+    private Long orderId;
     @ApiModelProperty(value = "商户编号")
     private String merchCode;
     @ApiModelProperty(value = "用户主键Id，统计或划拔回调操作时用户Id")

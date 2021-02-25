@@ -79,6 +79,9 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     @Autowired
     private WebSocketServer webSocketServer;
 
+    @Autowired
+    private IBizMerchOrderService merchOrderService;
+
     @Override
     @DataSource(DataSourceType.SLAVE)
     public List<BizPosMachine> queryList(BizPosMachine bizPosMachine) {
@@ -307,7 +310,15 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
     }
     @Override
     @Transactional
-    public Integer doTheOperations(List<Long> posIdList, Long merchantId, Long loginUser,Integer operType){
+    public Integer doTheOperations(List<Long> posIdList, Long merchantId, Long loginUser,Integer operType,Long orderId){
+        // 生成订单  改变订单状态
+        BizMerchOrder merchOrder = null;
+        if(orderId!=null && orderId!=0){
+            //  改变订单状态
+            merchOrder = merchOrderService.getById(orderId);
+            merchOrder.setStatus(1);
+            merchOrderService.saveOrUpdate(merchOrder);
+        }
         List<BizPosMachine> posList = iBizPosMachineService.listByIds(posIdList);
         List<BizAllocAdjRecords> recordList = new ArrayList<>();
         LocalDateTime localDate = LocalDateTime.now();
@@ -325,13 +336,27 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
             record.setOperator(loginUser);
             record.setOperateTime(formatedDate);
             record.setOperateType(operType);
+            // 如果是积分兑换  需要存储订单编号
+            if(merchOrder!=null){
+                record.setVar1(merchOrder.getOrderNo());
+            }
             recordList.add(record);
-
             pos.setVar2(newMerchant.getMerchCode());
             pos.setMerchId(merchantId);
         }
         iBizPosMachineService.updateBatchById(posList);
         iBizAllocAdjRecordsService.saveBatch(recordList);
+
+        // 发消息
+        BizMessageRecords messageRecords = new BizMessageRecords();
+        // 发消息   1- 入库
+        String rukuMess = "您的机具已经下发，共"+posIdList.size()+"台机具，请注意查收";
+        messageRecords.setMsgContent(rukuMess);// 消息内容
+        messageRecords.setMsgType(1); // 消息类型  入库
+        messageRecords.setReadStatus(0);// 消息未读
+        messageRecords.setAdviceType(1); // 业务消息
+        BizMerchant merchant = iBizMerchantService.getMerchantByMerchId(merchantId);
+        webSocketServer.sendInfo(merchant.getUserId(), messageRecords);// 发送消息
         return posIdList.size();
     }
     @Override

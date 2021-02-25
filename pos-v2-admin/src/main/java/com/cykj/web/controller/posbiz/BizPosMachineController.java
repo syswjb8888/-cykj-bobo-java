@@ -124,7 +124,7 @@ public class BizPosMachineController extends BaseController {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         List<Long> posIdList = merchantDTO.getPosIds();
         Long merchId = merchantDTO.getMerchId();
-        iBizPosMachineService.doTheOperations(posIdList,merchId,loginUser.getUser().getUserId(),1);
+        iBizPosMachineService.doTheOperations(posIdList,merchId,loginUser.getUser().getUserId(),1,null);
         return ajax;
     }
     @PreAuthorize("@ss.hasPermi('terminal:posmachine:adjust')" )
@@ -138,7 +138,7 @@ public class BizPosMachineController extends BaseController {
         if(parentMerchant != null){
             merchId = parentMerchant.getMerchId();
         }
-        iBizPosMachineService.doTheOperations(merchantDTO.getPosIds(),merchId,loginUser.getUser().getUserId(),2);
+        iBizPosMachineService.doTheOperations(merchantDTO.getPosIds(),merchId,loginUser.getUser().getUserId(),2,null);
         return ajax;
     }
 }
