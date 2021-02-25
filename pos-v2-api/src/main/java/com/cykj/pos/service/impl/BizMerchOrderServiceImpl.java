@@ -44,39 +44,41 @@ public class BizMerchOrderServiceImpl extends ServiceImpl<BizMerchOrderMapper, B
     IBizMerchIntegralService merchIntegralService;
     @Autowired
     IBizWalletService walletService;
+    @Autowired
+    BizMerchOrderMapper merchOrderMapper;
 
     @Override
     public List<BizMerchOrder> queryList(BizMerchOrder bizMerchOrder) {
         LambdaQueryWrapper<BizMerchOrder> lqw = Wrappers.lambdaQuery();
-        if (StringUtils.isNotBlank(bizMerchOrder.getOrderNo())){
-            lqw.eq(BizMerchOrder::getOrderNo ,bizMerchOrder.getOrderNo());
+        if (StringUtils.isNotBlank(bizMerchOrder.getOrderNo())) {
+            lqw.eq(BizMerchOrder::getOrderNo, bizMerchOrder.getOrderNo());
         }
-        if (bizMerchOrder.getMerchId() != null){
-            lqw.eq(BizMerchOrder::getMerchId ,bizMerchOrder.getMerchId());
+        if (bizMerchOrder.getMerchId() != null) {
+            lqw.eq(BizMerchOrder::getMerchId, bizMerchOrder.getMerchId());
         }
-        if (bizMerchOrder.getProductId() != null){
-            lqw.eq(BizMerchOrder::getProductId ,bizMerchOrder.getProductId());
+        if (bizMerchOrder.getProductId() != null) {
+            lqw.eq(BizMerchOrder::getProductId, bizMerchOrder.getProductId());
         }
-        if (bizMerchOrder.getNum() != null){
-            lqw.eq(BizMerchOrder::getNum ,bizMerchOrder.getNum());
+        if (bizMerchOrder.getNum() != null) {
+            lqw.eq(BizMerchOrder::getNum, bizMerchOrder.getNum());
         }
-        if (bizMerchOrder.getMoney() != null){
-            lqw.eq(BizMerchOrder::getMoney ,bizMerchOrder.getMoney());
+        if (bizMerchOrder.getMoney() != null) {
+            lqw.eq(BizMerchOrder::getMoney, bizMerchOrder.getMoney());
         }
-        if (bizMerchOrder.getParentId() != null){
-            lqw.eq(BizMerchOrder::getParentId ,bizMerchOrder.getParentId());
+        if (bizMerchOrder.getParentId() != null) {
+            lqw.eq(BizMerchOrder::getParentId, bizMerchOrder.getParentId());
         }
-        if (StringUtils.isNotBlank(bizMerchOrder.getParentName())){
-            lqw.like(BizMerchOrder::getParentName ,bizMerchOrder.getParentName());
+        if (StringUtils.isNotBlank(bizMerchOrder.getParentName())) {
+            lqw.like(BizMerchOrder::getParentName, bizMerchOrder.getParentName());
         }
-        if (bizMerchOrder.getStatus() != null){
-            lqw.eq(BizMerchOrder::getStatus ,bizMerchOrder.getStatus());
+        if (bizMerchOrder.getStatus() != null) {
+            lqw.eq(BizMerchOrder::getStatus, bizMerchOrder.getStatus());
         }
-        if (bizMerchOrder.getType() != null){
-            lqw.eq(BizMerchOrder::getType ,bizMerchOrder.getType());
+        if (bizMerchOrder.getType() != null) {
+            lqw.eq(BizMerchOrder::getType, bizMerchOrder.getType());
         }
-        if (bizMerchOrder.getLogisticsId() != null){
-            lqw.eq(BizMerchOrder::getLogisticsId ,bizMerchOrder.getLogisticsId());
+        if (bizMerchOrder.getLogisticsId() != null) {
+            lqw.eq(BizMerchOrder::getLogisticsId, bizMerchOrder.getLogisticsId());
         }
         return this.list(lqw);
     }
@@ -97,10 +99,11 @@ public class BizMerchOrderServiceImpl extends ServiceImpl<BizMerchOrderMapper, B
         merchOrder.setParentId(orderDTO.getParentId());// 划拨商户id
         merchOrder.setParentName(parentName); // 商户名称
         merchOrder.setStatus(0); //订单状态
-        merchOrder.setType(1) ;// 消费类型  1 积分对象   2现金支付
+        merchOrder.setType(1);// 消费类型  1 积分对象   2现金支付
         merchOrder.setDispatchType(orderDTO.getDispatchType());
         // 系统当前时间
-        String formatedDate = DateUtils.Date2String(new Date(),"yyyy-MM-dd HH:mm:ss");;
+        String formatedDate = DateUtils.Date2String(new Date(), "yyyy-MM-dd HH:mm:ss");
+        ;
         merchOrder.setCreateTime(formatedDate);
         saveOrUpdate(merchOrder); //保存或者更新
         // 更新钱包中的积分   积分明细表
@@ -122,11 +125,11 @@ public class BizMerchOrderServiceImpl extends ServiceImpl<BizMerchOrderMapper, B
         String secIntegral = wallet.getIntegral(); // 通用积分
         String key = wallet.getSecretKey();// 获得key
         // 解密数据
-        String integralStr = DESHelperUtil.decrypt(key,secIntegral);
+        String integralStr = DESHelperUtil.decrypt(key, secIntegral);
         Long integral = Long.parseLong(integralStr);
-        integral = integral-orderDTO.getMoney();// 通用积分
+        integral = integral - orderDTO.getMoney();// 通用积分
         // 加密
-        String integralMoneyStr = DESHelperUtil.encrypt(key,String.valueOf(integral));
+        String integralMoneyStr = DESHelperUtil.encrypt(key, String.valueOf(integral));
         wallet.setIntegral(integralMoneyStr);
         wallet.setSecretKey(key);
         // 保存钱包信息
@@ -150,11 +153,11 @@ public class BizMerchOrderServiceImpl extends ServiceImpl<BizMerchOrderMapper, B
         String secIntegral2 = wallet2.getIntegral(); // 通用积分
         String key2 = wallet2.getSecretKey();// 获得key
         // 解密数据
-        String integralStr2 = DESHelperUtil.decrypt(key2,secIntegral2);
+        String integralStr2 = DESHelperUtil.decrypt(key2, secIntegral2);
         Long integral2 = Long.parseLong(integralStr2);
-        integral2 = integral2+orderDTO.getMoney();// 通用积分
+        integral2 = integral2 + orderDTO.getMoney();// 通用积分
         // 加密
-        String integralMoneyStr2 = DESHelperUtil.encrypt(key2,String.valueOf(integral2));
+        String integralMoneyStr2 = DESHelperUtil.encrypt(key2, String.valueOf(integral2));
         wallet2.setIntegral(integralMoneyStr2);
         wallet2.setSecretKey(key2);
         // 保存钱包信息
@@ -164,13 +167,47 @@ public class BizMerchOrderServiceImpl extends ServiceImpl<BizMerchOrderMapper, B
         // String rukuMess = "您的机具已经下发，共100台机具，请注意查收";
         BizMessageRecords duiHuanMessageRecords = new BizMessageRecords();
         // 发消息   6- 兑换申请
-        String duiHuanMess = "您收到了来自"+bizMerchant.getMerchName()+"的机具兑换申请，共"+orderDTO.getNum()+"台机具";
+        String duiHuanMess = "您收到了来自" + bizMerchant.getMerchName() + "的机具兑换申请，共" + orderDTO.getNum() + "台机具";
         duiHuanMessageRecords.setMsgContent(duiHuanMess);// 消息内容
         duiHuanMessageRecords.setMsgType(6); // 消息类型  兑换申请
         duiHuanMessageRecords.setReadStatus(0);// 消息未读
         duiHuanMessageRecords.setAdviceType(1); // 业务消息
-        webSocketServer.sendInfo(merchant.getUserId(),duiHuanMessageRecords);// 发送消息
+        webSocketServer.sendInfo(merchant.getUserId(), duiHuanMessageRecords);// 发送消息
 
         return merchOrder;
+    }
+
+    @Override
+    public List<BizMerchOrder> getOrderListByMerchId(OrderDTO orderDTO) {
+
+        if(orderDTO.getPageNo()!=null && orderDTO.getPageSize()!=null){
+            int pageNo = orderDTO.getPageNo();
+            int pageSize = orderDTO.getPageSize();
+            int start =  (pageNo-1)*pageSize;
+            orderDTO.setStart(start);
+        }
+        return merchOrderMapper.selectOrderListByMerchId(orderDTO);
+    }
+
+    @Override
+    public List<BizMerchOrder> getOrderListByParentId(OrderDTO orderDTO) {
+
+        if(orderDTO.getPageNo()!=null && orderDTO.getPageSize()!=null){
+            int pageNo = orderDTO.getPageNo();
+            int pageSize = orderDTO.getPageSize();
+            int start =  (pageNo-1)*pageSize;
+            orderDTO.setStart(start);
+        }
+        return merchOrderMapper.selectOrderListByParentId(orderDTO);
+    }
+
+    @Override
+    public BizMerchOrder getOrdertById(OrderDTO orderDTO) {
+        return merchOrderMapper.selectOrdertById(orderDTO);
+    }
+
+    @Override
+    public BizMerchOrder getOrdertByParentId(OrderDTO orderDTO) {
+        return merchOrderMapper.selectOrdertByParentId(orderDTO);
     }
 }

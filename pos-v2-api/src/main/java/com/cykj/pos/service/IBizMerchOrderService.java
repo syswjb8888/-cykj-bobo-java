@@ -26,4 +26,31 @@ public interface IBizMerchOrderService extends IService<BizMerchOrder> {
      * @return
      */
     BizMerchOrder submitOrder(OrderDTO orderDTO);
+
+    /**
+     * 根据商户查询订单列表
+     * @param orderDTO
+     * @return
+     */
+    List<BizMerchOrder> getOrderListByMerchId(OrderDTO orderDTO);
+
+    /**
+     * 根据申请商户查询订单列表
+     * @param orderDTO
+     * @return
+     */
+    List<BizMerchOrder> getOrderListByParentId(OrderDTO orderDTO);
+
+    /**
+     * 根据订单id查询订单
+     * @param orderDTO
+     * @return
+     */
+    BizMerchOrder getOrdertById(OrderDTO orderDTO);
+    /**
+     * 根据伙伴id查询订单
+     * @param orderDTO
+     * @return
+     */
+    BizMerchOrder getOrdertByParentId(OrderDTO orderDTO);
 }

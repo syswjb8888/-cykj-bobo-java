@@ -19,6 +19,54 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="dispatchType"    column="dispatch_type"    />
     </resultMap>
+    <!--根据商户获得订单列表-->
+    <select id="selectOrderListByMerchId" parameterType="com.cykj.pos.domain.dto.OrderDTO" resultMap="BizMerchOrderResult">
+        select o.order_id,o.order_no,o.merch_id,o.product_id,o.num,o.money,o.parent_id,o.parent_name,
+        o.`status`,o.type,o.logistics_id,DATE_FORMAT(o.create_time,'%Y-%m-%d %H:%i:%s') create_time,o.dispatch_type
+        from biz_merch_order o left join biz_merchant m on o.merch_id=m.merch_id
+        where m.user_id=#{userId}
+        order by o.create_time desc
+        <if test="pageNo!=null and pageSize!=null and pageNo != -1 and pageSize != -1"><!-- 分页 -->
+            limit #{start},#{pageSize}
+        </if>
+    </select>
 
+    <!--根据申请商户获得订单列表-->
+    <select id="selectOrderListByParentId" parameterType="com.cykj.pos.domain.dto.OrderDTO" resultMap="BizMerchOrderResult">
+        select oo.order_id,oo.order_no,oo.merch_id,oo.product_id,oo.num,oo.money,oo.parent_id,mm.merch_name parent_name,
+        oo.`status`,oo.type,oo.logistics_id,oo.create_time,oo.dispatch_type
+        from
+        (select o.order_id,o.order_no,o.merch_id,o.product_id,o.num,o.money,o.parent_id,o.parent_name,
+        o.`status`,o.type,o.logistics_id,DATE_FORMAT(o.create_time,'%Y-%m-%d %H:%i:%s') create_time,o.dispatch_type
+        from biz_merch_order o left join biz_merchant m on o.parent_id=m.merch_id
+        where m.user_id=#{userId}) oo
+        left join biz_merchant mm on oo.merch_id=mm.merch_id
+        order by oo.create_time desc
+        <if test="pageNo!=null and pageSize!=null and pageNo != -1 and pageSize != -1"><!-- 分页 -->
+            limit #{start},#{pageSize}
+        </if>
+    </select>
 
+    <select id="selectOrdertById" parameterType="com.cykj.pos.domain.dto.OrderDTO"
+            resultMap="BizMerchOrderResult">
+        select o.order_id,o.order_no,o.merch_id,o.product_id,o.num,o.money,o.parent_id,o.parent_name,
+        o.`status`,o.type,o.logistics_id,DATE_FORMAT(o.create_time,'%Y-%m-%d %H:%i:%s') create_time,o.dispatch_type
+        from biz_merch_order o left join biz_merchant m on o.merch_id=m.merch_id
+        where o.order_id=#{orderId}
+        order by o.create_time desc
+        limit 1
+    </select>
+
+    <select id="selectOrdertByParentId" parameterType="com.cykj.pos.domain.dto.OrderDTO" resultMap="BizMerchOrderResult">
+        select oo.order_id,oo.order_no,oo.merch_id,oo.product_id,oo.num,oo.money,oo.parent_id,mm.merch_name parent_name,
+        oo.`status`,oo.type,oo.logistics_id,oo.create_time,oo.dispatch_type
+        from
+        (select o.order_id,o.order_no,o.merch_id,o.product_id,o.num,o.money,o.parent_id,o.parent_name,
+        o.`status`,o.type,o.logistics_id,DATE_FORMAT(o.create_time,'%Y-%m-%d %H:%i:%s') create_time,o.dispatch_type
+        from biz_merch_order o left join biz_merchant m on o.parent_id=m.merch_id
+        where o.order_id=#{orderId}) oo
+        left join biz_merchant mm on oo.merch_id=mm.merch_id
+        order by oo.create_time desc
+        limit 1
+    </select>
 </mapper>
