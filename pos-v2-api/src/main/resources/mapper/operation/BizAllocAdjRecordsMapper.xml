@@ -23,6 +23,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="var4"    column="var4"    />
         <result property="var5"    column="var5"    />
     </resultMap>
-
+    <select id="selectAdjRecordsListByOrderId" resultType="java.lang.String">
+        select pos_code from
+        biz_alloc_adj_records a left join biz_merch_order o on a.var1=o.order_no
+        where o.order_id=#{orderId}
+        order by a.pos_code
+    </select>
 
 </mapper>

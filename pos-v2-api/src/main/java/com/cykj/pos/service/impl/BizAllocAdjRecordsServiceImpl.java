@@ -35,6 +35,9 @@ public class BizAllocAdjRecordsServiceImpl extends ServiceImpl<BizAllocAdjRecord
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private BizAllocAdjRecordsMapper allocAdjRecordsMapper;
+
     @Override
     @DataSource(DataSourceType.SLAVE)
     public List<BizAllocAdjRecords> queryList(BizAllocAdjRecords bizAllocAdjRecords) {
@@ -141,5 +144,10 @@ public class BizAllocAdjRecordsServiceImpl extends ServiceImpl<BizAllocAdjRecord
         Object[] params = new Object[]{userId,userId,userId,operType};
         String sql = "select count(1) from biz_alloc_adj_records where old_user_id=? or new_user_id=? or operator=? and operate_type=?";
         return jdbcTemplate.queryForObject(sql,params,Integer.class);
+    }
+
+    @Override
+    public List<String> getAdjRecordsListByOrderId(Long orderId) {
+        return allocAdjRecordsMapper.selectAdjRecordsListByOrderId(orderId);
     }
 }

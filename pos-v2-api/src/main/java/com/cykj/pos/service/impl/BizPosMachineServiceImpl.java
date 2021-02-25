@@ -246,15 +246,15 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
             if(1 == operType){
                 //仅能划拔本级终端
                 sqlBuilder = new StringBuilder("SELECT * FROM biz_pos_machine WHERE merch_id=? AND " +
-                        "pos_code NOT IN (SELECT sn_code FROM biz_pos_machine_status_records)");
+                        "pos_code NOT IN (SELECT sn_code FROM biz_pos_machine_status_records) order by pos_code");
             }
             if(2 == operType){
                 //仅能回调下拉下级终端
-                sqlBuilder = new StringBuilder("select * from biz_pos_machine where merch_id in (select merch_id from biz_merchant where parent_id=?)");
+                sqlBuilder = new StringBuilder("select * from biz_pos_machine where merch_id in (select merch_id from biz_merchant where parent_id=?)  order by pos_code");
             }
         }else{
             // sqlBuilder = new StringBuilder("select * from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?))");
-            sqlBuilder = new StringBuilder("select m.*,r.records_type recordsType from biz_pos_machine m LEFT JOIN biz_pos_machine_status_records r ON m.pos_code=r.sn_code WHERE merch_id=?");
+            sqlBuilder = new StringBuilder("select m.*,r.records_type recordsType from biz_pos_machine m LEFT JOIN biz_pos_machine_status_records r ON m.pos_code=r.sn_code WHERE merch_id=?  order by pos_code");
         }
         paramList.add(merchId);
         sqlBuilder.append(this.queryCondtions(paramList,terminalVo,pageNo,pageSize));

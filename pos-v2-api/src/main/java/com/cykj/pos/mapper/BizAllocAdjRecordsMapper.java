@@ -3,6 +3,8 @@ package com.cykj.pos.mapper;
 import com.cykj.pos.domain.BizAllocAdjRecords;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * 划拔回调记录Mapper接口
  *
@@ -11,4 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface BizAllocAdjRecordsMapper extends BaseMapper<BizAllocAdjRecords> {
 
+    List<String> selectAdjRecordsListByOrderId(Long orderId);
 }

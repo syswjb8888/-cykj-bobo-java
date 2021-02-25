@@ -7,10 +7,7 @@ import com.cykj.pos.domain.BizWallet;
 import com.cykj.pos.domain.dto.IntegralDTO;
 import com.cykj.pos.domain.dto.IntegralDetailDTO;
 import com.cykj.pos.domain.dto.OrderDTO;
-import com.cykj.pos.service.IBizMerchIntegralService;
-import com.cykj.pos.service.IBizMerchOrderService;
-import com.cykj.pos.service.IBizMerchantService;
-import com.cykj.pos.service.IBizWalletService;
+import com.cykj.pos.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +27,7 @@ import java.util.Map;
 public class PosV2AppOrderController {
     private final IBizMerchOrderService merchOrderService;
     private final IBizMerchantService merchantService;
-
+    private final IBizAllocAdjRecordsService allocAdjRecordsService;
 
     /**
      * 我的积分首页  获得积分  传递userId  用户id
@@ -58,7 +55,10 @@ public class PosV2AppOrderController {
         }else if(orderDTO.getOrderType()==2){ // 兑换申请
             merchOrder = merchOrderService.getOrdertByParentId(orderDTO);// 根据被申请伙伴id查询订单
         }
+        // 通过订单id查询划拨的机器
+        List<String> posCodeList = allocAdjRecordsService.getAdjRecordsListByOrderId(orderDTO.getOrderId());
         ajaxResult.put("data",merchOrder);
+        ajaxResult.put("posCodeList",posCodeList);
         return ajaxResult;
     }
 }

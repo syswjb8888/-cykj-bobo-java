@@ -40,4 +40,11 @@ public interface IBizAllocAdjRecordsService extends IService<BizAllocAdjRecords>
      * @return
      */
     public Integer geOperationRecordsCounts(PosTerminalDTO terminalDTO);
+
+    /**
+     * 根据订单查看划拨机器编号列表
+     * @param orderId
+     * @return
+     */
+    List<String> getAdjRecordsListByOrderId(Long orderId);
 }
