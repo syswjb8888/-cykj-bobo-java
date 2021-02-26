@@ -425,6 +425,9 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         //--------------------- 插入账单  返现 1--------------------------
         // 通过设备号获得商户信息
         BizPosMachine posMachine = getPosMachineBySnCode(terminalActivateDTO.getSnCode());
+        // 更新pos机器状态
+        posMachine.setPosActivateStatus("2");//状态为2是激活
+        saveOrUpdate(posMachine);//更新pos机
         BizMerchBill merchBill = new BizMerchBill();
         Long merId = posMachine.getMerchId();
         BizMerchant merchant = iBizMerchantService.getMerchantByMerchId(merId);

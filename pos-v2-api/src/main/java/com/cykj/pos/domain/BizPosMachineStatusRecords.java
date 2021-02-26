@@ -113,6 +113,9 @@ private static final long serialVersionUID=1L;
     @Excel(name = "政策编号")
     private String policyId;
 
+    @Excel(name = "银行卡号")
+    private String bankCardno;
+
     @TableField(exist = false)
     private Map<String, Object> params = new HashMap<>();
 }

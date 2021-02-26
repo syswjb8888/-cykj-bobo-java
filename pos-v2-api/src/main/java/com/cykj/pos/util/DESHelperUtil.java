@@ -140,8 +140,19 @@ public class DESHelperUtil {
          u+DISe2EF5JrOqSS3s/VTw==
          */
         // 解密
-        String str1 = decrypt("7278ec2e85484ce49aa23fdb1637f3ef","1QAxtA5O7cw=");
-        System.out.println("str1="+str1);
+        /*String str1 = decrypt("7278ec2e85484ce49aa23fdb1637f3ef","1QAxtA5O7cw=");
+        System.out.println("str1="+str1);*/
         //System.out.println(UUID.randomUUID().toString().replace("-","").length());
+
+        System.out.println("====加密：======");
+        String encrption = DESHelperUtil.encrypt("7278ec2e85484ce49aa23fdb1637f3ef", "10000");
+        System.out.println(encrption);
+        //0         1QAxtA5O7cw=
+        // 0.00     iLpHF4qYK6Q=
+        // 10000    +riFIVwCACM=
+        System.out.println("====解密：======");
+        System.out.println("==========");
+        System.out.println(DESHelperUtil.decrypt("7278ec2e85484ce49aa23fdb1637f3ef", "+riFIVwCACM="));
+        System.out.println("==========");
     }
 }

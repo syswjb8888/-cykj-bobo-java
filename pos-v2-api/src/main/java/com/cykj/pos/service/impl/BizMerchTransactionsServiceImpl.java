@@ -175,7 +175,7 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
     public BigDecimal getMonthlyTransAmountByMerchId(Long merchId){ // 获取当前月份
         String formatedDate = DateUtils.getCaculateYearAndMonth("",DATE_FORMATTER);
         String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
-                "where FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.trans_date like CONCAT(?,'%')";
+                "where p.pos_activate_status=2 and FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.error_msg='交易成功' and t.trans_date like CONCAT(?,'%')";
         BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchId,formatedDate},BigDecimal.class);
         return transAmount == null?BigDecimal.ZERO:transAmount;
     }
@@ -185,7 +185,7 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
     public BigDecimal getMonthlyTransAmountByMerchId(Long merchId,String month){ // 获取某个月份的销售总金额
         String formatedDate = DateUtils.getCaculateYearAndMonth(month,DATE_FORMATTER);
         String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
-                "where FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.trans_date like CONCAT(?,'%')";
+                "where p.pos_activate_status=2 and FIND_IN_SET(p.merch_id,findMerchSubNode(?))) and t.error_msg='交易成功' and t.trans_date like CONCAT(?,'%')";
         BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchId,formatedDate},BigDecimal.class);
         return transAmount == null?BigDecimal.ZERO:transAmount;
     }
@@ -195,7 +195,7 @@ public class BizMerchTransactionsServiceImpl extends ServiceImpl<BizMerchTransac
     public BigDecimal getMonthlyMerchantTransAmountByMerchId(Long merchId) {
         String formatedDate = DateUtils.getCaculateYearAndMonth("this",DATE_FORMATTER);
         String sql = "select sum(trans_amount) from biz_merch_transactions t where t.pos_code in (select p.pos_code from biz_pos_machine p " +
-                "where p.merch_id=?) and t.trans_date like CONCAT(?,'%')";
+                "where p.merch_id=?) and t.error_msg='交易成功' and t.trans_date like CONCAT(?,'%')";
         BigDecimal transAmount = jdbcTemplate.queryForObject(sql,new Object[]{merchId,formatedDate},BigDecimal.class);
         return transAmount == null?BigDecimal.ZERO:transAmount;
     }

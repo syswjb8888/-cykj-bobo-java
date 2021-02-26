@@ -3,8 +3,10 @@ package com.cykj.pos.mapper;
 import com.cykj.pos.domain.BizMerchant;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cykj.pos.domain.dto.HomePageDTO;
+import com.cykj.pos.profit.dto.HomePageDataDTO;
 import com.cykj.pos.profit.dto.MerchantDTO;
 import com.cykj.pos.profit.dto.MerchantDict;
+import com.cykj.pos.profit.dto.TransAmountDataDTO;
 
 import java.util.List;
 
@@ -41,4 +43,18 @@ public interface BizMerchantMapper extends BaseMapper<BizMerchant> {
      * @return
      */
     List<BizMerchant> selectParentMerchByUserId(Long parentMerchId);
+
+    /**
+     * 查看首页数据  一个sql完事
+     * @param homePageDTO
+     * @return
+     */
+    HomePageDataDTO selectHomePageDataDTO(HomePageDTO homePageDTO);
+
+    /**
+     * 本月数据信息
+     * @param homePageDTO
+     * @return
+     */
+    TransAmountDataDTO selectTransAmountDataDTO(HomePageDTO homePageDTO);
 }

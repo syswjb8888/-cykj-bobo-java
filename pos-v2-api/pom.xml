@@ -44,31 +44,44 @@
         <dependency>
             <groupId>com.cykj</groupId>
             <artifactId>pos-v2-common</artifactId>
-            </dependency>
+        </dependency>
         <dependency>
             <groupId>com.cykj</groupId>
             <artifactId>pos-v2-framework</artifactId>
         </dependency>
-		<dependency>
-			<groupId>com.github.qcloudsms</groupId>
-			<artifactId>qcloudsms</artifactId>
-			<version>1.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>com.bill99.sdk.crypto</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>1.59</version>
-		</dependency>
-		<dependency>
-			<groupId>com.bill99.sdk.crypto</groupId>
-			<artifactId>bcprov-jdk15on</artifactId>
-			<version>1.59</version>
-		</dependency>
-		<dependency>
-			<groupId>com.bill99.sdk.crypto</groupId>
-			<artifactId>kuaiqian-crypto-sdk</artifactId>
-			<version>1.0.0.30</version>
-		</dependency>
+        <dependency>
+            <groupId>com.github.qcloudsms</groupId>
+            <artifactId>qcloudsms</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bill99.sdk.crypto</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.59</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bill99.sdk.crypto</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.59</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bill99.sdk.crypto</groupId>
+            <artifactId>kuaiqian-crypto-sdk</artifactId>
+            <version>1.0.0.30</version>
+        </dependency>
+        <!--支付接口依赖-->
+        <dependency>
+            <groupId>com.sec.sdk</groupId>
+            <artifactId>sec-java-sdk</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <!--<plugins>

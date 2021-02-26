@@ -244,4 +244,18 @@ public interface IBizMerchantService extends IService<BizMerchant> {
      * @return
      */
     List<BizMerchant> getParentMerchByUserId(Long userId);
+
+    /**
+     * 获得首页数据  魏建波
+     * @return
+     */
+    HomePageDataDTO getHomePageDataDTO(Long merchId,Long userId);
+
+    /**
+     * 获得本月数据信息
+     * @param merchId
+     * @param userId
+     * @return
+     */
+    TransAmountDataDTO getTransAmountDataDTO(Long merchId, Long userId);
 }

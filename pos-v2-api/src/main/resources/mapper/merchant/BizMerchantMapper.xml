@@ -52,6 +52,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <!--新增商户  也就是激活的pos机器数量-->
     <select id="getMonthlyNewMerchCounts" parameterType="HomePageDTO" resultType="java.lang.Integer">
+
+
         SELECT COUNT(*) FROM biz_pos_machine WHERE merch_id=#{merchId}
         <if test="yearMonth!=null and yearMonth!=''">
             AND create_time LIKE CONCAT(#{yearMonth},'%')
@@ -66,4 +68,74 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where  merch_id = (select parent_id from biz_merchant where user_id=#{userId})
         or parent_id=0
     </select>
+
+    <select id="selectHomePageDataDTO" parameterType="com.cykj.pos.domain.dto.HomePageDTO"
+    resultType="com.cykj.pos.profit.dto.HomePageDataDTO">
+        select
+        (
+        select IFNULL(sum(trans_amount),0) from biz_merch_transactions t where t.trans_date like CONCAT(#{yearMonth},'%')
+        and t.error_msg='交易成功'
+        and t.pos_code in
+        (select p.pos_code from biz_pos_machine p
+        where p.pos_activate_status=2 and FIND_IN_SET(p.merch_id,findMerchSubNode(#{merchId})))
+        ) monthlyTransAmount,
+        (SELECT COUNT(*) FROM biz_merchant
+                WHERE parent_id=#{merchId} AND create_time LIKE CONCAT(#{yearMonth},'%')) monthlyNewPartnerCounts,
+        (
+            select count(*) from biz_pos_machine_status_records where Records_type='2'
+            and active_time like CONCAT(#{yearMonth},'%')
+            and sn_code in (select pos_code from biz_pos_machine where pos_activate_status=2 and merch_id=#{merchId})
+        ) monthlyNewMerchantCounts,
+        (
+        select merch_name from biz_merchant where merch_id=#{merchId}
+        ) nickName,
+        (
+        select u.portrait from sys_user u where user_id=#{userId}
+        ) portrait
+        from dual
+    </select>
+
+    <select id="selectTransAmountDataDTO" parameterType="com.cykj.pos.domain.dto.HomePageDTO"
+        resultType="com.cykj.pos.profit.dto.TransAmountDataDTO">
+        select
+            <!-- 团队交易总额 monthlyTransAmount -->
+            (
+            select IFNULL(sum(trans_amount),0) from biz_merch_transactions t where t.trans_date like CONCAT(#{yearMonth},'%')
+            and t.error_msg='交易成功'
+            and t.pos_code in
+            (select p.pos_code from biz_pos_machine p
+            where p.pos_activate_status=2 and FIND_IN_SET(p.merch_id,findMerchSubNode(#{merchId})))
+            )
+            monthlyTransAmount,
+            <!-- 新增合作伙伴 monthlyNewPartnerCounts -->
+            (SELECT COUNT(*) FROM biz_merchant
+                  WHERE parent_id=#{merchId} AND create_time LIKE CONCAT(#{yearMonth},'%')) monthlyNewPartnerCounts,
+
+            <!-- 月新增商户数 monthlyNewMerchantCounts-->
+              (
+                  select count(*) from biz_pos_machine_status_records where Records_type='2'
+                  and active_time like CONCAT(#{yearMonth},'%')
+                  and sn_code in (select pos_code from biz_pos_machine where pos_activate_status=2 and merch_id=#{merchId})
+              ) monthlyNewMerchantCounts,
+              <!-- 商户交易额 merchantTransAmount -->
+              (
+                  select IFNULL(sum(trans_amount),0) from biz_merch_transactions t where t.trans_date like CONCAT(#{yearMonth},'%')
+                  and t.error_msg='交易成功'
+                  and t.pos_code in
+                  (select p.pos_code from biz_pos_machine p
+                  where p.pos_activate_status=2 and p.merch_id=#{merchId})
+              ) merchantTransAmount,
+
+              <!-- 累计伙伴 totalPartnerCounts  -->
+              (
+                  select count(*) from biz_merchant where parent_id=#{merchId}
+              ) totalPartnerCounts,
+              <!-- 累计商户 totalMerchantCounts-->
+              (
+              SELECT COUNT(*) FROM biz_pos_machine_status_records r
+              WHERE r.records_type='2' AND r.sn_code IN
+              (SELECT pos_code FROM biz_pos_machine WHERE pos_activate_status=2 and merch_id=#{merchId})
+              ) totalMerchantCounts
+          from dual
+</select>
 </mapper>

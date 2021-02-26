@@ -870,4 +870,27 @@ public class BizMerchantServiceImpl extends ServiceImpl<BizMerchantMapper, BizMe
     public List<BizMerchant> getParentMerchByUserId(Long userId) {
         return bizMerchantMapper.selectParentMerchByUserId(userId);
     }
+
+    @Override
+    public HomePageDataDTO getHomePageDataDTO(Long merchId,Long userId) {
+        String formatedDate = DateUtils.getCaculateYearAndMonth("","yyyy-MM");
+        HomePageDTO homePageDTO = new HomePageDTO();
+        homePageDTO.setMerchId(merchId);
+        homePageDTO.setYearMonth(formatedDate);
+        homePageDTO.setUserId(userId);
+        return bizMerchantMapper.selectHomePageDataDTO(homePageDTO);
+    }
+
+    @Override
+    public TransAmountDataDTO getTransAmountDataDTO(Long merchId, Long userId) {
+        String formatedDate = DateUtils.getCaculateYearAndMonth("this","yyyy-MM");
+        HomePageDTO homePageDTO = new HomePageDTO();
+        homePageDTO.setMerchId(merchId);
+        homePageDTO.setYearMonth(formatedDate);
+        homePageDTO.setUserId(userId);
+        TransAmountDataDTO transAmountDataDTO = bizMerchantMapper.selectTransAmountDataDTO(homePageDTO);
+        // 计算一下伙伴业绩   总业绩-个人业绩
+        transAmountDataDTO.setPartnerTransAmount(transAmountDataDTO.getMonthlyTransAmount().subtract(transAmountDataDTO.getMerchantTransAmount()));
+        return transAmountDataDTO;
+    }
 }
