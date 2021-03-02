@@ -87,4 +87,14 @@ public class BizMicroInfoServiceImpl extends ServiceImpl<BizMicroInfoMapper, Biz
         lqw.eq(BizMicroInfo::getMerchId ,merchId);
         return this.getOne(lqw);
     }
+
+    @Override
+    public boolean idCordIsExist(String card) {
+        LambdaQueryWrapper<BizMicroInfo> lqw = Wrappers.lambdaQuery();
+        lqw.eq(BizMicroInfo::getMerchIdcard ,card);
+        List<BizMicroInfo> list = list(lqw);
+        if(list==null || list.size()==0)
+            return false;
+        return true;
+    }
 }

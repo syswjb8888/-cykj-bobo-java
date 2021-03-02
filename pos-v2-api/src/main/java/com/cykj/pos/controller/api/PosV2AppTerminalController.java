@@ -81,7 +81,7 @@ public class PosV2AppTerminalController {
     @ApiOperation(value = "区间查询用户终端列表")
     @ApiImplicitParams({@ApiImplicitParam(name="posCodeStart",value = "区间起始SN系列号",dataType = "string",required = true,paramType="body"),
             @ApiImplicitParam(name="posCodeEnd",value = "区间结束SN系列号",dataType = "string",required = true,paramType="body"),
-            @ApiImplicitParam(name="posActivateStatus",value = "终端激活状态，0-未激活，1-已激活",dataType = "string",required = true,paramType="body")})
+            @ApiImplicitParam(name="posActivateStatus",value = "终端激活状态，0-未激活，2-已激活",dataType = "string",required = true,paramType="body")})
     @ApiResponses({@ApiResponse(code = 200, response = BizPosMachine.class, message = "区间查询用户终端列表数据响应成功")})
     @PostMapping("/interval/list")
     public AjaxResult queryTerminalIntervalList(@RequestBody PosTerminalDTO terminalDTO) {

@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @ApiModel
 public class OperationRecordsDTO {
@@ -25,7 +27,7 @@ public class OperationRecordsDTO {
     private String adjustName;
 
     @ApiModelProperty(value = "操作终端SN系列号,可能包含多个，多个系列号之间用英文逗号做分隔")
-    private String posCodes;
+    private List<String> posCodes;
 
     @ApiModelProperty(value = "操作时间，格式：2021-01-21 15:35:55")
     private String operateTime;

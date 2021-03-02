@@ -217,11 +217,13 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
             paramList.add(posName);
             conditions.append(" and pos_name like CONCAT(?,'%')");
         }
+        // 加排序 order by pos_code asc
+        conditions.append(" order by pos_code asc");
         long start = (pageNo -1) * pageSize;
         if(pageNo != -1 && pageSize != -1){
             paramList.add(start);
             paramList.add(pageSize);
-            conditions.append("LIMIT ?,?");
+            conditions.append(" LIMIT ?,?");
         }
         return conditions.toString();
     }
@@ -245,16 +247,16 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
         if(operType != null){
             if(1 == operType){
                 //仅能划拔本级终端
-                sqlBuilder = new StringBuilder("SELECT * FROM biz_pos_machine WHERE merch_id=? AND " +
-                        "pos_code NOT IN (SELECT sn_code FROM biz_pos_machine_status_records) order by pos_code");
+                sqlBuilder = new StringBuilder("SELECT * FROM biz_pos_machine WHERE pos_activate_status=0 AND merch_id=? AND " +
+                        "pos_code NOT IN (SELECT sn_code FROM biz_pos_machine_status_records) ");
             }
             if(2 == operType){
                 //仅能回调下拉下级终端
-                sqlBuilder = new StringBuilder("select * from biz_pos_machine where merch_id in (select merch_id from biz_merchant where parent_id=?)  order by pos_code");
+                sqlBuilder = new StringBuilder("select * from biz_pos_machine where pos_activate_status=0 AND merch_id in (select merch_id from biz_merchant where parent_id=?) ");
             }
         }else{
             // sqlBuilder = new StringBuilder("select * from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?))");
-            sqlBuilder = new StringBuilder("select m.*,r.records_type recordsType from biz_pos_machine m LEFT JOIN biz_pos_machine_status_records r ON m.pos_code=r.sn_code WHERE merch_id=?  order by pos_code");
+            sqlBuilder = new StringBuilder("select m.*,r.records_type recordsType from biz_pos_machine m LEFT JOIN biz_pos_machine_status_records r ON m.pos_code=r.sn_code WHERE merch_id=? ");
         }
         paramList.add(merchId);
         sqlBuilder.append(this.queryCondtions(paramList,terminalVo,pageNo,pageSize));
@@ -305,7 +307,7 @@ public class BizPosMachineServiceImpl extends ServiceImpl<BizPosMachineMapper, B
             newDate.minusMonths(1);
             formatedDate = newDate.format(DateTimeFormatter.ofPattern("yyyyMMdd")).substring(0,6);
         }
-        String sql = "select count(1) from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?)) and pos_activate_status='1' and pos_bind_time like ?";
+        String sql = "select count(1) from biz_pos_machine where FIND_IN_SET(merch_id,findMerchSubNode(?)) and pos_activate_status='2' and pos_bind_time like ?";
         return jdbcTemplate.queryForObject(sql,new Object[]{merchId,"'"+formatedDate+"%'"},Integer.class);
     }
     @Override

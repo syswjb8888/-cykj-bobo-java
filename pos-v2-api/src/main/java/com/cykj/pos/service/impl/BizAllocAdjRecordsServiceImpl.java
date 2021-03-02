@@ -42,47 +42,48 @@ public class BizAllocAdjRecordsServiceImpl extends ServiceImpl<BizAllocAdjRecord
     @DataSource(DataSourceType.SLAVE)
     public List<BizAllocAdjRecords> queryList(BizAllocAdjRecords bizAllocAdjRecords) {
         LambdaQueryWrapper<BizAllocAdjRecords> lqw = Wrappers.lambdaQuery();
-        if (bizAllocAdjRecords.getPosId() != null){
-            lqw.eq(BizAllocAdjRecords::getPosId ,bizAllocAdjRecords.getPosId());
+        if (bizAllocAdjRecords.getPosId() != null) {
+            lqw.eq(BizAllocAdjRecords::getPosId, bizAllocAdjRecords.getPosId());
         }
-        if (StringUtils.isNotBlank(bizAllocAdjRecords.getPosCode())){
-            lqw.eq(BizAllocAdjRecords::getPosCode ,bizAllocAdjRecords.getPosCode());
+        if (StringUtils.isNotBlank(bizAllocAdjRecords.getPosCode())) {
+            lqw.eq(BizAllocAdjRecords::getPosCode, bizAllocAdjRecords.getPosCode());
         }
-        if (bizAllocAdjRecords.getOldUserId() != null){
-            lqw.eq(BizAllocAdjRecords::getOldUserId,bizAllocAdjRecords.getOldUserId());
+        if (bizAllocAdjRecords.getOldUserId() != null) {
+            lqw.eq(BizAllocAdjRecords::getOldUserId, bizAllocAdjRecords.getOldUserId());
         }
-        if (bizAllocAdjRecords.getNewUserId() != null){
-            lqw.eq(BizAllocAdjRecords::getNewUserId,bizAllocAdjRecords.getNewUserId());
+        if (bizAllocAdjRecords.getNewUserId() != null) {
+            lqw.eq(BizAllocAdjRecords::getNewUserId, bizAllocAdjRecords.getNewUserId());
         }
-        if (bizAllocAdjRecords.getOperator() != null){
-            lqw.eq(BizAllocAdjRecords::getOperator ,bizAllocAdjRecords.getOperator());
+        if (bizAllocAdjRecords.getOperator() != null) {
+            lqw.eq(BizAllocAdjRecords::getOperator, bizAllocAdjRecords.getOperator());
         }
-        if (bizAllocAdjRecords.getOperateTime() != null){
-            lqw.eq(BizAllocAdjRecords::getOperateTime ,bizAllocAdjRecords.getOperateTime());
+        if (bizAllocAdjRecords.getOperateTime() != null) {
+            lqw.eq(BizAllocAdjRecords::getOperateTime, bizAllocAdjRecords.getOperateTime());
         }
-        if (bizAllocAdjRecords.getOperateType() != null){
-            lqw.eq(BizAllocAdjRecords::getOperateType ,bizAllocAdjRecords.getOperateType());
+        if (bizAllocAdjRecords.getOperateType() != null) {
+            lqw.eq(BizAllocAdjRecords::getOperateType, bizAllocAdjRecords.getOperateType());
         }
-        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar1())){
-            lqw.eq(BizAllocAdjRecords::getVar1 ,bizAllocAdjRecords.getVar1());
+        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar1())) {
+            lqw.eq(BizAllocAdjRecords::getVar1, bizAllocAdjRecords.getVar1());
         }
-        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar2())){
-            lqw.eq(BizAllocAdjRecords::getVar2 ,bizAllocAdjRecords.getVar2());
+        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar2())) {
+            lqw.eq(BizAllocAdjRecords::getVar2, bizAllocAdjRecords.getVar2());
         }
-        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar3())){
-            lqw.eq(BizAllocAdjRecords::getVar3 ,bizAllocAdjRecords.getVar3());
+        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar3())) {
+            lqw.eq(BizAllocAdjRecords::getVar3, bizAllocAdjRecords.getVar3());
         }
-        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar4())){
-            lqw.eq(BizAllocAdjRecords::getVar4 ,bizAllocAdjRecords.getVar4());
+        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar4())) {
+            lqw.eq(BizAllocAdjRecords::getVar4, bizAllocAdjRecords.getVar4());
         }
-        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar5())){
-            lqw.eq(BizAllocAdjRecords::getVar5 ,bizAllocAdjRecords.getVar5());
+        if (StringUtils.isNotBlank(bizAllocAdjRecords.getVar5())) {
+            lqw.eq(BizAllocAdjRecords::getVar5, bizAllocAdjRecords.getVar5());
         }
         return this.list(lqw);
     }
+
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public List<OperationRecordsDTO> getCurrentYearBriefOperationRecordsList(PosTerminalDTO terminalDTO){
+    public List<OperationRecordsDTO> getCurrentYearBriefOperationRecordsList(PosTerminalDTO terminalDTO) {
         Long userId = terminalDTO.getUserId();
         Integer operType = terminalDTO.getOperType();
         Integer pageNo = terminalDTO.getPageNo();
@@ -94,56 +95,70 @@ public class BizAllocAdjRecordsServiceImpl extends ServiceImpl<BizAllocAdjRecord
         paramList.add(userId);
         StringBuilder sqlBuilder = new StringBuilder("select count(1) as posCounts,rec.operator,o.nick_name as operatorName," +
                 "u.nick_name as allocName,s.nick_name as adjustName," +
-                "GROUP_CONCAT(rec.pos_code SEPARATOR ',') as posCodes," +
                 "DATE_FORMAT(rec.operate_time,'%Y-%m-%d %H:%i:%s') as operateTime " +
                 "from biz_alloc_adj_records rec " +
                 "left join sys_user u on u.user_id=rec.new_user_id " +
                 "left join sys_user s on s.user_id=rec.old_user_id " +
                 "left join sys_user o on o.user_id=rec.operator where " +
                 "rec.operate_type=? and  rec.operator=? ");
-
         //如果添加操作时间查询条件的话则添加操作时间参数
-        if(StringUtils.isNotBlank(operateTime)){
-           paramList.add(operateTime);
-           sqlBuilder.append("and rec.operate_time like CONCAT(?,'%')");
+        if (StringUtils.isNotBlank(operateTime)) {
+            paramList.add(operateTime);
+            sqlBuilder.append("and rec.operate_time like CONCAT(?,'%')");
         }
-
-        sqlBuilder.append( " group by rec.operator, DATE_FORMAT(rec.operate_time,'%Y-%m-%d %H:%i:%s') order by rec.operate_time desc");
-
+        sqlBuilder.append(" group by rec.operator, DATE_FORMAT(rec.operate_time,'%Y-%m-%d %H:%i:%s') order by rec.operate_time desc");
         //如果需要分页查询的话则添加分页参数
-        if(pageNo !=-1 && pageSize !=-1){
+        if (pageNo != -1 && pageSize != -1) {
             Integer start = (pageNo - 1) * pageSize;
             paramList.add(start);
             paramList.add(pageSize);
             sqlBuilder.append(" LIMIT ?,?");
         }
         Object[] params = paramList.toArray();
-        return jdbcTemplate.query(sqlBuilder.toString(),params,new BeanPropertyRowMapper<>(OperationRecordsDTO.class));
+        // 获得划拨数据
+        List<OperationRecordsDTO> dataList = jdbcTemplate.query(sqlBuilder.toString(), params, new BeanPropertyRowMapper<>(OperationRecordsDTO.class));
+        for(int i=0;i< dataList.size();i++ ){
+            OperationRecordsDTO dto = dataList.get(i);
+            paramList.clear();
+            paramList.add(operType);
+            paramList.add(userId);
+            paramList.add(dto.getOperateTime());
+            params = paramList.toArray();
+            String str= "select rec.pos_code  from biz_alloc_adj_records rec "+
+                    "where rec.operate_type=? and  rec.operator=? "+
+                    " and rec.operate_time=? order by rec.pos_code asc";
+            // 根据创建时间  获得划拨机器号
+            List<String> posCodes = jdbcTemplate.queryForList(str, params,String.class);
+            dto.setPosCodes(posCodes);
+        }
+        return dataList;
     }
+
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public List<BizAllocAdjRecords> getPageOperationRecordsList(PosTerminalDTO terminalDTO){
+    public List<BizAllocAdjRecords> getPageOperationRecordsList(PosTerminalDTO terminalDTO) {
         Long userId = terminalDTO.getUserId();
         Integer operType = terminalDTO.getOperType();
         Integer pageNo = terminalDTO.getPageNo();
         Integer pageSize = terminalDTO.getPageSize();
         long start = (pageNo - 1) * pageSize;
-        Object[] params = new Object[]{userId,userId,userId,operType};
+        Object[] params = new Object[]{userId, userId, userId, operType};
         String sql = "select * from biz_alloc_adj_records where old_user_id=? or new_user_id=? or operator=? and operate_type=?";
-        if(-1 != pageNo && -1 != pageSize){
-            params = new Object[]{userId,userId,userId,operType,start,pageSize};
+        if (-1 != pageNo && -1 != pageSize) {
+            params = new Object[]{userId, userId, userId, operType, start, pageSize};
             sql = "select * from biz_alloc_adj_records where old_user_id=? or new_user_id=? or operator=? and operate_type=? LIMIT ?,?";
         }
-        return jdbcTemplate.query(sql,params,new BeanPropertyRowMapper<BizAllocAdjRecords>(BizAllocAdjRecords.class));
+        return jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<BizAllocAdjRecords>(BizAllocAdjRecords.class));
     }
+
     @Override
     @DataSource(DataSourceType.SLAVE)
-    public Integer geOperationRecordsCounts(PosTerminalDTO terminalDTO){
+    public Integer geOperationRecordsCounts(PosTerminalDTO terminalDTO) {
         Long userId = terminalDTO.getUserId();
         Integer operType = terminalDTO.getOperType();
-        Object[] params = new Object[]{userId,userId,userId,operType};
+        Object[] params = new Object[]{userId, userId, userId, operType};
         String sql = "select count(1) from biz_alloc_adj_records where old_user_id=? or new_user_id=? or operator=? and operate_type=?";
-        return jdbcTemplate.queryForObject(sql,params,Integer.class);
+        return jdbcTemplate.queryForObject(sql, params, Integer.class);
     }
 
     @Override

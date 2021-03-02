@@ -253,4 +253,16 @@ public class PosV2AppMerchantController {
         return ajaxResult;
     }
 
+    // 验证身份证是否唯一
+
+    @ApiOperation(value="验证身份证是否唯一")
+    @PostMapping("/idCordIsExist")
+    public AjaxResult idCordIsExist(@RequestBody MicroMerchantDTO dto){ //merchIdcard
+        AjaxResult ajaxResult = AjaxResult.success("验证身份证是否唯一成功");
+        // 获取用户
+        boolean b = microInfoService.idCordIsExist(dto.getMerchIdcard());
+        ajaxResult.put("data",b);
+        return ajaxResult;
+    }
+
 }

@@ -127,8 +127,8 @@ mybatis-plus:
     # 当设置为 true 的时候，懒加载的对象可能被任何懒属性全部加载，否则，每个属性都按需加载。需要和 lazyLoadingEnabled 一起使用。
     aggressiveLazyLoading: true
     # MyBatis 自动映射策略
-    # NONE：不启用自动映射
-    # PARTIAL：只对非嵌套的 resultMap 进行自动映射
+    # NONE：
+    # PARTIAL：只对不启用自动映射非嵌套的 resultMap 进行自动映射
     # FULL：对所有的 resultMap 都进行自动映射
     autoMappingBehavior: PARTIAL
     # MyBatis 自动映射时未知列或未知属性处理策

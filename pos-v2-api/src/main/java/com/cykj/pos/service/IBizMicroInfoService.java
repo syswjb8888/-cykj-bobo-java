@@ -23,4 +23,11 @@ public interface IBizMicroInfoService extends IService<BizMicroInfo> {
      * @return
      */
     public BizMicroInfo getBizMicroInfoByMerchId(Long merchId);
+
+    /**
+     * 身份证号是否存在
+     * @param card
+     * @return
+     */
+    boolean idCordIsExist(String card);
 }
